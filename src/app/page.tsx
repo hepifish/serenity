@@ -50,7 +50,7 @@ export default function Home() {
     animateRing();
 
     // Add hover effects to interactive elements
-    const interactiveElements = document.querySelectorAll("a, button, .si img, .dst img, .dss img");
+    const interactiveElements = document.querySelectorAll("a, button, .si img, .ap img");
     interactiveElements.forEach((el) => {
       el.addEventListener("mouseenter", handleMouseEnterInteractive);
       el.addEventListener("mouseleave", handleMouseLeaveInteractive);
@@ -72,10 +72,13 @@ export default function Home() {
       const progress = (scrollTop / docHeight) * 100;
       setScrollProgress(progress);
 
-      // Reveal animations
+      // Reveal animations. The 0.85 threshold can never be met by whatever
+      // sits in the last screenful, so once scrolling bottoms out anything
+      // on screen reveals too. Otherwise the contact email stays invisible.
+      const atBottom = scrollTop + window.innerHeight >= document.documentElement.scrollHeight - 2;
       document.querySelectorAll(".rv, .rl").forEach((el) => {
         const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight * 0.85) {
+        if (rect.top < window.innerHeight * 0.85 || (atBottom && rect.top < window.innerHeight)) {
           el.classList.add("on");
         }
       });
@@ -94,6 +97,13 @@ export default function Home() {
     setLightboxOpen(true);
     document.body.style.overflow = "hidden";
   }, []);
+
+  // Open the lightbox on a specific photo rather than a hand-counted index,
+  // so reordering a gallery can't send the viewer to the wrong image.
+  const openAt = useCallback(
+    (gallery: string[], src: string) => openLightbox(gallery, Math.max(0, gallery.indexOf(src))),
+    [openLightbox]
+  );
 
   const closeLightbox = useCallback(() => {
     setLightboxOpen(false);
@@ -120,74 +130,108 @@ export default function Home() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [lightboxOpen, closeLightbox, lightboxPrev, lightboxNext]);
 
-  // Gallery image arrays
+  // Gallery image arrays, ordered the way a guest wants to see a place:
+  // the room you walk into first, then the rooms you sleep and cook in,
+  // then the small details, and bathrooms at the end.
   const filmGallery = [
-    "/images/film/Serenity2024-27.webp",
-    "/images/film/Serenity2024-28.webp",
-    "/images/film/Serenity2024-29.webp",
-    "/images/film/Serenity2024-30.webp",
-    "/images/film/Serenity2024-31.webp",
-    "/images/film/Serenity2024-32.webp",
-    "/images/film/Serenity2024-33.webp",
-    "/images/film/Serenity2024-34.webp",
-    "/images/film/Serenity2024-35.webp",
-    "/images/film/Serenity2024-36.webp",
-    "/images/film/Serenity2024-37.webp",
+    "/images/film/Serenity2024-39.webp", // living, kitchen and dining, wide
+    "/images/film/Serenity2024-29.webp", // yellow sofa under the poster wall
+    "/images/film/Serenity2024-36.webp", // bedroom, black accent wall
+    "/images/film/Serenity2024-34.webp", // Aspectomat projector on the shelf
+    "/images/film/Serenity2024-40.webp", // kitchen counter, Nespresso
+    "/images/film/Serenity2024-35.webp", // desk and green velvet curtain
+    "/images/film/Serenity2024-33.webp", // Leon and Spirited Away prints
+    "/images/film/Serenity2024-59.webp", // second bedroom
     "/images/film/Serenity2024-38.webp",
-    "/images/film/Serenity2024-39.webp",
-    "/images/film/Serenity2024-40.webp",
+    "/images/film/Serenity2024-32.webp",
+    "/images/film/Serenity2024-58.webp",
     "/images/film/Serenity2024-41.webp",
     "/images/film/Serenity2024-42.webp",
-    "/images/film/Serenity2024-58.webp",
-    "/images/film/Serenity2024-59.webp",
+    "/images/film/Serenity2024-30.webp",
+    "/images/film/Serenity2024-37.webp",
+    "/images/film/Serenity2024-31.webp",
+    "/images/film/Serenity2024-27.webp", // bathroom
+    "/images/film/Serenity2024-28.webp",
   ];
 
   const gothicGallery = [
+    "/images/gotic/Serenity2024-22.webp", // living under the vaults, wide
+    "/images/gotic/Serenity2024-24.webp", // Tiffany lamp beside the bed
+    "/images/gotic/Serenity2024-26.webp", // bedroom, wrought-iron chandelier
+    "/images/gotic/Serenity2024-48.webp", // arched mirror holding the chandelier
+    "/images/gotic/Serenity2024-20.webp", // living toward the arched window
+    "/images/gotic/Serenity2024-19.webp", // peacock feathers, Dracula on the shelf
+    "/images/gotic/Serenity2024-14.webp", // dining under the drapes
+    "/images/gotic/Serenity2024-23.webp",
     "/images/gotic/Serenity2024-13.webp",
-    "/images/gotic/Serenity2024-14.webp",
-    "/images/gotic/Serenity2024-15.webp",
+    "/images/gotic/Serenity2024-61.webp",
+    "/images/gotic/Serenity2024-45.webp",
+    "/images/gotic/Serenity2024-21.webp",
+    "/images/gotic/Serenity2024-60.webp",
+    "/images/gotic/Serenity2024-25.webp",
+    "/images/gotic/Serenity2024-46.webp",
+    "/images/gotic/Serenity2024-47.webp",
+    "/images/gotic/Serenity2024-49.webp",
+    "/images/gotic/Serenity2024-15.webp", // bathroom
     "/images/gotic/Serenity2024-16.webp",
     "/images/gotic/Serenity2024-17.webp",
     "/images/gotic/Serenity2024-18.webp",
-    "/images/gotic/Serenity2024-19.webp",
-    "/images/gotic/Serenity2024-20.webp",
-    "/images/gotic/Serenity2024-21.webp",
-    "/images/gotic/Serenity2024-22.webp",
-    "/images/gotic/Serenity2024-23.webp",
-    "/images/gotic/Serenity2024-24.webp",
-    "/images/gotic/Serenity2024-25.webp",
-    "/images/gotic/Serenity2024-26.webp",
-    "/images/gotic/Serenity2024-45.webp",
-    "/images/gotic/Serenity2024-46.webp",
-    "/images/gotic/Serenity2024-47.webp",
-    "/images/gotic/Serenity2024-48.webp",
-    "/images/gotic/Serenity2024-49.webp",
-    "/images/gotic/Serenity2024-60.webp",
-    "/images/gotic/Serenity2024-61.webp",
   ];
 
   const artGallery = [
-    "/images/art/Serenity2024-01.webp",
-    "/images/art/Serenity2024-02.webp",
-    "/images/art/Serenity2024-03.webp",
-    "/images/art/Serenity2024-04.webp",
+    "/images/art/Serenity2024-56.webp", // living, the full gallery wall
+    "/images/art/Serenity2024-43.webp", // Rysselberghe and Rousseau prints
+    "/images/art/Serenity2024-04.webp", // bedroom and desk, wide
+    "/images/art/Serenity2024-08.webp", // bed under the wicker pendant
+    "/images/art/Serenity2024-54.webp", // workspace, Edison lamp
+    "/images/art/Serenity2024-51.webp", // candle and prints on the console
+    "/images/art/Serenity2024-03.webp", // red sofa and dining, wide
     "/images/art/Serenity2024-05.webp",
+    "/images/art/Serenity2024-12.webp",
+    "/images/art/Serenity2024-55.webp",
+    "/images/art/Serenity2024-50.webp",
     "/images/art/Serenity2024-06.webp",
     "/images/art/Serenity2024-07.webp",
-    "/images/art/Serenity2024-08.webp",
-    "/images/art/Serenity2024-09.webp",
-    "/images/art/Serenity2024-10.webp",
-    "/images/art/Serenity2024-11.webp",
-    "/images/art/Serenity2024-12.webp",
-    "/images/art/Serenity2024-43.webp",
-    "/images/art/Serenity2024-50.webp",
-    "/images/art/Serenity2024-51.webp",
     "/images/art/Serenity2024-52.webp",
     "/images/art/Serenity2024-53.webp",
-    "/images/art/Serenity2024-54.webp",
-    "/images/art/Serenity2024-55.webp",
-    "/images/art/Serenity2024-56.webp",
+    "/images/art/Serenity2024-02.webp",
+    "/images/art/Serenity2024-01.webp",
+    "/images/art/Serenity2024-09.webp", // bathroom
+    "/images/art/Serenity2024-10.webp",
+    "/images/art/Serenity2024-11.webp",
   ];
+
+  // What each apartment leads with on the page. Every entry also lives in the
+  // gallery array above, so openAt() can find it and open the lightbox there.
+  const shown = {
+    film: {
+      hero: { src: filmGallery[0], alt: "Film Studio living area, kitchen and dining beyond" },
+      detail: { src: filmGallery[1], alt: "Yellow sofa beneath the cinema poster wall" },
+      tiles: [
+        { src: filmGallery[2], alt: "Bedroom against the black accent wall" },
+        { src: filmGallery[3], alt: "Vintage Aspectomat projector on the shelving unit" },
+        { src: filmGallery[4], alt: "Kitchen counter with the Nespresso machine" },
+      ],
+    },
+    gothic: {
+      hero: { src: gothicGallery[0], alt: "Gothic Suite living area under medieval vaulted ceilings" },
+      detail: { src: gothicGallery[1], alt: "Tiffany stained-glass lamp beside the bed" },
+      tiles: [
+        { src: gothicGallery[2], alt: "Bedroom beneath a wrought-iron chandelier" },
+        { src: gothicGallery[3], alt: "Arched mirror reflecting the chandelier and vaults" },
+        { src: gothicGallery[5], alt: "Peacock feathers and a Dracula volume on the shelf" },
+      ],
+    },
+    art: {
+      hero: { src: artGallery[0], alt: "Art Studio living area with its wall of museum prints" },
+      detail: { src: artGallery[1], alt: "Rysselberghe and Rousseau prints above the red sofa" },
+      tiles: [
+        { src: artGallery[2], alt: "Bedroom with the desk by the window" },
+        { src: artGallery[4], alt: "Minimalist workspace lit by an Edison lamp" },
+        { src: artGallery[3], alt: "Bed under the boho wicker pendant" },
+      ],
+    },
+  };
 
   // Generate stars with varying properties (120 stars like original)
   const stars = Array.from({ length: 120 }).map((_, i) => ({
@@ -224,7 +268,7 @@ export default function Home() {
           <li><a href="#film">Film Studio</a></li>
           <li><a href="#gothic">Gothic Suite</a></li>
           <li><a href="#art">Art Studio</a></li>
-          <li><a href="/sibiu">Sibiu Guide</a></li>
+          {/* Sibiu Guide hidden until its photos are in place: see src/app/_sibiu */}
           <li><a href="#contact">Contact</a></li>
         </ul>
         <div className="nr">
@@ -314,8 +358,8 @@ export default function Home() {
       {/* Film Studio Section */}
       <section id="film">
         <div className="ah rv">
-          <img src="/images/film/Serenity2024-27.webp" alt="Film Studio" />
-          <div className="ov" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%)" }} />
+          <img src={shown.film.hero.src} alt={shown.film.hero.alt} />
+          <div className="ov" />
           <div className="al">
             <div className="nn">01</div>
             <div className="bg">
@@ -355,18 +399,23 @@ export default function Home() {
               </a>
             </div>
           </div>
-          <div style={{ overflow: "hidden" }}>
-            <img src="/images/film/Serenity2024-28.webp" alt="Film Studio Detail" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          <div className="ap" onClick={() => openAt(filmGallery, shown.film.detail.src)}>
+            <img src={shown.film.detail.src} alt={shown.film.detail.alt} loading="lazy" decoding="async" />
           </div>
         </div>
 
         {/* Film Gallery */}
         <div className="st rv">
-          <div className="si t" onClick={() => openLightbox(filmGallery, 2)}><img src="/images/film/Serenity2024-29.webp" alt="Film Gallery 1" /></div>
-          <div className="si w" onClick={() => openLightbox(filmGallery, 3)}><img src="/images/film/Serenity2024-30.webp" alt="Film Gallery 2" /></div>
-          <div className="si s" onClick={() => openLightbox(filmGallery, 4)}><img src="/images/film/Serenity2024-31.webp" alt="Film Gallery 3" /></div>
-          <div className="si s" onClick={() => openLightbox(filmGallery, 5)}><img src="/images/film/Serenity2024-32.webp" alt="Film Gallery 4" /></div>
-          <div className="si t" onClick={() => openLightbox(filmGallery, 6)}><img src="/images/film/Serenity2024-33.webp" alt="Film Gallery 5" /></div>
+          {shown.film.tiles.map((t) => (
+            <div className="si" key={t.src} onClick={() => openAt(filmGallery, t.src)}>
+              <img src={t.src} alt={t.alt} loading="lazy" decoding="async" />
+            </div>
+          ))}
+        </div>
+        <div className="va rv">
+          <button type="button" className="vab" onClick={() => openAt(filmGallery, filmGallery[0])}>
+            View all {filmGallery.length} photos
+          </button>
         </div>
 
       </section>
@@ -381,8 +430,8 @@ export default function Home() {
       {/* Gothic Suite Section */}
       <section id="gothic">
         <div className="ah rv">
-          <img src="/images/gotic/Serenity2024-13.webp" alt="Gothic Suite" />
-          <div className="ov" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%)" }} />
+          <img src={shown.gothic.hero.src} alt={shown.gothic.hero.alt} loading="lazy" decoding="async" />
+          <div className="ov" />
           <div className="al">
             <div className="nn">02</div>
             <div className="bg">
@@ -394,8 +443,8 @@ export default function Home() {
         </div>
 
         <div className="ab">
-          <div style={{ overflow: "hidden" }}>
-            <img src="/images/gotic/Serenity2024-14.webp" alt="Gothic Suite Detail" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          <div className="ap" onClick={() => openAt(gothicGallery, shown.gothic.detail.src)}>
+            <img src={shown.gothic.detail.src} alt={shown.gothic.detail.alt} loading="lazy" decoding="async" />
           </div>
           <div className="ai" style={{ background: "var(--bg2)" }}>
             <p className="lb2 rl" style={{ color: "var(--gold)" }}>Apartment Two &middot; Gothic Suite</p>
@@ -428,10 +477,17 @@ export default function Home() {
         </div>
 
         {/* Gothic Gallery */}
-        <div className="ds rv">
-          <div className="dst" onClick={() => openLightbox(gothicGallery, 2)}><img src="/images/gotic/Serenity2024-15.webp" alt="Gothic Gallery 1" /></div>
-          <div className="dss" onClick={() => openLightbox(gothicGallery, 3)}><img src="/images/gotic/Serenity2024-16.webp" alt="Gothic Gallery 2" /></div>
-          <div className="dss" onClick={() => openLightbox(gothicGallery, 4)}><img src="/images/gotic/Serenity2024-17.webp" alt="Gothic Gallery 3" /></div>
+        <div className="st rv">
+          {shown.gothic.tiles.map((t) => (
+            <div className="si" key={t.src} onClick={() => openAt(gothicGallery, t.src)}>
+              <img src={t.src} alt={t.alt} loading="lazy" decoding="async" />
+            </div>
+          ))}
+        </div>
+        <div className="va rv">
+          <button type="button" className="vab" onClick={() => openAt(gothicGallery, gothicGallery[0])}>
+            View all {gothicGallery.length} photos
+          </button>
         </div>
 
         {/* Quote */}
@@ -456,8 +512,8 @@ export default function Home() {
       {/* Art Studio Section */}
       <section id="art">
         <div className="ah rv">
-          <img src="/images/art/Serenity2024-12.webp" alt="Art Studio" />
-          <div className="ov" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%)" }} />
+          <img src={shown.art.hero.src} alt={shown.art.hero.alt} loading="lazy" decoding="async" />
+          <div className="ov" />
           <div className="al">
             <div className="nn">03</div>
             <div className="bg">
@@ -498,18 +554,23 @@ export default function Home() {
               </a>
             </div>
           </div>
-          <div style={{ overflow: "hidden" }}>
-            <img src="/images/art/Serenity2024-43.webp" alt="Art Studio Detail" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          <div className="ap" onClick={() => openAt(artGallery, shown.art.detail.src)}>
+            <img src={shown.art.detail.src} alt={shown.art.detail.alt} loading="lazy" decoding="async" />
           </div>
         </div>
 
         {/* Art Gallery */}
         <div className="st rv">
-          <div className="si t" onClick={() => openLightbox(artGallery, 13)}><img src="/images/art/Serenity2024-50.webp" alt="Art Gallery 1" /></div>
-          <div className="si w" onClick={() => openLightbox(artGallery, 14)}><img src="/images/art/Serenity2024-51.webp" alt="Art Gallery 2" /></div>
-          <div className="si s" onClick={() => openLightbox(artGallery, 15)}><img src="/images/art/Serenity2024-52.webp" alt="Art Gallery 3" /></div>
-          <div className="si s" onClick={() => openLightbox(artGallery, 16)}><img src="/images/art/Serenity2024-53.webp" alt="Art Gallery 4" /></div>
-          <div className="si t" onClick={() => openLightbox(artGallery, 17)}><img src="/images/art/Serenity2024-54.webp" alt="Art Gallery 5" /></div>
+          {shown.art.tiles.map((t) => (
+            <div className="si" key={t.src} onClick={() => openAt(artGallery, t.src)}>
+              <img src={t.src} alt={t.alt} loading="lazy" decoding="async" />
+            </div>
+          ))}
+        </div>
+        <div className="va rv">
+          <button type="button" className="vab" onClick={() => openAt(artGallery, artGallery[0])}>
+            View all {artGallery.length} photos
+          </button>
         </div>
 
         {/* Quote */}
