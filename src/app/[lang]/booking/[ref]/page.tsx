@@ -5,7 +5,7 @@ import BookingStatus from "@/components/BookingStatus";
 import { getDict } from "@/i18n";
 import { isLocale } from "@/i18n/config";
 import { APARTMENTS, isApartmentSlug } from "@/lib/apartments";
-import { getGroupByRef } from "@/lib/bookings";
+import { getGroupByRef, guestStatus } from "@/lib/bookings";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { robots: { index: false, follow: false } };
@@ -23,7 +23,6 @@ export default async function BookingPage({ params, searchParams }: Props) {
   const t = getDict(lang);
   const apt = group.length === 1 && isApartmentSlug(b.apartment) ? APARTMENTS[b.apartment] : null;
   const names = group.map((r) => (isApartmentSlug(r.apartment) ? APARTMENTS[r.apartment].name : r.apartment)).join(" + ");
-  const expired = b.status === "pending" && b.hold_until < new Date() && !b.netopia_status;
   return (
     <>
       <Header lang={lang} t={t.nav} solid />
@@ -32,7 +31,7 @@ export default async function BookingPage({ params, searchParams }: Props) {
           lang={lang}
           ref_={b.group_ref}
           token={token}
-          initial={expired ? "expired" : b.status}
+          initial={guestStatus(b)}
           apartment={names}
           slug={apt ? b.apartment : ""}
           checkIn={b.check_in}

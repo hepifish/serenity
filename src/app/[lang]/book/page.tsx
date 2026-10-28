@@ -10,8 +10,7 @@ import { isLocale } from "@/i18n/config";
 import { APARTMENTS, isApartmentSlug, type ApartmentSlug } from "@/lib/apartments";
 import { isStayFree } from "@/lib/availability";
 import { longDate, money } from "@/lib/format";
-import { getRate, quote, type Quote } from "@/lib/pricing";
-import { checkStay, splitGuests } from "@/lib/stay";
+import { quoteStays } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { robots: { index: false, follow: false } };
@@ -28,18 +27,10 @@ export default async function BookPage({ params, searchParams }: Props) {
   const guests = Number(q.guests ?? 2);
   const home = `/${lang}?in=${q.in ?? ""}&out=${q.out ?? ""}&guests=${guests}`;
   if (!slugs.length) redirect(home);
-  const split = splitGuests(slugs, guests);
-  if (!split) redirect(home);
-
-  const quotes: Quote[] = [];
-  for (const [i, slug] of slugs.entries()) {
-    const rate = await getRate(slug);
-    if (!rate || checkStay(slug, q.in, q.out, split[i], rate.min_nights)) redirect(home);
-    if (!(await isStayFree(slug, q.in!, q.out!).catch(() => false))) redirect(home);
-    const qq = await quote(slug, q.in!, q.out!, split[i]);
-    if (!qq) redirect(home);
-    quotes.push(qq);
-  }
+  const stays = await quoteStays(slugs, q.in, q.out, guests);
+  if ("error" in stays) redirect(home);
+  const { quotes, split } = stays;
+  for (const slug of slugs) if (!(await isStayFree(slug, q.in!, q.out!).catch(() => false))) redirect(home);
   const total = Math.round(quotes.reduce((s, x) => s + x.total, 0) * 100) / 100;
   const single = slugs.length === 1 ? APARTMENTS[slugs[0]] : null;
   const change = single ? `/${lang}/apartments/${single.slug}?in=${q.in}&out=${q.out}&guests=${guests}#availability` : home;

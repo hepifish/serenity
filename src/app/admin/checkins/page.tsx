@@ -1,4 +1,5 @@
 import AdminNav from "@/components/AdminNav";
+import { requireAdmin } from "@/lib/admin-auth";
 import CopyButton from "@/components/CopyButton";
 import { APARTMENTS, isApartmentSlug } from "@/lib/apartments";
 import { listCheckins } from "@/lib/checkins";
@@ -8,7 +9,11 @@ export const dynamic = "force-dynamic";
 
 const d = (s: string) => new Intl.DateTimeFormat("ro-RO", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).format(new Date(s + "T00:00:00Z"));
 
+// The screen shows enough to match a guest; the CSV, which the invoice needs, has it whole.
+const maskCnp = (c: string) => (/^\d{13}$/.test(c) ? `${c[0]}${"•".repeat(9)}${c.slice(-3)}` : c);
+
 export default async function CheckinsPage() {
+  await requireAdmin();
   const rows = await listCheckins();
   return (
     <>
@@ -46,7 +51,7 @@ export default async function CheckinsPage() {
                       <td>{r.apartment && isApartmentSlug(r.apartment) ? APARTMENTS[r.apartment].name : "?"}</td>
                       <td>{r.full_name}<br /><a className="link muted" href={`mailto:${r.email}`}>{r.email}</a>{r.phone ? <><br /><span className="muted">{r.phone}</span></> : null}</td>
                       <td>{r.street}<br /><span className="muted">{[r.postal_code, r.city, r.country].filter(Boolean).join(", ")}</span></td>
-                      <td style={{ fontVariantNumeric: "tabular-nums" }}>{r.cnp ?? <span className="muted">none</span>}</td>
+                      <td style={{ fontVariantNumeric: "tabular-nums" }} title="Full CNP in the CSV">{r.cnp ? maskCnp(r.cnp) : <span className="muted">none</span>}</td>
                       <td className="hide-sm">{r.company_name ? <>{r.company_name}<br /><span className="muted">CUI {r.company_cui}</span></> : <span className="muted">person</span>}</td>
                       <td className="hide-sm"><span className="pill">{r.source}</span>{r.reservation ? <><br /><span className="muted">{r.reservation}</span></> : null}</td>
                     </tr>

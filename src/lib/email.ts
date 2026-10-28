@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 import { APARTMENTS, isApartmentSlug } from "./apartments";
+import { oneLine } from "./format";
 import { COMPANY, SITE_URL } from "./site";
 import type { Booking } from "./bookings";
 import { acceptancesForGroup } from "./terms";
@@ -10,14 +11,17 @@ import { getDict } from "@/i18n";
  * Two letters per paid booking: a confirmation to the guest in their language,
  * and a note to the owner with the one thing she must do by hand (close the
  * nights on Booking.com if its calendar has not caught up yet).
- * Without RESEND_API_KEY the letters are printed to the server log instead.
+ * Without RESEND_API_KEY the letters are printed to the server log instead,
+ * except in production, where guest data never goes to the log: it fails.
  */
 const FROM = process.env.EMAIL_FROM ?? "Serenity Apartments <onboarding@resend.dev>";
 const OWNER = process.env.OWNER_EMAIL ?? COMPANY.email;
 
-async function send(to: string, subject: string, html: string, replyTo?: string) {
+async function send(to: string, rawSubject: string, html: string, replyTo?: string) {
+  const subject = oneLine(rawSubject);
   const key = process.env.RESEND_API_KEY;
   if (!key) {
+    if (process.env.VERCEL_ENV === "production") throw new Error("RESEND_API_KEY is not set: email not sent");
     console.log(`[email] to=${to} subject="${subject}"\n${html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").slice(0, 1500)}`);
     return;
   }

@@ -26,7 +26,7 @@ export type Booking = {
   amount: string;
   nightly: { night: string; price: number }[];
   pay_method: "card" | "voucher";
-  status: "pending" | "paid" | "failed" | "cancelled" | "expired";
+  status: "pending" | "paid" | "failed" | "cancelled" | "expired" | "conflict";
   hold_until: Date;
   netopia_ntp_id: string | null;
   netopia_status: number | null;
@@ -117,36 +117,54 @@ export async function getGroupByRef(groupRef: string, token: string) {
 
 /**
  * Applies a payment outcome to the whole group. Returns the rows only when
- * this call is the one that turned them paid, so emails go out once even if
- * Netopia retries.
+ * this call is the one that settled them, so emails go out once even if
+ * Netopia retries. Status only moves forward: a refund is final, and a late
+ * or replayed "paid" never revives a cancelled booking.
  */
 export async function applyPaymentStatus(groupId: string, outcome: "paid" | "failed" | "pending" | "cancelled", ntpStatus: number, message: string) {
-  if (outcome === "paid") {
-    return sql<Booking[]>`
-      update bookings set status = 'paid', paid_at = now(), netopia_status = ${ntpStatus}, netopia_message = ${message}, updated_at = now()
-      where group_id = ${groupId} and status <> 'paid' returning ${COLUMNS}`;
-  }
+  if (outcome === "paid") return settlePaid(groupId, ntpStatus, message);
   if (outcome === "pending") {
     await sql`update bookings set netopia_status = ${ntpStatus}, netopia_message = ${message}, updated_at = now()
               where group_id = ${groupId} and status = 'pending'`;
     return [];
   }
-  // a refund (cancelled) can hit a paid booking; a decline only a pending one
+  // a refund (cancelled) can hit a paid or conflicting booking; a decline only a pending one
   await sql`update bookings set status = ${outcome}, netopia_status = ${ntpStatus}, netopia_message = ${message}, updated_at = now()
-            where group_id = ${groupId} and (status = 'pending' or ${outcome === "cancelled"})`;
+            where group_id = ${groupId} and (status = 'pending' or (${outcome === "cancelled"} and status in ('paid','conflict')))`;
   return [];
 }
 
-/** Another paid booking or Booking.com reservation already holds some of these nights. */
-export async function paidOverlap(b: Booking) {
-  const [row] = await sql`
-    select 1 from bookings where apartment = ${b.apartment} and status = 'paid' and id <> ${b.id}
-      and check_in < ${b.check_out} and check_out > ${b.check_in} limit 1`;
-  return !!row;
+/**
+ * A payment can land after its hold expired and someone else paid for the same
+ * nights. Under the same apartment locks as createPendingGroup, such a row
+ * becomes 'conflict' instead of a second 'paid' (sql/005 enforces it too), and
+ * the owner email flags it.
+ */
+async function settlePaid(groupId: string, ntpStatus: number, message: string) {
+  return sql.begin(async (tx) => {
+    const apts = await tx<{ apartment: string }[]>`select distinct apartment from bookings where group_id = ${groupId}`;
+    for (const a of apts.map((r) => r.apartment).sort()) await tx`select pg_advisory_xact_lock(hashtext(${a}))`;
+    return tx<Booking[]>`
+      update bookings b set
+        status = case when exists (
+          select 1 from bookings o where o.apartment = b.apartment and o.status = 'paid'
+            and o.check_in < b.check_out and o.check_out > b.check_in) then 'conflict' else 'paid' end,
+        paid_at = now(), netopia_status = ${ntpStatus}, netopia_message = ${message}, updated_at = now()
+      where group_id = ${groupId} and status in ('pending','failed','expired')
+      returning ${COLUMNS}`;
+  });
 }
 
+/** What the guest's page shows. A lapsed hold reads as expired; a conflict reads as paid, since the money is in and Pati resolves it. */
+export function guestStatus(b: Booking): Exclude<Booking["status"], "conflict"> {
+  if (b.status === "conflict") return "paid";
+  return b.status === "pending" && b.hold_until < new Date() && !b.netopia_status ? "expired" : b.status;
+}
+
+/** The admin list: settled bookings and live holds. A lapsed hold is noise. */
 export async function listBookings(limit = 200) {
-  return sql<Booking[]>`select ${COLUMNS} from bookings where status in ('paid','pending','cancelled')
+  return sql<Booking[]>`select ${COLUMNS} from bookings
+    where status in ('paid','conflict','cancelled') or (status = 'pending' and hold_until > now())
     order by check_in desc, ref limit ${limit}`;
 }
 

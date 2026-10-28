@@ -23,6 +23,8 @@
 # misc
 .DS_Store
 *.pem
+# Netopia's IPN verification key is public; the IPN function needs it in every build
+!.netopia/netopia-ipn-public-key.pem
 
 # debug
 npm-debug.log*

@@ -5,26 +5,30 @@ import { isValidCnp } from "@/lib/cnp";
 import { isISODate } from "@/lib/dates";
 import { sql } from "@/lib/db";
 import { sendCheckinNotice } from "@/lib/email";
+import { oneLine } from "@/lib/format";
+import { rateLimited } from "@/lib/rate-limit";
 import { seal } from "@/lib/seal";
 import { acceptanceOf, checkinStatement, recordAcceptance } from "@/lib/terms";
 
+const text = (min: number, max: number) => z.string().trim().min(min).max(max).transform(oneLine);
+
 const Body = z.object({
   source: z.enum(["direct", "booking", "other"]),
-  reservation: z.string().trim().max(40).optional(),
+  reservation: text(0, 40).optional(),
   apartment: z.enum(APARTMENT_SLUGS).optional(),
   arrival: z.string().refine(isISODate),
   nights: z.number().int().min(1).max(90).optional(),
   guests: z.number().int().min(1).max(16).optional(),
-  fullName: z.string().trim().min(3).max(120),
+  fullName: text(3, 120),
   email: z.string().trim().email().max(200),
-  phone: z.string().trim().max(40).optional(),
-  street: z.string().trim().min(3).max(200),
-  city: z.string().trim().min(2).max(100),
-  postalCode: z.string().trim().max(20).optional(),
-  country: z.string().trim().min(2).max(60),
+  phone: text(0, 40).optional(),
+  street: text(3, 200),
+  city: text(2, 100),
+  postalCode: text(0, 20).optional(),
+  country: text(2, 60),
   cnp: z.string().trim().optional().refine((v) => !v || isValidCnp(v), "cnp"),
-  companyName: z.string().trim().max(160).optional(),
-  companyCui: z.string().trim().max(20).optional(),
+  companyName: text(0, 160).optional(),
+  companyCui: text(0, 20).optional(),
   acceptRules: z.literal(true),
   lang: z.enum(["en", "ro", "de"]),
   website: z.string().max(0).optional(), // honeypot
@@ -32,6 +36,8 @@ const Body = z.object({
 
 /** Online check-in: the invoice data and the house rules, accepted before arrival. */
 export async function POST(req: Request) {
+  const limited = await rateLimited(req, "checkin", 5, 600);
+  if (limited) return limited;
   const parsed = Body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
     const cnp = parsed.error.issues.some((i) => i.path[0] === "cnp");

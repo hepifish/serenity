@@ -19,7 +19,9 @@ export function seal(plain: string): string {
 
 export function unseal(sealed: string): string {
   const [iv, tag, body] = sealed.split(".").map((p) => Buffer.from(p, "base64url"));
-  const d = createDecipheriv("aes-256-gcm", key(), iv);
+  // a short tag would be accepted by default and is easier to forge
+  if (tag?.length !== 16) throw new Error("sealed value has a bad tag");
+  const d = createDecipheriv("aes-256-gcm", key(), iv, { authTagLength: 16 });
   d.setAuthTag(tag);
   return Buffer.concat([d.update(body), d.final()]).toString("utf8");
 }

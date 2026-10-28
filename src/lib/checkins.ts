@@ -1,3 +1,4 @@
+import { requireAdmin } from "./admin-auth";
 import { sql } from "./db";
 import { unseal } from "./seal";
 
@@ -10,6 +11,7 @@ export type Checkin = {
 
 /** For the owner's eyes only: the admin page and the CSV export. The CNP is unsealed here and nowhere else. */
 export async function listCheckins(limit = 500): Promise<Checkin[]> {
+  await requireAdmin(); // checked next to the data too, whoever the caller is
   const rows = await sql<(Omit<Checkin, "cnp"> & { cnp_enc: string | null })[]>`
     select id, source, reservation, apartment, to_char(arrival,'YYYY-MM-DD') as arrival, nights, guests, full_name, email, phone,
       street, city, postal_code, country, cnp_enc, company_name, company_cui, lang, created_at
