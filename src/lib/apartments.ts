@@ -1,0 +1,230 @@
+import type { Locale } from "@/i18n/config";
+import manifest from "./image-manifest.json";
+import { ADDRESS } from "./site";
+
+/**
+ * The four apartments. Facts live here once; the words about them live in
+ * src/i18n/apartments.ts per language.
+ */
+export const APARTMENT_SLUGS = ["film-studio", "gothic-chambers", "art-station", "pink-panther"] as const;
+export type ApartmentSlug = (typeof APARTMENT_SLUGS)[number];
+
+export type Apartment = {
+  slug: ApartmentSlug;
+  name: string;
+  number: string;
+  /** accent colour, used sparingly: a rule, a dot, the selected nights */
+  accent: string;
+  maxGuests: number;
+  bedrooms: number;
+  beds: string;
+  sizeM2?: number;
+  /** which photo stands for the apartment in the home hero, and where to aim the crop */
+  heroIndex?: number;
+  heroFocus?: string;
+  /** the photo behind the title on the apartment's own page, when not the first */
+  pageHeroIndex?: number;
+  /** listed here but not bookable online yet (no calendar or photos) */
+  comingSoon?: boolean;
+  icalEnv: string;
+  bookingUrl: string;
+  /** where it is: the map pin, directions and the structured data */
+  lat: number;
+  lng: number;
+  address: Address;
+  /** the ways a guest asks about first, measured on OpenStreetMap routes (OSRM) and rounded */
+  ways: Way[];
+  gallery: { src: string; w: number; h: number }[];
+  /** what the structured data lists; the guest-facing words are the highlights in i18n */
+  amenities: Amenity[];
+  bedDetails: { count: number; type: string }[];
+  /** the inside of the Lupeni house, so it belongs to the business node */
+  inHouse: boolean;
+};
+
+export type Address = { streetAddress: string; postalCode?: string; locality: string };
+
+export const AMENITY_NAME = {
+  privateEntrance: "Private entrance",
+  groundFloor: "Ground floor",
+  terrace: "Terrace",
+  balcony: "Balcony with mountain view",
+  elevator: "Elevator",
+  kitchen: "Kitchen",
+  washingMachine: "Washing machine",
+  workspace: "Workspace",
+  walkInShower: "Walk-in shower",
+  bathtub: "Bathtub",
+  wifi: "Free Wi-Fi",
+  freeParking: "Free parking",
+  selfCheckIn: "Self check-in",
+} as const;
+export type Amenity = keyof typeof AMENITY_NAME;
+
+/**
+ * Quiet reference points on the map: named, never links. A landmark shows
+ * from `minZoom` up, so the small ones stay out of the way at city scale.
+ * Coordinates are OpenStreetMap's.
+ */
+export const LANDMARKS = [
+  /** Piața Mare (way 24536785); the Brukenthal Palace is on the square, so it shares the mark */
+  { id: "centre", lat: 45.796777, lng: 24.151826, minZoom: 0 },
+  /** Sibiu International Airport, terminal stop on Șoseaua Alba Iulia (node 13599377047) */
+  { id: "airport", lat: 45.789457, lng: 24.093852, minZoom: 0 },
+  /** Gara Sibiu (node 10291103204) */
+  { id: "station", lat: 45.800155, lng: 24.161724, minZoom: 12.5 },
+  /** Podul Minciunilor between Piața Mică and the lower town (way 898073994) */
+  { id: "bridge", lat: 45.798321, lng: 24.150798, minZoom: 13.75, labelAbove: true }, // 200 m north of the Piața Mare mark: its name goes up
+  /** ASTRA open-air museum in Dumbrava Sibiului (way 301275824) */
+  { id: "astra", lat: 45.753795, lng: 24.112741, minZoom: 11 },
+] as const;
+export type Landmark = (typeof LANDMARKS)[number];
+export type LandmarkId = Landmark["id"];
+
+export type Way = { to: "centre" | "station" | "airport"; km: number; minutes: number; by: "foot" | "car" };
+
+/** Film Studio, Gothic Chambers and Art Station share one house, so one pin. */
+const LUPENI_2 = {
+  lat: 45.803159,
+  lng: 24.1634059,
+  address: { streetAddress: ADDRESS.street, postalCode: ADDRESS.postalCode, locality: ADDRESS.city },
+  ways: [
+    { to: "centre", km: 1.3, minutes: 20, by: "foot" }, // 1.33 km, 18 min
+    { to: "station", km: 0.6, minutes: 8, by: "foot" }, // 632 m, 8.4 min
+  ] satisfies Way[],
+  bedDetails: [{ count: 1, type: "Queen" }, { count: 1, type: "Sofa bed" }],
+  inHouse: true,
+};
+
+export const directionsUrl = (lat: number, lng: number) => `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+
+export function isApartmentSlug(s: string): s is ApartmentSlug {
+  return (APARTMENT_SLUGS as readonly string[]).includes(s);
+}
+
+const BOOKING_PAGE = "https://www.booking.com/hotel/ro/serenity-house-apartments.html";
+
+const img = (dir: string, files: string[]) =>
+  files.map((f) => {
+    const src = `/images/${dir}/${f}.webp`;
+    const [w, h] = (manifest as Record<string, number[]>)[src] ?? [1600, 1200];
+    return { src, w, h };
+  });
+
+export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
+  "film-studio": {
+    slug: "film-studio",
+    ...LUPENI_2,
+    name: "Film Studio",
+    number: "01",
+    accent: "#D9A93B",
+    maxGuests: 4,
+    bedrooms: 1,
+    beds: "queen + sofa bed",
+    sizeM2: 45,
+    icalEnv: "BOOKING_ICAL_FILM",
+    amenities: ["privateEntrance", "groundFloor", "terrace", "kitchen", "workspace", "wifi", "freeParking", "selfCheckIn"],
+    heroIndex: 0,
+    heroFocus: "55% 40%",
+    bookingUrl: BOOKING_PAGE,
+    gallery: img("film", ["Serenity2024-29", "Serenity2024-37", "Serenity2024-36", "Serenity2024-34", "Serenity2024-33", "Serenity2024-35", "Serenity2024-39", "Serenity2024-40", "Serenity2024-59", "Serenity2024-38", "Serenity2024-32", "Serenity2024-58", "Serenity2024-41", "Serenity2024-42", "Serenity2024-30", "Serenity2024-31", "Serenity2024-27", "Serenity2024-28"]),
+  },
+  "gothic-chambers": {
+    slug: "gothic-chambers",
+    ...LUPENI_2,
+    name: "Gothic Chambers",
+    number: "02",
+    accent: "#8F6BB0",
+    maxGuests: 4,
+    bedrooms: 1,
+    beds: "queen + sofa bed",
+    sizeM2: 45,
+    icalEnv: "BOOKING_ICAL_GOTHIC",
+    amenities: ["privateEntrance", "groundFloor", "kitchen", "walkInShower", "wifi", "freeParking", "selfCheckIn"],
+    heroIndex: 1,
+    heroFocus: "50% 40%",
+    bookingUrl: BOOKING_PAGE,
+    gallery: img("gotic", ["Serenity2024-22", "Serenity2024-60", "Serenity2024-26", "Serenity2024-24", "Serenity2024-48", "Serenity2024-19", "Serenity2024-20", "Serenity2024-14", "Serenity2024-23", "Serenity2024-13", "Serenity2024-61", "Serenity2024-45", "Serenity2024-21", "Serenity2024-25", "Serenity2024-46", "Serenity2024-47", "Serenity2024-49", "Serenity2024-15", "Serenity2024-16", "Serenity2024-17", "Serenity2024-18"]),
+  },
+  "art-station": {
+    slug: "art-station",
+    ...LUPENI_2,
+    name: "Art Station",
+    number: "03",
+    accent: "#C8312C",
+    maxGuests: 4,
+    bedrooms: 1,
+    beds: "queen + sofa bed",
+    sizeM2: 45,
+    icalEnv: "BOOKING_ICAL_ART",
+    amenities: ["privateEntrance", "groundFloor", "terrace", "kitchen", "workspace", "walkInShower", "wifi", "freeParking", "selfCheckIn"],
+    heroIndex: 0,
+    heroFocus: "64% 55%",
+    bookingUrl: BOOKING_PAGE,
+    gallery: img("art", ["Serenity2024-56", "Serenity2024-43", "Serenity2024-03", "Serenity2024-04", "Serenity2024-08", "Serenity2024-54", "Serenity2024-51", "Serenity2024-05", "Serenity2024-12", "Serenity2024-55", "Serenity2024-50", "Serenity2024-06", "Serenity2024-07", "Serenity2024-52", "Serenity2024-53", "Serenity2024-02", "Serenity2024-01", "Serenity2024-09", "Serenity2024-10", "Serenity2024-11"]),
+  },
+  "pink-panther": {
+    slug: "pink-panther",
+    // Magnolia Residence, west Sibiu. TODO(Pati): street and number, then the postcode
+    lat: 45.807145443669,
+    lng: 24.106024925935,
+    address: { streetAddress: "Magnolia Residence", locality: "Sibiu" },
+    ways: [
+      { to: "centre", km: 5.3, minutes: 10, by: "car" }, // 5.35 km, 9 min without traffic
+      { to: "airport", km: 3.7, minutes: 8, by: "car" }, // 3.72 km, 8.1 min to the terminal
+    ],
+    name: "Pink Panther",
+    number: "04",
+    accent: "#E39AB4",
+    maxGuests: 6,
+    bedrooms: 2,
+    beds: "2 king + sofa bed",
+    sizeM2: 56,
+    icalEnv: "BOOKING_ICAL_PINK",
+    amenities: ["elevator", "balcony", "kitchen", "washingMachine", "bathtub", "wifi", "freeParking", "selfCheckIn"],
+    bedDetails: [{ count: 2, type: "King" }, { count: 1, type: "Sofa bed" }],
+    inHouse: false,
+    heroIndex: 1,
+    heroFocus: "50% 45%",
+    pageHeroIndex: 2,
+    bookingUrl: "https://www.booking.com/hotel/ro/feel-like-home-pink-panther-apartment.html",
+    gallery: img("pink", ["pink-01", "pink-03", "pink-10", "pink-19", "pink-02", "pink-09", "pink-06", "pink-04", "pink-05", "pink-07",
+      "pink-08", "pink-11", "pink-12", "pink-18", "pink-16", "pink-17", "pink-13", "pink-14", "pink-15", "pink-20", "pink-21"]),
+  },
+
+};
+
+export const apartmentList = () => APARTMENT_SLUGS.map((s) => APARTMENTS[s]);
+
+/** One entry per front door: apartments that share coordinates share a pin. */
+export type Place = Pick<Apartment, "lat" | "lng" | "address" | "ways"> & {
+  id: string;
+  href: string;
+  apartments: Pick<Apartment, "slug" | "name" | "accent">[];
+};
+
+export function places(): Place[] {
+  const byDoor = new Map<string, Place>();
+  for (const { slug, name, accent, lat, lng, address, ways } of apartmentList()) {
+    const id = `${lat},${lng}`;
+    const place = byDoor.get(id) ?? { id, lat, lng, address, ways, href: directionsUrl(lat, lng), apartments: [] };
+    place.apartments.push({ slug, name, accent });
+    byDoor.set(id, place);
+  }
+  return [...byDoor.values()];
+}
+
+export type ApartmentCopy = {
+  /** the search result: what it is, where, and the one fact that sells it */
+  seoTitle: string;
+  seoDescription: string;
+  tagline: string;
+  intro: string;
+  story: string[];
+  highlights: string[];
+  /** short factual passages (beds, the way there, arrival): what guests and AI answers quote */
+  goodToKnow: { title: string; text: string }[];
+  /** one per gallery photo, in gallery order */
+  alts: string[];
+};
+export type ApartmentCopyByLocale = Record<Locale, Record<ApartmentSlug, ApartmentCopy>>;
