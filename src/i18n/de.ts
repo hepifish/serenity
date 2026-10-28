@@ -194,9 +194,15 @@ const de: Dict = {
     title: "Zwei Adressen, eine Stadt",
     region: "Karte von Sibiu mit den Wohnungen",
     westSibiu: "Westen von Sibiu",
-    centre: "Piața Mare",
-    toCentre: (km, minutes, by) =>
-      `Etwa ${km} km bis zur Piața Mare, ${minutes} Minuten ${by === "foot" ? "zu Fuß" : "mit dem Auto"}`,
+    landmarks: {
+      centre: ["Piața Mare", "Brukenthal-Museum"],
+      airport: ["Flughafen Sibiu", "SBZ"],
+      station: ["Bahnhof Sibiu"],
+      bridge: ["Lügenbrücke", "Piața Mică"],
+      astra: ["ASTRA-Museum", "Dumbrava Sibiului"],
+    },
+    way: (distance, minutes, by, to) =>
+      `Etwa ${distance} ${{ centre: "bis zur Piața Mare", station: "bis zum Bahnhof", airport: "bis zum Flughafen" }[to]}, ${minutes} Minuten ${by === "foot" ? "zu Fuß" : "mit dem Auto"}`,
     directions: "Route",
     directionsTo: (names) => `Route zu ${names} in Google Maps (öffnet in einem neuen Tab)`,
     loading: "Die Karte wird geladen",

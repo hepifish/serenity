@@ -31,24 +31,45 @@ export type Apartment = {
   lat: number;
   lng: number;
   address: Address;
-  /** the way to Piața Mare, measured on OpenStreetMap routes and rounded */
-  toCentre: { km: number; minutes: number; by: "foot" | "car" };
+  /** the ways a guest asks about first, measured on OpenStreetMap routes (OSRM) and rounded */
+  ways: Way[];
   gallery: { src: string; w: number; h: number }[];
 };
 
 export type Address = { streetAddress: string; postalCode?: string; locality: string };
+
+/**
+ * Quiet reference points on the map: named, never links. A landmark shows
+ * from `minZoom` up, so the small ones stay out of the way at city scale.
+ * Coordinates are OpenStreetMap's.
+ */
+export const LANDMARKS = [
+  /** Piața Mare (way 24536785); the Brukenthal Palace is on the square, so it shares the mark */
+  { id: "centre", lat: 45.796777, lng: 24.151826, minZoom: 0 },
+  /** Sibiu International Airport, terminal stop on Șoseaua Alba Iulia (node 13599377047) */
+  { id: "airport", lat: 45.789457, lng: 24.093852, minZoom: 0 },
+  /** Gara Sibiu (node 10291103204) */
+  { id: "station", lat: 45.800155, lng: 24.161724, minZoom: 12.5 },
+  /** Podul Minciunilor between Piața Mică and the lower town (way 898073994) */
+  { id: "bridge", lat: 45.798321, lng: 24.150798, minZoom: 13.75, labelAbove: true }, // 200 m north of the Piața Mare mark: its name goes up
+  /** ASTRA open-air museum in Dumbrava Sibiului (way 301275824) */
+  { id: "astra", lat: 45.753795, lng: 24.112741, minZoom: 11 },
+] as const;
+export type Landmark = (typeof LANDMARKS)[number];
+export type LandmarkId = Landmark["id"];
+
+export type Way = { to: "centre" | "station" | "airport"; km: number; minutes: number; by: "foot" | "car" };
 
 /** Film Studio, Gothic Chambers and Art Station share one house, so one pin. */
 const LUPENI_2 = {
   lat: 45.803159,
   lng: 24.1634059,
   address: { streetAddress: "Fundătura Lupeni 2", postalCode: "550206", locality: "Sibiu" },
-  // OSRM foot route: 1.33 km, 18 min
-  toCentre: { km: 1.3, minutes: 20, by: "foot" as const },
+  ways: [
+    { to: "centre", km: 1.3, minutes: 20, by: "foot" }, // 1.33 km, 18 min
+    { to: "station", km: 0.6, minutes: 8, by: "foot" }, // 632 m, 8.4 min
+  ] satisfies Way[],
 };
-
-/** Piața Mare, the old town's main square (OSM way 24536785): the map's reference point. */
-export const PIATA_MARE = { lat: 45.796777, lng: 24.151826 };
 
 export const directionsUrl = (lat: number, lng: number) => `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
 
@@ -120,8 +141,10 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
     lat: 45.807145443669,
     lng: 24.106024925935,
     address: { streetAddress: "Magnolia Residence", locality: "Sibiu" },
-    // OSRM car route: 5.35 km, 9 min without traffic
-    toCentre: { km: 5.3, minutes: 10, by: "car" },
+    ways: [
+      { to: "centre", km: 5.3, minutes: 10, by: "car" }, // 5.35 km, 9 min without traffic
+      { to: "airport", km: 3.7, minutes: 8, by: "car" }, // 3.72 km, 8.1 min to the terminal
+    ],
     name: "Pink Panther",
     number: "04",
     accent: "#E39AB4",
@@ -143,7 +166,7 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
 export const apartmentList = () => APARTMENT_SLUGS.map((s) => APARTMENTS[s]);
 
 /** One entry per front door: apartments that share coordinates share a pin. */
-export type Place = Pick<Apartment, "lat" | "lng" | "address" | "toCentre"> & {
+export type Place = Pick<Apartment, "lat" | "lng" | "address" | "ways"> & {
   id: string;
   href: string;
   apartments: Pick<Apartment, "slug" | "name" | "accent">[];
@@ -151,9 +174,9 @@ export type Place = Pick<Apartment, "lat" | "lng" | "address" | "toCentre"> & {
 
 export function places(): Place[] {
   const byDoor = new Map<string, Place>();
-  for (const { slug, name, accent, lat, lng, address, toCentre } of apartmentList()) {
+  for (const { slug, name, accent, lat, lng, address, ways } of apartmentList()) {
     const id = `${lat},${lng}`;
-    const place = byDoor.get(id) ?? { id, lat, lng, address, toCentre, href: directionsUrl(lat, lng), apartments: [] };
+    const place = byDoor.get(id) ?? { id, lat, lng, address, ways, href: directionsUrl(lat, lng), apartments: [] };
     place.apartments.push({ slug, name, accent });
     byDoor.set(id, place);
   }
