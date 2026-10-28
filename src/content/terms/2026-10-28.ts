@@ -11,7 +11,7 @@ const CO = {
   name: "SERENITY ADMIN APARTAMENTE SRL",
   cui: "47339489",
   regCom: "J32/2691/2022",
-  address: "Fundătura Lupeni nr. 2, 550205 Sibiu, România",
+  address: "Fundătura Lupeni nr. 2, 550206 Sibiu, România",
   email: "serenityhouseap@gmail.com",
 };
 
@@ -122,11 +122,11 @@ const roTerms: LegalDoc = {
     },
     {
       id: "damage",
-      h: "12. Pagube minore: suma fixă de 500 lei",
+      h: "12. Pagube minore: costul real, cel mult 500 lei",
       p: [
         "Răspundeți pentru pagubele produse în timpul sejurului apartamentului, dotărilor lui și clădirii, dincolo de uzura normală. Persoana care a făcut rezervarea răspunde față de noi și pentru pagubele produse de persoanele cazate împreună cu ea sau primite de ea în apartament.",
-        "Pentru pagubele minore datorați o despăgubire fixă de 500 lei (aproximativ 100 euro) pe sejur, convenită ca clauză penală (art. 1538 și următoarele din Codul civil), fără să fie nevoie să dovedim valoarea exactă a pagubei. Suma reflectă costul obișnuit al curățării speciale sau al înlocuirii, al manoperei și al timpului în care apartamentul nu poate fi închiriat. Se datorează o singură dată pe sejur, oricâte pagube minore ar fi.",
-        "Nu cerem nimic pentru uzura normală și nici pentru un incident mărunt pe care îl rezolvăm fără cost, de exemplu un singur pahar spart.",
+        "Pentru pagubele minore plătiți doar costul real al curățării, reparației sau înlocuirii, dovedit cu factură, bon fiscal sau deviz scris, dar cel mult 500 lei (aproximativ 100 euro) pe sejur, oricâte pagube minore ar fi.",
+        "Uzura normală nu se plătește.",
         "Sunt pagube minore, de exemplu:",
       ],
       ul: [
@@ -138,17 +138,17 @@ const roTerms: LegalDoc = {
       ],
     },
     {
-      h: "13. Pagube mai mari: despăgubire integrală",
+      h: "13. Pagube mai mari: costul integral",
       p: [
-        "Dacă paguba totală depășește 500 lei, de exemplu un geam spart, un aparat electrocasnic sau o piesă de mobilier distrusă ori o inundație provocată, datorați, în locul sumei fixe, despăgubirea integrală: costul real al reparației sau, dacă bunul nu se poate repara, al înlocuirii cu un bun echivalent, dovedit prin deviz, ofertă sau factură. Dacă reparația ne obligă să anulăm rezervări, datorați și valoarea nopților pierdute, dovedită cu rezervările anulate.",
-        "Așadar, suma fixă de 500 lei nu limitează răspunderea dumneavoastră pentru pagubele mai mari. Plătiți fie suma fixă, fie despăgubirea integrală, niciodată pe amândouă.",
+        "Pentru pagubele mai mari, de exemplu un geam spart, un aparat electrocasnic sau o piesă de mobilier distrusă ori o inundație provocată, plătiți costul integral, fără limita de 500 lei: costul real al reparației sau, dacă bunul nu se poate repara, al înlocuirii cu un bun echivalent, dovedit prin factură sau deviz scris. Dacă reparația ne obligă să anulăm rezervări, datorați și valoarea nopților pierdute, dovedită cu rezervările anulate.",
+        "Limita de 500 lei se aplică pagubelor minore luate împreună. O pagubă care, singură, costă mai mult de 500 lei este o pagubă mai mare și se plătește integral.",
       ],
     },
     {
       h: "14. Cum constatăm pagubele și cum se plătesc",
       ul: [
         "Verificăm apartamentul după plecare și documentăm orice pagubă prin fotografii sau video cu dată și oră.",
-        "Vă anunțăm în scris, la adresa de e-mail din rezervare, în cel mult 7 zile de la check-out: ce s-a întâmplat, dovezile, suma cerută și, pentru pagubele mai mari, devizul, oferta sau factura. Dacă atunci avem doar o estimare, vă trimitem factura finală în cel mult 30 de zile, iar suma datorată este cea din factura finală.",
+        "Vă anunțăm în scris, la adresa de e-mail din rezervare, în cel mult 7 zile de la check-out: ce s-a întâmplat, fotografiile, suma cerută și dovada costului (factură, bon fiscal sau deviz scris). Dacă atunci avem doar un deviz, vă trimitem factura finală în cel mult 30 de zile, iar suma datorată este cea din factura finală, fără a depăși limita de 500 lei pentru pagubele minore.",
         "Aveți la dispoziție 14 zile de la primirea notificării pentru a răspunde: puteți contesta paguba sau suma și ne puteți trimite propriile dovezi. Analizăm răspunsul cu bună-credință și vă comunicăm decizia în scris.",
         "Plătiți prin transfer bancar sau prin link de plată cu cardul, în 14 zile de la notificare ori de la factura finală, dacă aceasta vine mai târziu, sau, dacă ați contestat, în 14 zile de la decizia noastră. Pentru suma plătită emitem un document justificativ.",
         "Dacă nu plătiți în acest termen, sunteți de drept în întârziere, fără altă formalitate (art. 1523 din Codul civil), iar noi putem recupera suma în instanță, de exemplu prin procedura cererii cu valoare redusă sau prin procedura europeană cu privire la cererile cu valoare redusă. Puteți apela oricând și la soluționarea alternativă a litigiilor de la punctul 17.",
@@ -296,11 +296,11 @@ const enTerms: LegalDoc = {
     },
     {
       id: "damage",
-      h: "12. Minor damage: a fixed 500 lei",
+      h: "12. Minor damage: the real cost, up to 500 lei",
       p: [
         "You are liable for damage caused during your stay to the apartment, its equipment and the building, beyond normal wear and tear. The person who made the booking is also liable to us for damage caused by the people staying with them or invited into the apartment.",
-        "For minor damage you owe a fixed compensation of 500 lei (about €100) per stay, agreed as a penalty clause (clauză penală, art. 1538 and following of the Romanian Civil Code), without us having to prove the exact value of the damage. The amount reflects the usual cost of special cleaning or replacement, the labour and the time the apartment cannot be let. It is owed once per stay, however many minor damages there are.",
-        "We charge nothing for normal wear and tear, nor for a small mishap we can fix at no cost, such as a single broken glass.",
+        "For minor damage you pay only the real cost of cleaning, repair or replacement, shown by an invoice, a receipt or a written estimate, and at most 500 lei (about €100) per stay, however many minor damages there are.",
+        "Normal wear and tear costs you nothing.",
         "Minor damage includes, for example:",
       ],
       ul: [
@@ -312,17 +312,17 @@ const enTerms: LegalDoc = {
       ],
     },
     {
-      h: "13. Larger damage: paid in full",
+      h: "13. Larger damage: the full cost",
       p: [
-        "If the total damage exceeds 500 lei, for example a broken window, a destroyed appliance or piece of furniture, or a flood you caused, you owe full compensation instead of the fixed amount: the actual cost of the repair or, if the item cannot be repaired, of replacing it with an equivalent one, shown by an estimate, a quote or an invoice. If the repair forces us to cancel bookings, you also owe the value of the nights lost, shown by the cancelled bookings.",
-        "The fixed 500 lei therefore does not cap your liability for larger damage. You pay either the fixed amount or the full compensation, never both.",
+        "For larger damage, for example a broken window, a destroyed appliance or piece of furniture, or a flood you caused, you pay the full cost, without the 500 lei limit: the actual cost of the repair or, if the item cannot be repaired, of replacing it with an equivalent one, shown by an invoice or a written estimate. If the repair forces us to cancel bookings, you also owe the value of the nights lost, shown by the cancelled bookings.",
+        "The 500 lei limit applies to all minor damage taken together. A single damage that costs more than 500 lei on its own is larger damage and is paid in full.",
       ],
     },
     {
       h: "14. How we report damage and how it is paid",
       ul: [
         "We check the apartment after you leave and record any damage with dated photos or video.",
-        "We notify you in writing, at the email address used for the booking, within 7 days after check-out: what happened, the evidence, the amount claimed and, for larger damage, the estimate, quote or invoice. If at that point we only have an estimate, we send the final invoice within 30 days, and the amount owed is the one on the final invoice.",
+        "We notify you in writing, at the email address used for the booking, within 7 days after check-out: what happened, the photos, the amount claimed and proof of the cost (invoice, receipt or written estimate). If at that point we only have an estimate, we send the final invoice within 30 days, and the amount owed is the one on the final invoice, never above the 500 lei limit for minor damage.",
         "You have 14 days from receiving our notice to respond: you can dispute the damage or the amount and send us your own evidence. We consider your response in good faith and give you our decision in writing.",
         "You pay by bank transfer or through a card payment link within 14 days of our notice or of the final invoice, whichever comes later, or, if you disputed it, within 14 days of our decision. We issue a receipt for the amount paid.",
         "If you do not pay within that term, you are in default by law without further notice (art. 1523 Romanian Civil Code), and we may recover the amount in court, for example through the Romanian small claims procedure or the European Small Claims Procedure. You may also use the alternative dispute resolution in section 17 at any time.",
@@ -470,11 +470,11 @@ const deTerms: LegalDoc = {
     },
     {
       id: "damage",
-      h: "12. Kleinere Schäden: pauschal 500 Lei",
+      h: "12. Kleinere Schäden: die tatsächlichen Kosten, höchstens 500 Lei",
       p: [
         "Sie haften für Schäden, die während Ihres Aufenthalts am Apartment, an seiner Ausstattung und am Gebäude entstehen und über die normale Abnutzung hinausgehen. Die Person, die gebucht hat, haftet uns gegenüber auch für Schäden durch ihre Mitreisenden oder durch Personen, die sie in das Apartment eingeladen hat.",
-        "Für kleinere Schäden schulden Sie eine pauschale Entschädigung von 500 Lei (etwa 100 €) pro Aufenthalt, vereinbart als Vertragsstrafe (clauză penală, Art. 1538 ff. rumänisches Zivilgesetzbuch), ohne dass wir die genaue Höhe des Schadens nachweisen müssen. Der Betrag entspricht den üblichen Kosten für Spezialreinigung oder Ersatz, Arbeitszeit und die Zeit, in der das Apartment nicht vermietet werden kann. Er wird einmal pro Aufenthalt fällig, unabhängig von der Zahl kleinerer Schäden.",
-        "Für normale Abnutzung berechnen wir nichts, ebenso wenig für ein kleines Missgeschick, das wir ohne Kosten beheben, etwa ein einzelnes zerbrochenes Glas.",
+        "Für kleinere Schäden zahlen Sie nur die tatsächlichen Kosten für Reinigung, Reparatur oder Ersatz, belegt durch Rechnung, Kassenbeleg oder schriftlichen Kostenvoranschlag, höchstens jedoch 500 Lei (etwa 100 €) pro Aufenthalt, unabhängig von der Zahl kleinerer Schäden.",
+        "Normale Abnutzung kostet Sie nichts.",
         "Kleinere Schäden sind zum Beispiel:",
       ],
       ul: [
@@ -486,17 +486,17 @@ const deTerms: LegalDoc = {
       ],
     },
     {
-      h: "13. Größere Schäden: voller Ersatz",
+      h: "13. Größere Schäden: die vollen Kosten",
       p: [
-        "Übersteigt der gesamte Schaden 500 Lei, zum Beispiel bei einer zerbrochenen Fensterscheibe, einem zerstörten Gerät oder Möbelstück oder einem von Ihnen verursachten Wasserschaden, schulden Sie statt der Pauschale vollen Schadenersatz: die tatsächlichen Kosten der Reparatur oder, wenn der Gegenstand nicht repariert werden kann, des Ersatzes durch einen gleichwertigen, belegt durch Kostenvoranschlag, Angebot oder Rechnung. Müssen wir wegen der Reparatur Buchungen stornieren, schulden Sie auch den Wert der entgangenen Nächte, belegt durch die stornierten Buchungen.",
-        "Die Pauschale von 500 Lei begrenzt Ihre Haftung für größere Schäden also nicht. Sie zahlen entweder die Pauschale oder den vollen Schadenersatz, nie beides.",
+        "Bei größeren Schäden, zum Beispiel einer zerbrochenen Fensterscheibe, einem zerstörten Gerät oder Möbelstück oder einem von Ihnen verursachten Wasserschaden, zahlen Sie die vollen Kosten ohne die Grenze von 500 Lei: die tatsächlichen Kosten der Reparatur oder, wenn der Gegenstand nicht repariert werden kann, des Ersatzes durch einen gleichwertigen, belegt durch Rechnung oder schriftlichen Kostenvoranschlag. Müssen wir wegen der Reparatur Buchungen stornieren, schulden Sie auch den Wert der entgangenen Nächte, belegt durch die stornierten Buchungen.",
+        "Die Grenze von 500 Lei gilt für alle kleineren Schäden zusammen. Ein einzelner Schaden, der für sich mehr als 500 Lei kostet, ist ein größerer Schaden und wird voll bezahlt.",
       ],
     },
     {
       h: "14. Wie wir Schäden melden und wie sie bezahlt werden",
       ul: [
         "Wir prüfen das Apartment nach Ihrer Abreise und dokumentieren jeden Schaden mit datierten Fotos oder Videos.",
-        "Wir benachrichtigen Sie schriftlich an die E-Mail-Adresse der Buchung, innerhalb von 7 Tagen nach dem Check-out: was passiert ist, die Nachweise, den geforderten Betrag und bei größeren Schäden den Kostenvoranschlag, das Angebot oder die Rechnung. Liegt uns dann nur eine Schätzung vor, senden wir die endgültige Rechnung innerhalb von 30 Tagen; geschuldet ist der Betrag der endgültigen Rechnung.",
+        "Wir benachrichtigen Sie schriftlich an die E-Mail-Adresse der Buchung, innerhalb von 7 Tagen nach dem Check-out: was passiert ist, die Fotos, den geforderten Betrag und den Kostennachweis (Rechnung, Kassenbeleg oder schriftlicher Kostenvoranschlag). Liegt uns dann nur ein Kostenvoranschlag vor, senden wir die endgültige Rechnung innerhalb von 30 Tagen; geschuldet ist der Betrag der endgültigen Rechnung, bei kleineren Schäden nie mehr als 500 Lei.",
         "Sie haben 14 Tage ab Erhalt unserer Mitteilung, um zu antworten: Sie können den Schaden oder den Betrag bestreiten und uns eigene Nachweise schicken. Wir prüfen Ihre Antwort nach Treu und Glauben und teilen Ihnen unsere Entscheidung schriftlich mit.",
         "Sie zahlen per Banküberweisung oder über einen Kartenzahlungslink innerhalb von 14 Tagen nach unserer Mitteilung oder nach der endgültigen Rechnung, je nachdem, was später kommt, oder, wenn Sie widersprochen haben, innerhalb von 14 Tagen nach unserer Entscheidung. Für den gezahlten Betrag erhalten Sie einen Beleg.",
         "Zahlen Sie nicht fristgerecht, geraten Sie ohne weitere Mahnung kraft Gesetzes in Verzug (Art. 1523 rumänisches Zivilgesetzbuch), und wir können den Betrag gerichtlich geltend machen, zum Beispiel im rumänischen Verfahren für geringfügige Forderungen oder im Europäischen Verfahren für geringfügige Forderungen. Sie können jederzeit auch die alternative Streitbeilegung nach Abschnitt 17 nutzen.",
