@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { LOCALES, LOCALE_TAG, type Locale } from "@/i18n/config";
-import { APARTMENTS, apartmentList, type ApartmentSlug } from "./apartments";
+import { APARTMENTS, apartmentList, directionsUrl, type ApartmentSlug } from "./apartments";
 import { COMPANY, SITE_URL } from "./site";
 
 /** Canonical + hreflang for a path that exists in every language ("" = home). */
@@ -80,8 +80,16 @@ export function apartmentLd(lang: Locale, slug: ApartmentSlug, name: string, des
     description,
     url: `${SITE_URL}/${lang}/apartments/${slug}`,
     image: a.gallery.slice(0, 6).map((g) => `${SITE_URL}${g.src}`),
-    address,
-    geo: { "@type": "GeoCoordinates", ...GEO },
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: a.address.streetAddress,
+      ...(a.address.postalCode ? { postalCode: a.address.postalCode } : {}),
+      addressLocality: a.address.locality,
+      addressRegion: "Sibiu",
+      addressCountry: "RO",
+    },
+    geo: { "@type": "GeoCoordinates", latitude: a.lat, longitude: a.lng },
+    hasMap: directionsUrl(a.lat, a.lng),
     numberOfRooms: a.bedrooms + 1,
     numberOfBedrooms: a.bedrooms,
     numberOfBathroomsTotal: 1,
