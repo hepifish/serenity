@@ -17,12 +17,22 @@ for (const [apartment, p] of Object.entries(defaults)) {
             on conflict (apartment) do nothing`;
 }
 
+// Booking's per-date prices (rows sorted by night): each run of nights at one
+// price becomes a dated special period, as migration 006 does.
 const rows = JSON.parse(readFileSync("scripts/booking-prices-2026-10-28.json", "utf8"));
 const slugs = ["film-studio", "gothic-chambers", "art-station"];
-for (const [night, ...prices] of rows) {
-  for (let i = 0; i < slugs.length; i++) {
-    await sql`insert into rate_overrides (apartment, night, price) values (${slugs[i]}, ${night}, ${direct(prices[i])})
-              on conflict do nothing`;
+const nextDay = (d) => new Date(Date.parse(d + "T00:00:00Z") + 864e5).toISOString().slice(0, 10);
+const [{ n }] = await sql`select count(*)::int as n from rate_periods where apartment = any(${slugs})`;
+for (let i = 0; i < slugs.length && !n; i++) {
+  const runs = [];
+  for (const [night, ...prices] of rows) {
+    const price = direct(prices[i]), last = runs.at(-1);
+    if (last && last.price === price && nextDay(last.to) === night) last.to = night;
+    else runs.push({ from: night, to: night, price });
+  }
+  for (const r of runs) {
+    await sql`insert into rate_periods (apartment, kind, label, first_night, last_night, price)
+              values (${slugs[i]}, 'special', 'Booking.com import', ${r.from}, ${r.to}, ${r.price})`;
   }
 }
 console.log("seeded", rows.length, "nights x", slugs.length);

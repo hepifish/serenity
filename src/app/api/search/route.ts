@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { APARTMENTS, APARTMENT_SLUGS } from "@/lib/apartments";
 import { isStayFree } from "@/lib/availability";
-import { getRate, quote } from "@/lib/pricing";
+import { getRate, minNightsOn, quote } from "@/lib/pricing";
+import { isISODate } from "@/lib/dates";
 import { checkStay } from "@/lib/stay";
 
 /**
@@ -19,8 +20,9 @@ export async function GET(req: Request) {
       if (APARTMENTS[slug].comingSoon) return { slug, capacity, available: false, reason: "no_price" };
       const rate = await getRate(slug);
       if (!rate) return { slug, capacity, available: false, reason: "no_price" };
-      const error = checkStay(slug, checkIn, checkOut, 1, rate.min_nights);
-      if (error) return { slug, capacity, available: false, reason: error, minNights: rate.min_nights };
+      const minNights = isISODate(checkIn) ? await minNightsOn(slug, checkIn, rate) : rate.min_nights;
+      const error = checkStay(slug, checkIn, checkOut, 1, minNights);
+      if (error) return { slug, capacity, available: false, reason: error, minNights };
       const free = await isStayFree(slug, checkIn!, checkOut!).catch(() => false);
       if (!free) return { slug, capacity, available: false, reason: "taken" };
       const q = await quote(slug, checkIn!, checkOut!, 1, rate);

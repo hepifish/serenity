@@ -18,7 +18,7 @@ type Props = {
   onChange: (a: ISODate | null, b: ISODate | null) => void;
   busy?: Set<ISODate>;
   prices?: Map<ISODate, number>;
-  minNights?: number;
+  minNights?: number | ((arrival: ISODate) => number);
   limitFor?: (checkIn: ISODate) => ISODate | null;
   footer?: React.ReactNode;
 };
