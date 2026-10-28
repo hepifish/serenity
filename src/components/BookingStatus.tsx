@@ -46,7 +46,7 @@ export default function BookingStatus({ lang, ref_, token, initial, apartment, s
         {status === "paid" ? <p className="muted">{t.arrival}</p> : null}
         <div className="actions" style={{ justifyContent: "center" }}>
           {status === "failed" || status === "expired" ? (
-            <Link className="btn" href={`/${lang}/apartments/${slug}?in=${checkIn}&out=${checkOut}#availability`}>{t.tryAgain}</Link>
+            <Link className="btn" href={slug ? `/${lang}/apartments/${slug}?in=${checkIn}&out=${checkOut}#availability` : `/${lang}?in=${checkIn}&out=${checkOut}`}>{t.tryAgain}</Link>
           ) : null}
           <Link className="btn ghost" href={`/${lang}`}>{t.home}</Link>
         </div>

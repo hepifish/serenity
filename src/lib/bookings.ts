@@ -5,6 +5,8 @@ import type { Quote } from "./pricing";
 
 export type Booking = {
   id: string;
+  group_id: string;
+  group_ref: string;
   ref: string;
   access_token: string;
   apartment: string;
@@ -32,7 +34,7 @@ export type Booking = {
   paid_at: Date | null;
 };
 
-const COLUMNS = sql`id, ref, access_token, apartment, to_char(check_in,'YYYY-MM-DD') as check_in,
+const COLUMNS = sql`id, group_id, group_ref, ref, access_token, apartment, to_char(check_in,'YYYY-MM-DD') as check_in,
   to_char(check_out,'YYYY-MM-DD') as check_out, guests, guest_name, guest_email, guest_phone, guest_country,
   guest_note, lang, lodging_total, cleaning_fee, city_tax, amount, nightly, pay_method, status, hold_until, netopia_ntp_id,
   netopia_status, netopia_message, created_at, paid_at`;
@@ -49,71 +51,81 @@ export type GuestDetails = {
 };
 
 /**
- * Takes the nights for HOLD_MINUTES while the guest pays. The advisory lock
- * makes two guests racing for the same nights take turns, so only one of them
- * gets the hold. Returns null when the nights were taken in the meantime.
+ * Takes the nights of one or several apartments for HOLD_MINUTES while the
+ * guest pays, as one group: all of them or none. Advisory locks, taken in a
+ * fixed order, make two guests racing for the same nights take turns.
+ * Returns null when any of the nights was taken in the meantime.
  */
-export async function createPendingBooking(q: Quote, g: GuestDetails): Promise<Booking | null> {
+export async function createPendingGroup(quotes: Quote[], g: GuestDetails): Promise<Booking[] | null> {
   return sql.begin(async (tx) => {
-    await tx`select pg_advisory_xact_lock(hashtext(${q.apartment}))`;
-    const [clash] = await tx`
-      select 1 from bookings
-      where apartment = ${q.apartment}
-        and (status = 'paid' or (status = 'pending' and hold_until > now()))
-        and check_in < ${q.checkOut} and check_out > ${q.checkIn}
-      limit 1`;
-    if (clash) return null;
-    const [b] = await tx<Booking[]>`
-      insert into bookings (ref, access_token, apartment, check_in, check_out, guests, guest_name, guest_email,
-        guest_phone, guest_country, guest_note, lang, lodging_total, cleaning_fee, city_tax, amount, nightly, pay_method, hold_until)
-      values (${newRef()}, ${randomBytes(18).toString("base64url")}, ${q.apartment}, ${q.checkIn}, ${q.checkOut},
-        ${q.guests}, ${g.name}, ${g.email}, ${g.phone}, ${g.country}, ${g.note ?? null}, ${g.lang}, ${q.lodging},
-        ${q.cleaning}, ${q.cityTax}, ${q.total}, ${tx.json(q.nightly)}, ${g.payMethod}, now() + make_interval(mins => ${HOLD_MINUTES}))
-      returning ${COLUMNS}`;
-    return b;
+    for (const a of [...new Set(quotes.map((q) => q.apartment))].sort()) await tx`select pg_advisory_xact_lock(hashtext(${a}))`;
+    for (const q of quotes) {
+      const [clash] = await tx`
+        select 1 from bookings
+        where apartment = ${q.apartment}
+          and (status = 'paid' or (status = 'pending' and hold_until > now()))
+          and check_in < ${q.checkOut} and check_out > ${q.checkIn}
+        limit 1`;
+      if (clash) return null;
+    }
+    const groupRef = newRef();
+    const token = randomBytes(18).toString("base64url");
+    const [{ id: groupId }] = await tx<{ id: string }[]>`select gen_random_uuid() as id`;
+    const rows: Booking[] = [];
+    for (const [i, q] of quotes.entries()) {
+      const ref = quotes.length === 1 ? groupRef : `${groupRef}-${i + 1}`;
+      const [b] = await tx<Booking[]>`
+        insert into bookings (group_id, group_ref, ref, access_token, apartment, check_in, check_out, guests, guest_name, guest_email,
+          guest_phone, guest_country, guest_note, lang, lodging_total, cleaning_fee, city_tax, amount, nightly, pay_method, hold_until)
+        values (${groupId}, ${groupRef}, ${ref}, ${token}, ${q.apartment}, ${q.checkIn}, ${q.checkOut},
+          ${q.guests}, ${g.name}, ${g.email}, ${g.phone}, ${g.country}, ${g.note ?? null}, ${g.lang}, ${q.lodging},
+          ${q.cleaning}, ${q.cityTax}, ${q.total}, ${tx.json(q.nightly)}, ${g.payMethod}, now() + make_interval(mins => ${HOLD_MINUTES}))
+        returning ${COLUMNS}`;
+      rows.push(b);
+    }
+    return rows;
   });
 }
 
-export async function attachPayment(id: string, ntpId: string) {
-  await sql`update bookings set netopia_ntp_id = ${ntpId}, updated_at = now() where id = ${id}`;
+export async function attachPayment(groupId: string, ntpId: string) {
+  await sql`update bookings set netopia_ntp_id = ${ntpId}, updated_at = now() where group_id = ${groupId}`;
 }
 
-export async function markFailed(id: string, message: string) {
+export async function markFailed(groupId: string, message: string) {
   await sql`update bookings set status = 'failed', netopia_message = ${message}, updated_at = now()
-            where id = ${id} and status = 'pending'`;
+            where group_id = ${groupId} and status = 'pending'`;
 }
 
-export async function getBooking(id: string) {
-  const [b] = await sql<Booking[]>`select ${COLUMNS} from bookings where id = ${id}`;
-  return b ?? null;
+export async function getGroup(groupId: string) {
+  return sql<Booking[]>`select ${COLUMNS} from bookings where group_id = ${groupId} order by ref`;
 }
 
-export async function getBookingByRef(ref: string, token: string) {
-  const [b] = await sql<Booking[]>`select ${COLUMNS} from bookings where ref = ${ref}`;
-  // compare outside SQL so a wrong token and an unknown ref look the same
-  return b && b.access_token === token ? b : null;
+export async function getGroupByRef(groupRef: string, token: string) {
+  const rows = await sql<Booking[]>`select ${COLUMNS} from bookings where group_ref = ${groupRef} order by ref`;
+  // compared outside SQL so a wrong token and an unknown code look the same
+  return rows.length && rows[0].access_token === token ? rows : null;
 }
 
 /**
- * Applies a payment outcome. Returns the booking only when this call is the
- * one that turned it paid, so emails go out once even if Netopia retries.
+ * Applies a payment outcome to the whole group. Returns the rows only when
+ * this call is the one that turned them paid, so emails go out once even if
+ * Netopia retries.
  */
-export async function applyPaymentStatus(id: string, outcome: "paid" | "failed" | "pending" | "cancelled", ntpStatus: number, message: string) {
+export async function applyPaymentStatus(groupId: string, outcome: "paid" | "failed" | "pending" | "cancelled", ntpStatus: number, message: string) {
   if (outcome === "paid") {
-    const [b] = await sql<Booking[]>`
+    return sql<Booking[]>`
       update bookings set status = 'paid', paid_at = now(), netopia_status = ${ntpStatus}, netopia_message = ${message}, updated_at = now()
-      where id = ${id} and status <> 'paid' returning ${COLUMNS}`;
-    return b ?? null;
+      where group_id = ${groupId} and status <> 'paid' returning ${COLUMNS}`;
   }
   if (outcome === "pending") {
     await sql`update bookings set netopia_status = ${ntpStatus}, netopia_message = ${message}, updated_at = now()
-              where id = ${id} and status = 'pending'`;
-    return null;
+              where group_id = ${groupId} and status = 'pending'`;
+    return [];
   }
   // a refund (cancelled) can hit a paid booking; a decline only a pending one
   await sql`update bookings set status = ${outcome}, netopia_status = ${ntpStatus}, netopia_message = ${message}, updated_at = now()
-            where id = ${id} and (status = 'pending' or ${outcome === "cancelled"})`;
-  return null;
+            where group_id = ${groupId} and (status = 'pending' or ${outcome === "cancelled"})`;
+  return [];
 }
 
 /** Another paid booking or Booking.com reservation already holds some of these nights. */
@@ -126,7 +138,7 @@ export async function paidOverlap(b: Booking) {
 
 export async function listBookings(limit = 200) {
   return sql<Booking[]>`select ${COLUMNS} from bookings where status in ('paid','pending','cancelled')
-    order by check_in desc limit ${limit}`;
+    order by check_in desc, ref limit ${limit}`;
 }
 
 export async function directBookingsFor(apartment: string) {

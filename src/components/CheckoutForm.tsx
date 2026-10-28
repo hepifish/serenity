@@ -7,11 +7,11 @@ import { money } from "@/lib/format";
 import { getDict } from "@/i18n";
 import type { Locale } from "@/i18n/config";
 
-type Props = { lang: Locale; slug: string; checkIn: string; checkOut: string; guests: number; total: number };
+type Props = { lang: Locale; slugs: string[]; checkIn: string; checkOut: string; guests: number; total: number };
 
 const COUNTRIES = ["Romania", "Germany", "Austria", "Switzerland", "Hungary", "Moldova", "Italy", "France", "Spain", "United Kingdom", "Netherlands", "Belgium", "Poland", "Czechia", "Bulgaria", "Serbia", "Israel", "United States", "Other"];
 
-export default function CheckoutForm({ lang, slug, checkIn, checkOut, guests, total }: Props) {
+export default function CheckoutForm({ lang, slugs, checkIn, checkOut, guests, total }: Props) {
   const t = getDict(lang).checkout;
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,7 +34,7 @@ export default function CheckoutForm({ lang, slug, checkIn, checkOut, guests, to
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          apartment: slug, checkIn, checkOut, guests, lang,
+          apartments: slugs, checkIn, checkOut, guests, lang,
           name: f.name, email: f.email, phone: f.phone, country: f.country, note: f.note || undefined,
           payMethod: f.payMethod, acceptTerms: f.terms === "on", website: f.website,
         }),

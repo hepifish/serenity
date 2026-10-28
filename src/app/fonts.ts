@@ -1,4 +1,4 @@
-import { Bodoni_Moda, Cinzel, Cormorant_Garamond, DM_Sans, Fraunces, Italiana } from "next/font/google";
+import { Bodoni_Moda, Cinzel, Cormorant_Garamond, DM_Sans, Italiana, Jost } from "next/font/google";
 
 // Declared once and shared by the site and the admin layouts.
 export const cormorant = Cormorant_Garamond({
@@ -20,8 +20,8 @@ export const dmSans = DM_Sans({
 export const filmFont = Bodoni_Moda({ variable: "--font-film-studio", subsets: ["latin", "latin-ext"], style: ["normal", "italic"] });
 /** Gothic Chambers: letters cut in stone, like the vaults. */
 export const gothicFont = Cinzel({ variable: "--font-gothic-chambers", subsets: ["latin", "latin-ext"] });
-/** Art Station: a soft, painterly serif. */
-export const artFont = Fraunces({ variable: "--font-art-station", subsets: ["latin", "latin-ext"], style: ["normal", "italic"] });
+/** Art Station: mid-century geometry, the Futura of museum posters. */
+export const artFont = Jost({ variable: "--font-art-station", subsets: ["latin", "latin-ext"] });
 /** Pink Panther: sixties Art Deco. */
 export const pinkFont = Italiana({ variable: "--font-pink-panther", subsets: ["latin"], weight: "400" });
 

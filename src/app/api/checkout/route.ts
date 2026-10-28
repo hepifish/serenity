@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { isApartmentSlug, APARTMENTS } from "@/lib/apartments";
+import { APARTMENTS, APARTMENT_SLUGS } from "@/lib/apartments";
 import { isStayFree } from "@/lib/availability";
-import { attachPayment, createPendingBooking, markFailed } from "@/lib/bookings";
+import { attachPayment, createPendingGroup, markFailed } from "@/lib/bookings";
 import { startPayment } from "@/lib/netopia";
-import { getRate, quote } from "@/lib/pricing";
-import { checkStay } from "@/lib/stay";
+import { getRate, quote, type Quote } from "@/lib/pricing";
+import { checkStay, splitGuests } from "@/lib/stay";
 
 const Body = z.object({
-  apartment: z.string(),
+  apartments: z.array(z.enum(APARTMENT_SLUGS)).min(1).max(APARTMENT_SLUGS.length),
   checkIn: z.string(),
   checkOut: z.string(),
   guests: z.number().int(),
@@ -28,58 +28,68 @@ function fail(code: string, status = 400) {
   return NextResponse.json({ error: code }, { status });
 }
 
+/** One payment for one or several apartments over the same dates. */
 export async function POST(req: Request) {
   const parsed = Body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return fail("invalid");
   const b = parsed.data;
-  if (!isApartmentSlug(b.apartment)) return fail("invalid");
+  const slugs = [...new Set(b.apartments)];
+  if (slugs.some((s) => APARTMENTS[s].comingSoon)) return fail("invalid");
+  const split = splitGuests(slugs, b.guests);
+  if (!split) return fail("guests");
 
-  const rate = await getRate(b.apartment);
-  if (!rate) return fail("no_price", 409);
-  const stayError = checkStay(b.apartment, b.checkIn, b.checkOut, b.guests, rate.min_nights);
-  if (stayError) return fail(stayError);
+  const quotes: Quote[] = [];
+  for (const [i, slug] of slugs.entries()) {
+    const rate = await getRate(slug);
+    if (!rate) return fail("no_price", 409);
+    const stayError = checkStay(slug, b.checkIn, b.checkOut, split[i], rate.min_nights);
+    if (stayError) return fail(stayError);
+    const q = await quote(slug, b.checkIn, b.checkOut, split[i]);
+    if (!q) return fail("no_price", 409);
+    quotes.push(q);
+  }
 
   // Read Booking.com live: this is the moment money is about to move.
   try {
-    if (!(await isStayFree(b.apartment, b.checkIn, b.checkOut, { fresh: true }))) return fail("taken", 409);
+    const free = await Promise.all(slugs.map((s) => isStayFree(s, b.checkIn, b.checkOut, { fresh: true })));
+    if (free.includes(false)) return fail("taken", 409);
   } catch (e) {
     console.error("[checkout] calendar unavailable", e);
     return fail("calendar_unavailable", 503);
   }
 
-  const q = await quote(b.apartment, b.checkIn, b.checkOut, b.guests);
-  if (!q) return fail("no_price", 409);
-
-  const booking = await createPendingBooking(q, {
+  const rows = await createPendingGroup(quotes, {
     name: b.name, email: b.email, phone: b.phone, country: b.country, note: b.note, lang: b.lang, payMethod: b.payMethod,
   });
-  if (!booking) return fail("taken", 409);
+  if (!rows) return fail("taken", 409);
+  const group = rows[0];
+  const total = Math.round(quotes.reduce((s, q) => s + q.total, 0) * 100) / 100;
 
   // Netopia calls back the deployment that started the payment (production, a preview, or localhost).
   const origin = new URL(req.url).origin;
-  const back = `${origin}/${b.lang}/booking/${booking.ref}?t=${booking.access_token}`;
+  const back = `${origin}/${b.lang}/booking/${group.group_ref}?t=${group.access_token}`;
   const [firstName, ...rest] = b.name.split(/\s+/);
   try {
     const { ntpId, paymentUrl } = await startPayment({
-      orderId: booking.id,
-      amount: q.total,
-      description: `Serenity ${APARTMENTS[b.apartment].name} ${q.checkIn} - ${q.checkOut} (${booking.ref})`,
+      orderId: group.group_id,
+      amount: total,
+      description: `Serenity ${slugs.map((s) => APARTMENTS[s].name).join(" + ")} ${b.checkIn} - ${b.checkOut} (${group.group_ref})`,
       lang: b.lang,
       notifyUrl: `${origin}/api/netopia/ipn`,
       redirectUrl: back,
       cancelUrl: back,
       billing: { email: b.email, phone: b.phone, firstName, lastName: rest.join(" ") || firstName, countryName: b.country },
-      products: [
-        { name: `${APARTMENTS[b.apartment].name}, ${q.nights} nights`, code: b.apartment, price: q.lodging },
-        ...(q.cleaning ? [{ name: "Cleaning", code: "cleaning", price: q.cleaning }] : []),
-        { name: "Sibiu tourism promotion tax", code: "city-tax", price: q.cityTax },
-      ],
+      products: quotes.flatMap((q) => [
+        { name: `${APARTMENTS[q.apartment as keyof typeof APARTMENTS].name}, ${q.nights} nights`, code: q.apartment, price: q.lodging },
+        ...(q.cleaning ? [{ name: "Cleaning", code: `${q.apartment}-cleaning`, price: q.cleaning }] : []),
+        { name: "Sibiu tourism promotion tax", code: `${q.apartment}-tax`, price: q.cityTax },
+      ]),
     });
-    await attachPayment(booking.id, ntpId);
-    return NextResponse.json({ paymentUrl, ref: booking.ref });
+    await attachPayment(group.group_id, ntpId);
+    return NextResponse.json({ paymentUrl, ref: group.group_ref });
   } catch (e) {
     console.error("[checkout] payment start failed", e);
-    await markFailed(booking.id, e instanceof Error ? e.message : "start failed");
+    await markFailed(group.group_id, e instanceof Error ? e.message : "start failed");
     return fail("payment_unavailable", 502);
   }
 }

@@ -48,6 +48,14 @@ export default function HeroSearch({ lang, today, maxGuests }: Props) {
     [cal, merged],
   );
 
+  // "Book direct" in the header asks for the date picker.
+  useEffect(() => {
+    const pick = (e: Event) => (e.preventDefault(), setOpen(true));
+    window.addEventListener("serenity:pick-dates", pick);
+    if (new URLSearchParams(location.search).get("pick") === "1") setOpen(true);
+    return () => window.removeEventListener("serenity:pick-dates", pick);
+  }, []);
+
   // A shared link (?in=&out=&guests=) runs its search straight away.
   useEffect(() => {
     const q = new URLSearchParams(location.search);
@@ -62,7 +70,6 @@ export default function HeroSearch({ lang, today, maxGuests }: Props) {
   function submit() {
     if (!s.checkIn || !s.checkOut) return setOpen(true);
     searchStore.run();
-    document.getElementById("apartments")?.scrollIntoView({ behavior: "smooth" });
   }
 
   const results = s.results ? Object.values(s.results) : null;
@@ -112,7 +119,7 @@ export default function HeroSearch({ lang, today, maxGuests }: Props) {
     </div>
     <p className="search-status" aria-live="polite">
       {s.loading ? <span className="spinner" style={{ width: 14, height: 14 }} /> : results ? (
-        <a href="#apartments" className="link">{t.status(free, results.length)} ↓</a>
+        <a href="#results" className="link">{t.status(free, results.length)} ↓</a>
       ) : null}
     </p>
     </>

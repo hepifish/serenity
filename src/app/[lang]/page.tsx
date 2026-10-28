@@ -7,7 +7,8 @@ import Footer from "@/components/Footer";
 import HeroTriptych from "@/components/HeroTriptych";
 import SibiuPhotos from "@/components/SibiuPhotos";
 import HeroSearch from "@/components/HeroSearch";
-import RowAvailability from "@/components/RowAvailability";
+import SearchResults from "@/components/SearchResults";
+import { money } from "@/lib/format";
 import ContactForm from "@/components/ContactForm";
 import Reveal from "@/components/Reveal";
 import { getDict } from "@/i18n";
@@ -38,7 +39,8 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
   const prices = await Promise.all(
     apartments.map((a) => (a.comingSoon ? null : fromPrice(a.slug, addDays(today, 1), addDays(today, 90)).catch(() => null))),
   );
-  const maxGuests = Math.max(...apartments.map((a) => a.maxGuests));
+  // a party can spread over several apartments, so the search allows all of them together
+  const maxGuests = apartments.filter((a) => !a.comingSoon).reduce((n, a) => n + a.maxGuests, 0);
 
   return (
     <>
@@ -62,6 +64,18 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           </div>
           <HeroTriptych lang={lang} />
         </section>
+
+        <SearchResults
+          lang={lang}
+          apartments={apartments.map((a) => ({
+            slug: a.slug,
+            name: a.name,
+            number: a.number,
+            accent: a.accent,
+            tagline: apartmentCopy(lang, a.slug).tagline,
+            image: a.gallery[0] ?? null,
+          }))}
+        />
 
         <section className="section direct" aria-labelledby="direct-title">
           <div className="wrap">
@@ -123,7 +137,17 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                         </ul>
                       ) : null}
                       <div className="rv d3">
-                        <RowAvailability lang={lang} slug={a.slug} fromPrice={prices[i]} comingSoon={a.comingSoon} />
+                        <div style={{ display: "grid", gap: "1rem", justifyItems: "start" }}>
+                          {prices[i] ? (
+                            <p className="price-from">
+                              {t.apartments.from} <strong>{money(prices[i]!, lang)}</strong> / {t.apartments.perNight}
+                            </p>
+                          ) : null}
+                          <div className="actions">
+                            <Link href={`/${lang}/apartments/${a.slug}`} className={`btn ${a.comingSoon ? "ghost" : ""}`}>{t.apartments.discover}</Link>
+                            {!a.comingSoon ? <Link href={`/${lang}/apartments/${a.slug}#availability`} className="btn ghost">{t.apartments.checkAvailability}</Link> : null}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </article>

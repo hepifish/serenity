@@ -5,7 +5,7 @@ import BookingStatus from "@/components/BookingStatus";
 import { getDict } from "@/i18n";
 import { isLocale } from "@/i18n/config";
 import { APARTMENTS, isApartmentSlug } from "@/lib/apartments";
-import { getBookingByRef } from "@/lib/bookings";
+import { getGroupByRef } from "@/lib/bookings";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { robots: { index: false, follow: false } };
@@ -17,25 +17,27 @@ export default async function BookingPage({ params, searchParams }: Props) {
   const { lang, ref } = await params;
   const { t: token = "" } = await searchParams;
   if (!isLocale(lang)) notFound();
-  const b = await getBookingByRef(ref, token);
-  if (!b) notFound();
+  const group = await getGroupByRef(ref, token);
+  if (!group) notFound();
+  const b = group[0];
   const t = getDict(lang);
-  const apt = isApartmentSlug(b.apartment) ? APARTMENTS[b.apartment] : null;
+  const apt = group.length === 1 && isApartmentSlug(b.apartment) ? APARTMENTS[b.apartment] : null;
+  const names = group.map((r) => (isApartmentSlug(r.apartment) ? APARTMENTS[r.apartment].name : r.apartment)).join(" + ");
   const expired = b.status === "pending" && b.hold_until < new Date() && !b.netopia_status;
   return (
     <>
       <Header lang={lang} t={t.nav} solid />
-      <main style={{ ["--accent" as string]: apt?.accent ?? "var(--gold)" }}>
+      <main className={apt ? `theme-${apt.slug}` : undefined}>
         <BookingStatus
           lang={lang}
-          ref_={b.ref}
+          ref_={b.group_ref}
           token={token}
           initial={expired ? "expired" : b.status}
-          apartment={apt?.name ?? b.apartment}
-          slug={b.apartment}
+          apartment={names}
+          slug={apt ? b.apartment : ""}
           checkIn={b.check_in}
           checkOut={b.check_out}
-          amount={Number(b.amount)}
+          amount={group.reduce((sum, r) => sum + Number(r.amount), 0)}
         />
       </main>
     </>

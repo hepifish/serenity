@@ -18,3 +18,20 @@ export function checkStay(slug: ApartmentSlug, checkIn: unknown, checkOut: unkno
   if (!Number.isInteger(guests) || guests < 1 || guests > APARTMENTS[slug].maxGuests) return "guests";
   return null;
 }
+
+/**
+ * Spreads a party over the chosen apartments, filling each up to its size.
+ * Null when they do not fit, or when an apartment would stand empty.
+ */
+export function splitGuests(slugs: ApartmentSlug[], total: number): number[] | null {
+  const caps = slugs.map((s) => APARTMENTS[s].maxGuests);
+  if (!Number.isInteger(total) || total < slugs.length || total > caps.reduce((a, b) => a + b, 0)) return null;
+  const out = slugs.map(() => 1);
+  let left = total - slugs.length;
+  for (let i = 0; i < slugs.length && left > 0; i++) {
+    const add = Math.min(caps[i] - 1, left);
+    out[i] += add;
+    left -= add;
+  }
+  return out;
+}

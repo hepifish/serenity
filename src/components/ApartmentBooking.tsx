@@ -55,6 +55,13 @@ export default function ApartmentBooking({ lang, slug, name, maxGuests, bookingU
       .catch(() => setError(true));
   }, [slug, maxGuests]);
 
+  // "Book direct" in the header opens this apartment's calendar.
+  useEffect(() => {
+    const pick = (e: Event) => (e.preventDefault(), setSheet(true));
+    window.addEventListener("serenity:pick-dates", pick);
+    return () => window.removeEventListener("serenity:pick-dates", pick);
+  }, []);
+
   // Dates that came in through a link may have been booked since: let them go.
   useEffect(() => {
     if (!data || !checkIn) return;
@@ -75,7 +82,7 @@ export default function ApartmentBooking({ lang, slug, name, maxGuests, bookingU
   const minPrice = prices.size ? Math.min(...prices.values()) : null;
   const tooShort = valid && data && nights.length < data.minNights;
   const canBook = valid && !tooShort;
-  const href = canBook ? `/${lang}/book/${slug}?in=${checkIn}&out=${checkOut}&guests=${guests}` : "#";
+  const href = canBook ? `/${lang}/book?apts=${slug}&in=${checkIn}&out=${checkOut}&guests=${guests}` : "#";
 
   const onDates = (i: ISODate | null, o: ISODate | null) => {
     setIn(i);

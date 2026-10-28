@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { applyPaymentStatus, getBooking, paidOverlap } from "@/lib/bookings";
+import { applyPaymentStatus, getGroup, paidOverlap } from "@/lib/bookings";
 import { isApartmentSlug } from "@/lib/apartments";
 import { isStayFree } from "@/lib/availability";
 import { sendBookingConfirmed } from "@/lib/email";
@@ -19,32 +19,35 @@ export async function POST(req: Request) {
     return NextResponse.json({ errorType: 2, errorCode: 1, errorMessage: "invalid signature" }, { status: 401 });
   }
 
-  const booking = await getBooking(ipn.order.orderID).catch(() => null);
-  if (!booking) return ok(); // not ours (or deleted): acknowledge so Netopia stops retrying
-  if (Math.abs(Number(booking.amount) - Number(ipn.payment.amount)) > 0.01) {
-    console.error("[ipn] amount mismatch", booking.ref, booking.amount, ipn.payment.amount);
+  const group = await getGroup(ipn.order.orderID).catch(() => []);
+  if (!group.length) return ok(); // not ours: acknowledge so Netopia stops retrying
+  const expected = group.reduce((s, b) => s + Number(b.amount), 0);
+  if (Math.abs(expected - Number(ipn.payment.amount)) > 0.01) {
+    console.error("[ipn] amount mismatch", group[0].group_ref, expected, ipn.payment.amount);
     return NextResponse.json({ errorType: 2, errorCode: 2, errorMessage: "amount mismatch" });
   }
 
+  const groupId = group[0].group_id;
   const status = Number(ipn.payment.status);
   const message = ipn.payment.message ?? "";
   try {
     if (PAID_STATUSES.has(status)) {
-      const paid = await applyPaymentStatus(booking.id, "paid", status, message);
-      if (paid) {
-        // A payment that lands after its hold expired may have lost the nights meanwhile.
-        const lateClash = await paidOverlap(paid);
-        const bookingComClash = isApartmentSlug(paid.apartment)
-          ? !(await isStayFree(paid.apartment, paid.check_in, paid.check_out, { fresh: true, exceptBooking: paid.id }).catch(() => true))
-          : false;
-        await sendBookingConfirmed(paid, { conflict: lateClash || bookingComClash });
+      const paid = await applyPaymentStatus(groupId, "paid", status, message);
+      if (paid.length) {
+        // A payment that lands after its hold expired may have lost nights meanwhile.
+        let conflict = false;
+        for (const b of paid) {
+          if (await paidOverlap(b)) conflict = true;
+          else if (isApartmentSlug(b.apartment) && !(await isStayFree(b.apartment, b.check_in, b.check_out, { fresh: true, exceptBooking: b.id }).catch(() => true))) conflict = true;
+        }
+        await sendBookingConfirmed(paid, { conflict });
       }
     } else if (PENDING_STATUSES.has(status)) {
-      await applyPaymentStatus(booking.id, "pending", status, message);
+      await applyPaymentStatus(groupId, "pending", status, message);
     } else if (status === 8 || status === 4) {
-      await applyPaymentStatus(booking.id, booking.status === "paid" ? "cancelled" : "failed", status, message);
+      await applyPaymentStatus(groupId, group[0].status === "paid" ? "cancelled" : "failed", status, message);
     } else {
-      await applyPaymentStatus(booking.id, "failed", status, message);
+      await applyPaymentStatus(groupId, "failed", status, message);
     }
   } catch (e) {
     console.error("[ipn] processing failed", e);

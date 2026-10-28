@@ -45,21 +45,26 @@ function layout(inner: string) {
   </div></div>`;
 }
 
-export async function sendBookingConfirmed(b: Booking, opts: { conflict: boolean }) {
-  const apt = isApartmentSlug(b.apartment) ? APARTMENTS[b.apartment] : null;
+/** One letter per group, however many apartments it holds. */
+export async function sendBookingConfirmed(group: Booking[], opts: { conflict: boolean }) {
+  const b = group[0];
+  const name = (r: Booking) => (isApartmentSlug(r.apartment) ? APARTMENTS[r.apartment].name : r.apartment);
+  const names = group.map(name).join(" + ");
+  const sum = (k: "amount" | "lodging_total" | "cleaning_fee" | "city_tax") => group.reduce((s, r) => s + Number(r[k]), 0);
+  const guests = group.reduce((s, r) => s + r.guests, 0);
   const lang = (b.lang in T ? b.lang : "en") as keyof typeof T;
   const t = T[lang];
   const fmt = new Intl.DateTimeFormat(lang, { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
   const d = (s: string) => fmt.format(new Date(s + "T00:00:00Z"));
-  const link = `${SITE_URL}/${lang}/booking/${b.ref}?t=${b.access_token}`;
+  const link = `${SITE_URL}/${lang}/booking/${b.group_ref}?t=${b.access_token}`;
   const row = (k: string, v: string) => `<tr><td style="padding:6px 0;color:#A79F95;font-size:13px">${k}</td><td style="padding:6px 0;text-align:right;font-size:14px">${v}</td></tr>`;
 
-  await send(b.guest_email, `${t.subject} · ${b.ref}`, layout(`
-    <h1 style="font-weight:400;font-size:30px;margin:0 0 16px">${esc(apt?.name ?? b.apartment)}</h1>
+  await send(b.guest_email, `${t.subject} · ${b.group_ref}`, layout(`
+    <h1 style="font-weight:400;font-size:30px;margin:0 0 16px">${esc(names)}</h1>
     <p style="line-height:1.7;font-size:15px">${t.hello} ${esc(b.guest_name)},<br>${t.body}</p>
     <table style="width:100%;border-collapse:collapse;margin:24px 0;border-top:1px solid #2a2230;border-bottom:1px solid #2a2230">
-      ${row(t.ref, b.ref)}${row(t.dates, `${d(b.check_in)} → ${d(b.check_out)}`)}${row(t.guests, String(b.guests))}
-      ${row(t.paid, `${Number(b.amount).toFixed(2)} RON <span style="color:#A79F95;font-size:12px">(${t.tax})</span>`)}
+      ${row(t.ref, b.group_ref)}${row(t.dates, `${d(b.check_in)} → ${d(b.check_out)}`)}${row(t.guests, String(guests))}
+      ${row(t.paid, `${sum("amount").toFixed(2)} RON <span style="color:#A79F95;font-size:12px">(${t.tax})</span>`)}
     </table>
     <p style="line-height:1.7;font-size:14px;color:#cfc6b8">${t.checkin}</p>
     <p style="margin:28px 0"><a href="${link}" style="color:#0E0B10;background:#C9A45C;padding:12px 22px;text-decoration:none;font-family:Arial,sans-serif;font-size:13px;letter-spacing:.08em">${t.view}</a></p>
@@ -67,15 +72,17 @@ export async function sendBookingConfirmed(b: Booking, opts: { conflict: boolean
 
   const warn = opts.conflict
     ? `<p style="background:#5B1E2D;padding:14px;line-height:1.6"><b>Atenție: suprapunere.</b> Plata a venit după ce perioada a fost ocupată în altă parte. Verifică Booking.com și contactează oaspetele (rambursare sau altă unitate).</p>`
-    : `<p style="line-height:1.6">Booking.com citește calendarul nostru automat, dar cu întârziere. <b>Dacă vrei siguranță imediată, închide nopțile în extranet.</b></p>`;
-  await send(OWNER, `${opts.conflict ? "⚠ SUPRAPUNERE · " : ""}Rezervare directă ${b.ref} · ${apt?.name ?? b.apartment} · ${b.check_in} → ${b.check_out}`, layout(`
+    : `<p style="line-height:1.6">Booking.com citește calendarul nostru automat, dar cu întârziere. <b>Dacă vrei siguranță imediată, închide nopțile în extranet${group.length > 1 ? " pentru fiecare apartament" : ""}.</b></p>`;
+  await send(OWNER, `${opts.conflict ? "⚠ SUPRAPUNERE · " : ""}Rezervare directă ${b.group_ref} · ${names} · ${b.check_in} → ${b.check_out}`, layout(`
     <h1 style="font-weight:400;font-size:26px;margin:0 0 16px">Rezervare directă nouă</h1>
     ${warn}
     <table style="width:100%;border-collapse:collapse;margin:20px 0">
-      ${row("Apartament", apt?.name ?? b.apartment)}${row("Perioada", `${b.check_in} → ${b.check_out}`)}${row("Oaspeți", String(b.guests))}
+      ${group.map((r) => row(`${esc(name(r))} · ${r.ref}`, `${r.guests} oaspeți · ${Number(r.amount).toFixed(2)} RON`)).join("")}
+      ${row("Perioada", `${b.check_in} → ${b.check_out}`)}
       ${row("Nume", esc(b.guest_name))}${row("Email", esc(b.guest_email))}${row("Telefon", esc(b.guest_phone))}${row("Țara", esc(b.guest_country))}
-      ${row("Cazare", `${Number(b.lodging_total).toFixed(2)} RON`)}${row("Curățenie", `${Number(b.cleaning_fee).toFixed(2)} RON`)}${row("Taxă promovare turistică", `${Number(b.city_tax).toFixed(2)} RON`)}
-      ${row("Total încasat", `${Number(b.amount).toFixed(2)} RON`)}${row("Metodă", b.pay_method === "voucher" ? "Card de vacanță" : "Card")}
+      ${row("Cazare", `${sum("lodging_total").toFixed(2)} RON`)}${row("Curățenie", `${sum("cleaning_fee").toFixed(2)} RON`)}
+      ${row("Taxă promovare turistică", `${sum("city_tax").toFixed(2)} RON`)}
+      ${row("Total încasat", `${sum("amount").toFixed(2)} RON`)}${row("Metodă", b.pay_method === "voucher" ? "Card de vacanță" : "Card")}
       ${row("Netopia ID", esc(b.netopia_ntp_id ?? ""))}
     </table>
     ${b.guest_note ? `<p style="line-height:1.6"><i>${esc(b.guest_note)}</i></p>` : ""}

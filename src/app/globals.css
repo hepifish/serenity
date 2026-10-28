@@ -1892,7 +1892,13 @@ textarea {
 }
 .theme-art-station .apt-hero .h1 {
   font-weight: 300;
-  font-style: italic;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: clamp(2.6rem, 7vw, 6rem);
+}
+.theme-art-station .display {
+  font-weight: 300;
+  letter-spacing: 0.01em;
 }
 [class*="theme-"] .eyebrow::before,
 [class*="theme-"] .highlights li::before {
@@ -1980,5 +1986,163 @@ textarea {
   .sp figcaption {
     flex-direction: column;
     gap: 0.2rem;
+  }
+}
+
+/* Art Station's geometric face reads best light and set in capitals wherever its name appears */
+.door-name[style*="art-station"],
+.apt-row .h2 a[style*="art-station"] {
+  font-weight: 300;
+}
+
+.aside-strip {
+  display: flex;
+  gap: 2px;
+  aspect-ratio: 16 / 10;
+}
+.aside-strip img {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: auto;
+}
+
+/* ───────── search results ───────── */
+.results-panel {
+  scroll-margin-top: var(--header);
+  padding: clamp(2.5rem, 5vw, 4rem) 0 clamp(3rem, 6vw, 5rem);
+  background: var(--ink-2);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.results-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  margin-bottom: 1.6rem;
+}
+.results-head .h3 {
+  margin-top: 0.6rem;
+}
+.results-cards {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1rem;
+  margin-top: 1.4rem;
+}
+.rcard {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background: var(--ink);
+  border: 1px solid var(--line);
+  transition: border-color 0.3s, opacity 0.3s;
+}
+.rcard.picked {
+  border-color: var(--card);
+  box-shadow: 0 0 0 1px var(--card);
+}
+.rcard.off {
+  opacity: 0.5;
+}
+.rcard-img {
+  display: block;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+.rcard-img img,
+.rcard-blank {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: radial-gradient(120% 90% at 30% 20%, #4a2738, var(--ink-2));
+}
+.rcard-body {
+  padding: 1.1rem 1.2rem 1.3rem;
+  display: grid;
+  gap: 0.45rem;
+  align-content: start;
+}
+.rcard-name {
+  font-weight: 400;
+  font-size: 1.6rem;
+  line-height: 1.15;
+}
+.rcard-tag {
+  font-size: 0.82rem;
+}
+.rcard-price strong {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 1.7rem;
+}
+.rcard-why {
+  font-size: 0.88rem;
+  color: var(--bone-2);
+}
+.rcard-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.3rem;
+}
+.rcard-actions .btn {
+  min-height: 42px;
+  padding: 0 1rem;
+  flex: 1;
+}
+.pick-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 1rem;
+  transform: translateX(-50%);
+  z-index: 95;
+  width: min(calc(100vw - 2rem), 760px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1.1rem;
+  background: var(--ink-3);
+  border: 1px solid var(--gold);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+  animation: rise 0.35s var(--ease);
+}
+.pick-bar strong {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 1.2rem;
+}
+@media (max-width: 600px) {
+  .pick-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+@media (max-width: 600px) {
+  .rcard {
+    grid-template-columns: 38% 1fr;
+    grid-template-rows: auto;
+  }
+  .rcard-img {
+    aspect-ratio: auto;
+    height: 100%;
+  }
+  .rcard-body {
+    padding: 0.8rem 0.9rem 0.9rem;
+  }
+  .rcard-name {
+    font-size: 1.3rem;
+  }
+  .rcard-price strong {
+    font-size: 1.35rem;
+  }
+  .rcard-actions .btn {
+    min-height: 38px;
+    font-size: 0.7rem;
   }
 }

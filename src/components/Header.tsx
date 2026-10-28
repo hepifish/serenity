@@ -40,6 +40,12 @@ export default function Header({ lang, t, solid = false }: { lang: Locale; t: Di
     { href: `/${lang}#contact`, label: t.contact },
   ];
 
+  // "Book direct" opens whichever date picker this page has; elsewhere it goes home and opens it there.
+  function book(e: React.MouseEvent) {
+    setOpen(false);
+    if (window.dispatchEvent(new CustomEvent("serenity:pick-dates", { cancelable: true })) === false) e.preventDefault();
+  }
+
   const langs = (
     <nav className="lang" aria-label={t.language}>
       {LOCALES.map((l) => (
@@ -66,7 +72,7 @@ export default function Header({ lang, t, solid = false }: { lang: Locale; t: Di
           </nav>
           <div className="header-end">
             {langs}
-            <Link href={`/${lang}#book`} className="btn">{t.book}</Link>
+            <Link href={`/${lang}?pick=1`} className="btn" onClick={book}>{t.book}</Link>
             <button type="button" className="burger" aria-expanded={open} aria-controls="drawer" aria-label={open ? t.close : t.menu} onClick={() => setOpen(!open)}>
               <span /><span />
             </button>
@@ -80,7 +86,7 @@ export default function Header({ lang, t, solid = false }: { lang: Locale; t: Di
           ))}
         </ul>
         {langs}
-        <Link href={`/${lang}#book`} className="btn block" onClick={() => setOpen(false)}>{t.book}</Link>
+        <Link href={`/${lang}?pick=1`} className="btn block" onClick={book}>{t.book}</Link>
       </div>
     </>
   );

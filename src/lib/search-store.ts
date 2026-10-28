@@ -9,8 +9,8 @@ import type { ISODate } from "./dates";
  * Mirrored in the URL (?in=&out=&guests=) so a search can be shared or reloaded.
  */
 export type Result =
-  | { slug: string; available: true; nights: number; lodging: number; cleaning: number; cityTax: number; total: number }
-  | { slug: string; available: false; reason: string; minNights?: number };
+  | { slug: string; capacity: number; available: true; nights: number; lodging: number; cleaning: number; cityTax: number; total: number }
+  | { slug: string; capacity: number; available: false; reason: string; minNights?: number };
 
 type State = {
   checkIn: ISODate | null;
@@ -18,9 +18,11 @@ type State = {
   guests: number;
   loading: boolean;
   results: Record<string, Result> | null;
+  /** apartments the guest has picked to book together */
+  picked: string[];
 };
 
-let state: State = { checkIn: null, checkOut: null, guests: 2, loading: false, results: null };
+let state: State = { checkIn: null, checkOut: null, guests: 2, loading: false, results: null, picked: [] };
 const listeners = new Set<() => void>();
 const emit = () => listeners.forEach((l) => l());
 const set = (patch: Partial<State>) => ((state = { ...state, ...patch }), emit());
@@ -32,13 +34,16 @@ export const searchStore = {
     return () => listeners.delete(l);
   },
   setDates(checkIn: ISODate | null, checkOut: ISODate | null) {
-    set({ checkIn, checkOut, results: checkIn && checkOut ? state.results : null });
+    set({ checkIn, checkOut, results: checkIn && checkOut ? state.results : null, picked: [] });
   },
   setGuests(guests: number) {
     set({ guests });
   },
+  toggle(slug: string) {
+    set({ picked: state.picked.includes(slug) ? state.picked.filter((s) => s !== slug) : [...state.picked, slug] });
+  },
   clear() {
-    set({ checkIn: null, checkOut: null, results: null });
+    set({ checkIn: null, checkOut: null, results: null, picked: [] });
     const url = new URL(location.href);
     ["in", "out", "guests"].forEach((k) => url.searchParams.delete(k));
     history.replaceState(null, "", url);
@@ -55,12 +60,13 @@ export const searchStore = {
     try {
       const res = await fetch(`/api/search?in=${checkIn}&out=${checkOut}&guests=${guests}`);
       const data: { results: Result[] } = await res.json();
-      set({ results: Object.fromEntries(data.results.map((r) => [r.slug, r])), loading: false });
+      const results = Object.fromEntries(data.results.map((r) => [r.slug, r]));
+      set({ results, loading: false, picked: state.picked.filter((p) => results[p]?.available) });
     } catch {
       set({ loading: false, results: null });
     }
   },
 };
 
-const server: State = { checkIn: null, checkOut: null, guests: 2, loading: false, results: null };
+const server: State = { checkIn: null, checkOut: null, guests: 2, loading: false, results: null, picked: [] };
 export const useSearch = () => useSyncExternalStore(searchStore.subscribe, searchStore.get, () => server);
