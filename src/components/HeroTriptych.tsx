@@ -17,7 +17,8 @@ export default function HeroTriptych({ lang }: { lang: Locale }) {
         const photo = a.gallery[a.heroIndex ?? 1] ?? a.gallery[0];
         return (
           <Link key={a.slug} href={`/${lang}/apartments/${a.slug}`} className="panel-door" role="listitem" style={{ ["--door" as string]: a.accent }}>
-            <Image src={photo.src} alt={apartmentCopy(lang, a.slug).alts[a.heroIndex ?? 1] ?? a.name} fill priority={i === 0} sizes="(max-width: 900px) 60vw, 40vw" style={{ objectFit: "cover", objectPosition: a.heroFocus ?? "center" }} />
+            <Image src={photo.src} alt={apartmentCopy(lang, a.slug).alts[a.heroIndex ?? 1] ?? a.name} fill priority={i === 0} sizes="(max-width: 900px) 50vw, 30vw" style={{ objectFit: "cover", objectPosition: a.heroFocus ?? "center" }} />
+            <span className="door-dim" aria-hidden="true" />
             <span className="door-label">
               <small>{a.number}</small>
               <span className="door-name" style={{ fontFamily: `var(--font-${a.slug})` }}><AptName slug={a.slug} name={a.name} /></span>
