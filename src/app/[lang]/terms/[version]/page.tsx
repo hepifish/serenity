@@ -7,6 +7,9 @@ import TermsView from "@/components/TermsView";
 type Params = { params: Promise<{ lang: string; version: string }> };
 
 // Permanent link to the exact text a guest accepted (sent in the confirmation email).
+// Only published versions exist: an unknown one is a real 404, never a cached 200.
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return LOCALES.flatMap((lang) => Object.keys(TERMS_VERSIONS).map((version) => ({ lang, version })));
 }

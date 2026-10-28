@@ -1,26 +1,31 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import AptName from "@/components/AptName";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { getDict } from "@/i18n";
 import { apartmentCopy } from "@/i18n/apartments";
-import { DEFAULT_LOCALE, isLocale } from "@/i18n/config";
+import { DEFAULT_LOCALE, isLocale, type Locale } from "@/i18n/config";
 import { apartmentList } from "@/lib/apartments";
 
 /**
  * A 404 in the site's own clothes, in the visitor's language, with the four
- * doors that do lead somewhere. Not-found components get no params, so the
- * language comes from the path. With a dynamic root layout Next sends this as
- * a client-rendered shell (status 404, noindex); app/global-not-found.tsx
- * behind experimental.globalNotFound would server-render it.
+ * doors that do lead somewhere. A 404 gets no params and the server does not
+ * see the path here (app/global-not-found.tsx), so it renders in English and
+ * switches to the path's language once it runs in the browser.
  */
-export default function NotFound() {
-  const first = usePathname()?.split("/")[1];
-  const lang = isLocale(first) ? first : DEFAULT_LOCALE;
+export default function NotFoundView() {
+  const [lang, setLang] = useState<Locale>(DEFAULT_LOCALE);
   const t = getDict(lang);
+  useEffect(() => {
+    const first = window.location.pathname.split("/")[1];
+    if (isLocale(first)) setLang(first);
+  }, []);
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
   return (
     <>
       <title>{t.notFound.meta}</title>

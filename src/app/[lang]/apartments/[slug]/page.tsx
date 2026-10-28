@@ -20,6 +20,8 @@ import { COMPANY, SITE_URL } from "@/lib/site";
 import { JsonLd, apartmentLd, breadcrumbLd, ogImage, pageMeta } from "@/lib/seo";
 
 export const revalidate = 60;
+// Only the four apartments exist: anything else is a real 404 at routing level, never a cached 200.
+export const dynamicParams = false;
 
 export function generateStaticParams() {
   return LOCALES.flatMap((lang) => APARTMENT_SLUGS.map((slug) => ({ lang, slug })));
