@@ -14,6 +14,12 @@ import { apartmentList } from "@/lib/apartments";
 const coverSizes = (aspect: number) =>
   `(max-width: 900px) ${Math.round(50 * Math.max(1, aspect))}vw, calc((100vh - 68px) * ${aspect.toFixed(2)})`;
 
+/** "55% 40%" as --fx: 0.55 and --fy: 40%, so the CSS can aim the crop inside a wider box (see .door-photo). */
+const focusVars = (focus = "50% 50%") => {
+  const [x, y = "50%"] = focus.split(" ");
+  return { ["--fx" as string]: parseFloat(x) / 100, ["--fy" as string]: y };
+};
+
 /**
  * The hero's right half: the apartments themselves, one tall panel each. The
  * hovered panel widens like a door opening (see .door-photo in globals.css);
@@ -26,9 +32,9 @@ export default function HeroTriptych({ lang }: { lang: Locale }) {
       {apts.map((a, i) => {
         const photo = a.gallery[a.heroIndex ?? 1] ?? a.gallery[0];
         return (
-          <Link key={a.slug} href={`/${lang}/apartments/${a.slug}`} className="panel-door" role="listitem" style={{ ["--door" as string]: a.accent, ["--j" as string]: i }}>
+          <Link key={a.slug} href={`/${lang}/apartments/${a.slug}`} className="panel-door" role="listitem" style={{ ["--door" as string]: a.accent, ["--j" as string]: i, ...focusVars(a.heroFocus) }}>
             <span className="door-photo">
-              <Image src={photo.src} alt={apartmentCopy(lang, a.slug).alts[a.heroIndex ?? 1] ?? a.name} fill priority={i === 0} sizes={coverSizes(photo.w / photo.h)} style={{ objectFit: "cover", objectPosition: a.heroFocus ?? "center" }} />
+              <Image src={photo.src} alt={apartmentCopy(lang, a.slug).alts[a.heroIndex ?? 1] ?? a.name} fill priority={i === 0} sizes={coverSizes(photo.w / photo.h)} style={{ objectFit: "cover" }} />
             </span>
             <span className="door-dim" aria-hidden="true" />
             <span className="door-label">
