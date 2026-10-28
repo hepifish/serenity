@@ -19,6 +19,23 @@
   --nv: rgba(10, 10, 11, 0.88);
   --so: 1;
   --gr: 0.04;
+
+  /* Sibiu skyline, dusk. Plum-tinted so the silhouette sits in the
+     burgundy/charcoal family rather than reading as flat black. */
+  --sky-top: #0A0A0B;
+  --sky-glow: #7A3A52;
+  --ridge: #3E2E45;
+  --ridge-snow: #9C8AA0;
+  --roof-far: #33253A;
+  --roof-near: #261B2C;
+  --stone-mid: #2E2136;
+  --stone-near: #3A2A43;
+  --stone-edge: #86668A;
+  --eye: #4A3550;
+  --eye-pupil: #F0CE8A;
+  --eye-lid: #E0BC80;
+  --window: #1C1420;
+  --accent: #F5C842;
 }
 
 [data-theme="light"] {
@@ -32,6 +49,23 @@
   --nv: rgba(249, 246, 240, 0.9);
   --so: 0;
   --gr: 0.025;
+
+  /* Same skyline in daylight: pale stone on bone, one step darker than
+     the page so it reads as haze rather than a black cutout. */
+  --sky-top: #F9F6F0;
+  --sky-glow: #E4D3C4;
+  --ridge: #D8D0C4;
+  --ridge-snow: #FFFFFF;
+  --roof-far: #CDC3B4;
+  --roof-near: #BCB0A0;
+  --stone-mid: #C2B7A7;
+  --stone-near: #B4A897;
+  --stone-edge: #8A8073;
+  --eye: #A99C8A;
+  --eye-pupil: #F6EFE0;
+  --eye-lid: #E8DCC6;
+  --window: #9A8F80;
+  --accent: #C9A96E;
 }
 
 *,
@@ -230,6 +264,10 @@ nav {
   left: 0;
   right: 0;
   width: 100%;
+  /* Fixed band rather than intrinsic ratio: at 2560px the ratio alone would
+     make the skyline swallow the whole hero. "slice" crops the sides. */
+  height: min(62vh, 620px);
+  pointer-events: none;
 }
 
 .hc {
