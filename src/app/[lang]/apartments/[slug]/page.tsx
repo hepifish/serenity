@@ -121,7 +121,7 @@ export default async function ApartmentPage({ params }: Params) {
                   ) : <div style={{ aspectRatio: "4 / 3", background: "radial-gradient(120% 90% at 30% 20%, #4a2738, var(--ink-2))" }} />}
                   <div className="result-body">
                     <p className="apt-num">{o.number}</p>
-                    <p className="display h3" style={{ fontSize: "1.7rem" }}>{o.name}</p>
+                    <p className="rcard-name" style={{ fontFamily: `var(--font-${o.slug}), var(--serif)` }}><AptName slug={o.slug} name={o.name} /></p>
                     <p className="muted" style={{ fontSize: "0.9rem" }}>{apartmentCopy(lang, o.slug).tagline}</p>
                   </div>
                 </Link>

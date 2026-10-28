@@ -230,9 +230,11 @@ textarea {
   cursor: pointer;
   transition: background 0.3s var(--ease), color 0.3s var(--ease), transform 0.3s var(--ease), opacity 0.3s;
 }
-.btn:hover {
-  background: transparent;
-  color: var(--gold);
+@media (hover: hover) {
+  .btn:hover {
+    background: transparent;
+    color: var(--gold);
+  }
 }
 .btn:active {
   transform: translateY(1px);
@@ -248,9 +250,11 @@ textarea {
   color: var(--bone);
   border-color: var(--line-strong);
 }
-.btn.ghost:hover {
-  border-color: var(--gold);
-  color: var(--gold);
+@media (hover: hover) {
+  .btn.ghost:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
 }
 .btn.block {
   width: 100%;
@@ -268,9 +272,11 @@ textarea {
   border-bottom: 1px solid var(--line-strong);
   transition: border-color 0.3s, color 0.3s;
 }
-.link:hover {
-  color: var(--accent);
-  border-color: var(--accent);
+@media (hover: hover) {
+  .link:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
 }
 
 /* ───────── header ───────── */
@@ -319,8 +325,10 @@ textarea {
   color: var(--bone-2);
   transition: color 0.3s;
 }
-.nav a:hover {
-  color: var(--bone);
+@media (hover: hover) {
+  .nav a:hover {
+    color: var(--bone);
+  }
 }
 .header-end {
   display: flex;
@@ -462,16 +470,21 @@ textarea {
   isolation: isolate;
 }
 /* Hover only touches transform and opacity, which the GPU animates without re-laying out the page. */
+.panel-door {
+  -webkit-tap-highlight-color: transparent;
+}
 .panel-door img {
   transition: transform 1.2s var(--ease);
   will-change: transform;
 }
+/* The dim exists only to be lifted by a pointer; touch screens show the photos at full light. */
 .panel-door .door-dim {
   position: absolute;
   inset: 0;
   z-index: 1;
   background: rgba(14, 11, 16, 0.32);
-  transition: opacity 0.6s var(--ease);
+  opacity: 0;
+  transition: opacity 0.6s var(--ease), background 0.6s var(--ease);
 }
 .panel-door::after {
   content: "";
@@ -480,16 +493,32 @@ textarea {
   background: linear-gradient(180deg, rgba(14, 11, 16, 0.15) 0%, rgba(14, 11, 16, 0) 45%, rgba(14, 11, 16, 0.85) 100%);
   z-index: 1;
 }
-.panel-door:hover img,
 .panel-door:focus-visible img {
   transform: scale(1.05);
 }
-.panel-door:hover .door-dim,
-.panel-door:focus-visible .door-dim {
-  opacity: 0;
+@media (hover: hover) {
+  .panel-door .door-dim {
+    opacity: 1;
+  }
+  .panel-door:hover img {
+    transform: scale(1.05);
+  }
+  .panel-door:hover .door-dim,
+  .panel-door:focus-visible .door-dim {
+    opacity: 0;
+  }
+  .triptych:hover .panel-door:not(:hover) .door-dim {
+    background: rgba(14, 11, 16, 0.5);
+  }
 }
-.triptych:hover .panel-door:not(:hover) .door-dim {
-  background: rgba(14, 11, 16, 0.5);
+/* touch: the tile darkens under the finger, the way native list cells do, then the page navigates */
+@media (hover: none) {
+  .panel-door .door-dim {
+    transition-duration: 0.12s;
+  }
+  .panel-door:active .door-dim {
+    opacity: 1;
+  }
 }
 .door-label {
   position: absolute;
@@ -572,8 +601,10 @@ textarea {
   cursor: pointer;
   min-height: 64px;
 }
-.search-field:hover {
-  background: rgba(237, 230, 218, 0.03);
+@media (hover: hover) {
+  .search-field:hover {
+    background: rgba(237, 230, 218, 0.03);
+  }
 }
 .search-label {
   font-size: 0.66rem;
@@ -778,8 +809,10 @@ textarea {
   font-size: 0.92rem;
   transition: background 0.15s;
 }
-.cal-day:hover:not(:disabled) {
-  background: rgba(237, 230, 218, 0.07);
+@media (hover: hover) {
+  .cal-day:hover:not(:disabled) {
+    background: rgba(237, 230, 218, 0.07);
+  }
 }
 .cal-day:disabled {
   cursor: default;
@@ -898,11 +931,15 @@ textarea {
   height: 100%;
   object-fit: cover;
   transition: transform 1.2s var(--ease), filter 0.6s;
-  filter: saturate(0.92) brightness(0.94);
 }
-.apt-media a:hover img {
-  transform: scale(1.035);
-  filter: none;
+@media (hover: hover) {
+  .apt-media img {
+    filter: saturate(0.92) brightness(0.94);
+  }
+  .apt-media a:hover img {
+    transform: scale(1.035);
+    filter: none;
+  }
 }
 .apt-num {
   font-family: var(--serif);
@@ -1288,8 +1325,10 @@ textarea {
   text-transform: uppercase;
   color: var(--bone-2);
 }
-.crumbs a:hover {
-  color: var(--bone);
+@media (hover: hover) {
+  .crumbs a:hover {
+    color: var(--bone);
+  }
 }
 
 .apt-layout {
@@ -1379,8 +1418,10 @@ textarea {
   object-fit: cover;
   transition: transform 1s var(--ease);
 }
-.gallery button:hover img {
-  transform: scale(1.04);
+@media (hover: hover) {
+  .gallery button:hover img {
+    transform: scale(1.04);
+  }
 }
 .gallery .more {
   position: relative;
@@ -1795,8 +1836,10 @@ textarea {
   display: grid;
   gap: 0.5rem;
 }
-.footer a:hover {
-  color: var(--bone);
+@media (hover: hover) {
+  .footer a:hover {
+    color: var(--bone);
+  }
 }
 .footer-bottom {
   margin-top: 3rem;
@@ -2007,8 +2050,10 @@ textarea {
   white-space: nowrap;
   font-size: 0.72rem;
 }
-.carousel-slide figcaption a:hover {
-  opacity: 1;
+@media (hover: hover) {
+  .carousel-slide figcaption a:hover {
+    opacity: 1;
+  }
 }
 .carousel .prev,
 .carousel .next {
@@ -2066,6 +2111,7 @@ textarea {
 
 /* Art Station's geometric face reads best light and set in capitals wherever its name appears */
 .door-name[style*="art-station"],
+.rcard-name[style*="art-station"],
 .apt-row .h2 a[style*="art-station"] {
   font-weight: 300;
 }
