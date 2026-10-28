@@ -163,6 +163,8 @@ const de: Dict = {
       calendar_unavailable: "Wir konnten die Verfügbarkeit gerade nicht bestätigen. Bitte versuchen Sie es in einer Minute erneut.",
       payment_unavailable: "Die Zahlungsseite hat sich nicht geöffnet. Es wurde nichts abgebucht. Bitte versuchen Sie es erneut.",
       no_price: "Diese Wohnung ist für diese Daten noch nicht direkt buchbar. Schreiben Sie uns.",
+      hold_limit: "Sie haben bereits Buchungen, die auf die Zahlung warten. Schließen Sie eine ab oder versuchen Sie es in 20 Minuten erneut, wenn sie verfallen.",
+      too_many: "Zu viele Versuche von dieser Verbindung. Bitte warten Sie einige Minuten und versuchen Sie es erneut.",
       generic: "Etwas ist schiefgelaufen. Es wurde nichts abgebucht. Bitte versuchen Sie es erneut.",
     } as Record<string, string>,
   },
@@ -314,7 +316,7 @@ const de: Dict = {
     sending: "Wird gesendet…",
     doneTitle: "Sie sind eingecheckt.",
     doneText: "Vielen Dank. Alles ist vorbereitet; den Code für den Schlüsselsafe erhalten Sie am Anreisetag.",
-    errors: { invalid: "Bitte prüfen Sie die markierten Felder.", cnp: "Diese CNP scheint nicht korrekt. Bitte prüfen Sie die 13 Ziffern oder lassen Sie das Feld leer.", generic: "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut." } as Record<string, string>,
+    errors: { invalid: "Bitte prüfen Sie die markierten Felder.", too_many: "Zu viele Versuche von dieser Verbindung. Bitte warten Sie einige Minuten und versuchen Sie es erneut.", cnp: "Diese CNP scheint nicht korrekt. Bitte prüfen Sie die 13 Ziffern oder lassen Sie das Feld leer.", generic: "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut." } as Record<string, string>,
   },
   footer: {
     tagline: "Vier Räume. Eine Stadt. Viele Geschichten.",
@@ -328,6 +330,7 @@ const de: Dict = {
   common: {
     ron: "RON",
     loading: "Wird geladen…",
+    opening: "Die Tür öffnet sich",
   },
 };
 

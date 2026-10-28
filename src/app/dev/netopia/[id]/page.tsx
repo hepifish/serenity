@@ -1,7 +1,8 @@
 import { notFound, redirect } from "next/navigation";
+import { MOCK } from "@/lib/netopia";
 import { mockComplete, mockOrder } from "@/lib/netopia-mock";
 
-// A stand-in for Netopia's hosted card page, only with NETOPIA_MOCK=1.
+// A stand-in for Netopia's hosted card page, only with NETOPIA_MOCK=1 and never in production.
 // Each button plays one of Netopia's documented sandbox outcomes.
 const OUTCOMES = [
   { status: 3, label: "Pay (9900 0048 1022 5098, accepted)", message: "Tranzacție aprobată" },
@@ -10,13 +11,14 @@ const OUTCOMES = [
 ];
 
 export default async function MockPay({ params }: { params: Promise<{ id: string }> }) {
-  if (process.env.NETOPIA_MOCK !== "1") notFound();
+  if (!MOCK) notFound();
   const { id } = await params;
   const o = mockOrder(id);
   if (!o) notFound();
 
   async function finish(formData: FormData) {
     "use server";
+    if (!MOCK) notFound(); // a server action is its own endpoint: guard it too
     const status = Number(formData.get("status"));
     const out = OUTCOMES.find((x) => x.status === status)!;
     const r = await mockComplete(id, status, out.message);

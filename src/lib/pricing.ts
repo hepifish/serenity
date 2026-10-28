@@ -1,6 +1,8 @@
 import { sql } from "./db";
 import { eachNight, isWeekendNight, nightsBetween, type ISODate } from "./dates";
 import { CITY_TAX } from "./site";
+import type { ApartmentSlug } from "./apartments";
+import { checkStay, splitGuests, type StayError } from "./stay";
 
 export type Rate = { apartment: string; base_price: number; weekend_price: number | null; min_nights: number; cleaning_fee: number };
 export type NightPrice = { night: ISODate; price: number };
@@ -24,8 +26,8 @@ export async function getRate(apartment: string): Promise<Rate | null> {
 }
 
 /** Nightly prices for a date window: the override if one is set, else the weekday or weekend rate. */
-export async function nightlyPrices(apartment: string, from: ISODate, to: ISODate): Promise<NightPrice[]> {
-  const rate = await getRate(apartment);
+export async function nightlyPrices(apartment: string, from: ISODate, to: ISODate, known?: Rate): Promise<NightPrice[]> {
+  const rate = known ?? (await getRate(apartment));
   if (!rate) return [];
   const rows = await sql<{ night: string; price: number }[]>`
     select to_char(night, 'YYYY-MM-DD') as night, price from rate_overrides
@@ -44,10 +46,10 @@ export function cityTaxFor(accommodation: number, guests: number, nights: number
 }
 
 /** The server's price, always recomputed: a price sent by the browser is never trusted. */
-export async function quote(apartment: string, checkIn: ISODate, checkOut: ISODate, guests: number): Promise<Quote | null> {
-  const rate = await getRate(apartment);
+export async function quote(apartment: string, checkIn: ISODate, checkOut: ISODate, guests: number, known?: Rate): Promise<Quote | null> {
+  const rate = known ?? (await getRate(apartment));
   if (!rate) return null;
-  const nightly = await nightlyPrices(apartment, checkIn, checkOut);
+  const nightly = await nightlyPrices(apartment, checkIn, checkOut, rate);
   const lodging = nightly.reduce((s, n) => s + n.price, 0);
   const nights = nightsBetween(checkIn, checkOut);
   const cleaning = rate.cleaning_fee;
@@ -57,6 +59,25 @@ export async function quote(apartment: string, checkIn: ISODate, checkOut: ISODa
     total: Math.round((lodging + cleaning + cityTax) * 100) / 100,
     minNights: rate.min_nights,
   };
+}
+
+/**
+ * Checkout's one pipeline, for one apartment or several over the same dates:
+ * split the party, check each stay's rules, price it. Availability is the
+ * caller's, since checkout reads Booking.com live and the page does not.
+ */
+export async function quoteStays(slugs: ApartmentSlug[], checkIn: unknown, checkOut: unknown, guests: number): Promise<{ quotes: Quote[]; split: number[] } | { error: StayError | "no_price" }> {
+  const split = splitGuests(slugs, guests);
+  if (!split) return { error: "guests" };
+  const quotes: Quote[] = [];
+  for (const [i, slug] of slugs.entries()) {
+    const rate = await getRate(slug);
+    if (!rate) return { error: "no_price" };
+    const error = checkStay(slug, checkIn, checkOut, split[i], rate.min_nights);
+    if (error) return { error };
+    quotes.push((await quote(slug, checkIn as ISODate, checkOut as ISODate, split[i], rate))!);
+  }
+  return { quotes, split };
 }
 
 /** The lowest nightly price in the coming months, for "from … / night". */

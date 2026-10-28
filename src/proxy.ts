@@ -1,22 +1,48 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { DEFAULT_LOCALE, isLocale } from "@/i18n/config";
 import { ADMIN_COOKIE, isValidAdminToken } from "@/lib/admin-auth";
+import { GATE_COOKIE, gateActive, gateExempt, isGatePass } from "@/lib/gate";
 
-// Two jobs: send visitors without a language prefix to the right one, and keep
-// everyone but Pati out of /admin.
-export async function proxy(req: NextRequest) {
+// Three jobs: the pre-launch password gate (only while SITE_GATE_PASSWORD is
+// set), turning everyone but Pati away from /admin early, and sending visitors
+// without a language prefix to the right one. The admin check is the first
+// door only: every admin page and route checks the cookie again itself.
+export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
+  const first = pathname.split("/")[1];
 
-  if (pathname.startsWith("/admin")) {
+  if (gateActive()) {
+    const res = gate(req) ?? route(req);
+    res.headers.set("X-Robots-Tag", "noindex, nofollow");
+    return res;
+  }
+  if (first === "api" || isLocale(first)) return NextResponse.next();
+  return route(req);
+}
+
+function gate(req: NextRequest): NextResponse | null {
+  const { pathname, search } = req.nextUrl;
+  if (gateExempt(pathname) || isGatePass(req.cookies.get(GATE_COOKIE)?.value)) return null;
+  if (pathname.startsWith("/api/")) return NextResponse.json({ error: "gated" }, { status: 401 });
+  const first = pathname.split("/")[1];
+  const url = req.nextUrl.clone();
+  url.pathname = `/${isLocale(first) ? first : preferredLocale(req)}/gate`;
+  url.search = `?next=${encodeURIComponent(pathname + search)}`;
+  return NextResponse.redirect(url);
+}
+
+function route(req: NextRequest): NextResponse {
+  const { pathname } = req.nextUrl;
+  const first = pathname.split("/")[1];
+  if (first === "api" || first === "ical" || first === "dev" || isLocale(first)) return NextResponse.next();
+
+  if (first === "admin") {
     if (pathname === "/admin/login") return NextResponse.next();
-    if (await isValidAdminToken(req.cookies.get(ADMIN_COOKIE)?.value)) return NextResponse.next();
+    if (isValidAdminToken(req.cookies.get(ADMIN_COOKIE)?.value)) return NextResponse.next();
     const url = req.nextUrl.clone();
     url.pathname = "/admin/login";
     return NextResponse.redirect(url);
   }
-
-  const first = pathname.split("/")[1];
-  if (isLocale(first)) return NextResponse.next();
 
   const url = req.nextUrl.clone();
   url.pathname = `/${preferredLocale(req)}${pathname === "/" ? "" : pathname}`;
@@ -33,7 +59,8 @@ function preferredLocale(req: NextRequest) {
 }
 
 export const config = {
-  // Skip API routes, Next internals, the calendar feeds and any file with an extension.
-  matcher: ["/((?!api|_next|ical|dev|.*\\..*).*)"],
+  // Everything but Next internals and static files (images, fonts, robots.txt,
+  // sitemap.xml, the .ics feeds). RSC and segment-prefetch paths (.rsc) do come
+  // through. With the gate off, localized pages and API routes return at once.
+  matcher: ["/((?!_next/|.*\\.(?:png|jpe?g|webp|avif|gif|svg|ico|ics|txt|xml|woff2?|webmanifest)$).*)"],
 };
-

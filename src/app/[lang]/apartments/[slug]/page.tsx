@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AptName from "@/components/AptName";
+import AptMark from "@/components/AptMark";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -32,7 +33,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const a = APARTMENTS[slug];
   const c = apartmentCopy(lang, slug);
   const meta = pageMeta(lang, `/apartments/${slug}`, c.seoTitle, c.seoDescription, { url: ogImage(slug), alt: c.alts[a.pageHeroIndex ?? 0] ?? a.name });
-  return a.comingSoon ? { ...meta, robots: { index: false, follow: true } } : meta;
+  // the tab shows this apartment's own mark
+  const withIcon = { ...meta, icons: { icon: { url: `/marks/${slug}-icon.svg`, type: "image/svg+xml" } } };
+  return a.comingSoon ? { ...withIcon, robots: { index: false, follow: true } } : withIcon;
 }
 
 export default async function ApartmentPage({ params }: Params) {
@@ -96,6 +99,7 @@ export default async function ApartmentPage({ params }: Params) {
           })() : null}
           <div className="wrap">
             <nav className="crumbs" aria-label="Breadcrumb"><Link href={`/${lang}#apartments`}>← {t.apartment.back}</Link></nav>
+            <AptMark slug={slug} size={56} className="mark-eyebrow" />
             <p className="eyebrow">{a.number} · {c.tagline}</p>
             <h1 className="display h1"><AptName slug={slug} name={a.name} />{" "}<span className="h1-sub">{t.apartment.kind}</span></h1>
             <p className="lead" style={{ color: "var(--bone)" }}>{c.intro}</p>
@@ -145,7 +149,7 @@ export default async function ApartmentPage({ params }: Params) {
                     <Image src={o.gallery[0].src} alt={apartmentCopy(lang, o.slug).alts[0] ?? o.name} width={o.gallery[0].w} height={o.gallery[0].h} sizes="(max-width: 860px) 100vw, 33vw" style={{ aspectRatio: "4 / 3", objectFit: "cover", width: "100%", height: "auto" }} />
                   ) : <div style={{ aspectRatio: "4 / 3", background: "radial-gradient(120% 90% at 30% 20%, #4a2738, var(--ink-2))" }} />}
                   <div className="result-body">
-                    <p className="apt-num">{o.number}</p>
+                    <p className="apt-num with-mark"><AptMark slug={o.slug} size={32} />{o.number}</p>
                     <p className="rcard-name" style={{ fontFamily: `var(--font-${o.slug}), var(--serif)` }}><AptName slug={o.slug} name={o.name} /></p>
                     <p className="muted" style={{ fontSize: "0.9rem" }}>{apartmentCopy(lang, o.slug).tagline}</p>
                   </div>

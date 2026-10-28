@@ -1,6 +1,7 @@
 "use client";
 
 import AptName from "./AptName";
+import MorphLoader from "./MorphLoader";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
@@ -29,7 +30,7 @@ export default function SearchResults({ lang, apartments }: { lang: Locale; apar
   }, [shown, s.loading, s.results]);
 
   if (!shown && !s.loading) return null;
-  if (!shown) return <section className="results-panel" aria-busy="true"><div className="wrap"><span className="spinner" /></div></section>;
+  if (!shown) return <section className="results-panel" aria-busy="true"><div className="wrap"><MorphLoader size={56} srLabel={t.common.loading} /></div></section>;
 
   const list = apartments
     .map((a) => ({ a, res: s.results![a.slug] as Result | undefined }))

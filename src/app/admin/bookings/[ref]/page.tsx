@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import AdminNav from "@/components/AdminNav";
 import PrintButton from "@/components/PrintButton";
+import { requireAdmin } from "@/lib/admin-auth";
 import { TERMS_VERSIONS, isTermsVersion } from "@/content/terms";
 import type { LegalDoc } from "@/content/legal";
 import { APARTMENTS, isApartmentSlug } from "@/lib/apartments";
@@ -22,6 +23,7 @@ const local = (t: Date) =>
  * reader is a Romanian court or authority. Print it (or save as PDF).
  */
 export default async function BookingEvidencePage({ params }: Props) {
+  await requireAdmin();
   const { ref } = await params;
   const group = await groupByRef(decodeURIComponent(ref));
   if (!group.length) notFound();

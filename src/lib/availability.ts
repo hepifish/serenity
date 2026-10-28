@@ -11,6 +11,7 @@ import { APARTMENTS, type ApartmentSlug } from "./apartments";
  * takes money calls with fresh=true and reads it live.
  */
 const CACHE_MS = 3 * 60_000;
+const MAX_ICAL_BYTES = 2_000_000;
 const cache = new Map<string, { at: number; nights: Set<ISODate> }>();
 
 async function bookingComNights(slug: ApartmentSlug, fresh: boolean): Promise<Set<ISODate>> {
@@ -20,7 +21,11 @@ async function bookingComNights(slug: ApartmentSlug, fresh: boolean): Promise<Se
   if (!fresh && hit && Date.now() - hit.at < CACHE_MS) return hit.nights;
   const res = await fetch(url, { cache: "no-store", signal: AbortSignal.timeout(8000) });
   if (!res.ok) throw new Error(`Booking.com calendar for ${slug} answered ${res.status}`);
-  const nights = busyNights(parseIcal(await res.text()));
+  // A real feed is a few KB; refuse anything that could eat the function's memory.
+  if (Number(res.headers.get("content-length") ?? 0) > MAX_ICAL_BYTES) throw new Error(`Booking.com calendar for ${slug} is too large`);
+  const text = await res.text();
+  if (text.length > MAX_ICAL_BYTES) throw new Error(`Booking.com calendar for ${slug} is too large`);
+  const nights = busyNights(parseIcal(text));
   cache.set(slug, { at: Date.now(), nights });
   return nights;
 }

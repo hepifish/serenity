@@ -1,17 +1,16 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { isAdminRequest } from "@/lib/admin-auth";
+import { adminDenied } from "@/lib/admin-auth";
 import { APARTMENT_SLUGS, APARTMENTS } from "@/lib/apartments";
 import { unavailableNights } from "@/lib/availability";
 import { eachNight, isISODate } from "@/lib/dates";
 import { sql } from "@/lib/db";
 import { getRate, nightlyPrices, type Rate } from "@/lib/pricing";
 
-const deny = () => NextResponse.json({ error: "unauthorized" }, { status: 401 });
-
 /** One window of the price matrix: every apartment, every night, its price and whether it is taken. */
 export async function GET(req: Request) {
-  if (!(await isAdminRequest(req))) return deny();
+  const denied = adminDenied(req);
+  if (denied) return denied;
   const u = new URL(req.url);
   const from = u.searchParams.get("from"), to = u.searchParams.get("to");
   if (!isISODate(from) || !isISODate(to) || to <= from) return NextResponse.json({ error: "dates" }, { status: 400 });
@@ -45,7 +44,8 @@ const SetPrices = z.object({
 
 /** Sets one price on a selection of nights, or clears them back to the default rate. */
 export async function POST(req: Request) {
-  if (!(await isAdminRequest(req))) return deny();
+  const denied = adminDenied(req);
+  if (denied) return denied;
   const parsed = SetPrices.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "invalid" }, { status: 400 });
   const { apartments, nights, price } = parsed.data;

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AptName from "@/components/AptName";
+import AptMark from "@/components/AptMark";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -126,7 +127,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                       )}
                     </div>
                     <div className="apt-copy">
-                      <p className="apt-num rv">{a.number}</p>
+                      <p className="apt-num with-mark rv"><AptMark slug={a.slug} size={40} />{a.number}</p>
                       <h3 id={`apt-${a.slug}`} className="display h2 rv d1">
                         <Link href={`/${lang}/apartments/${a.slug}`}><AptName slug={a.slug} name={a.name} /></Link>
                       </h3>

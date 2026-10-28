@@ -1,0 +1,7 @@
+# The CLI uploads everything not listed here (it does not read .gitignore).
+.claude
+.netopia/mock-*
+.env*
+scripts
+*.tsbuildinfo
+.DS_Store
