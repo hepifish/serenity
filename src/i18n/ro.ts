@@ -290,6 +290,7 @@ const ro: Dict = {
   common: {
     ron: "lei",
     loading: "Se încarcă…",
+    opening: "Se deschide ușa",
   },
 };
 

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import MorphLoader from "./MorphLoader";
 import PayLogos from "./PayLogos";
 import { money } from "@/lib/format";
 import { getDict } from "@/i18n";
@@ -124,6 +125,12 @@ export default function CheckoutForm({ lang, slugs, checkIn, checkOut, guests, t
         {t.secure} {t.hold}
       </p>
       <PayLogos />
+      {/* on the way to Netopia: the page is about to change, so say so and keep the form out of reach */}
+      {busy ? (
+        <div className="pay-veil">
+          <MorphLoader size={88} label={t.submitting} />
+        </div>
+      ) : null}
     </form>
   );
 }
