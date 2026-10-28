@@ -2,6 +2,8 @@
 .claude
 .netopia/mock-*
 .env*
-scripts
+# scripts stay local, except the migration runner the production build uses
+scripts/*
+!scripts/migrate.mjs
 *.tsbuildinfo
 .DS_Store
