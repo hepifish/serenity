@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import LegalArticle from "@/components/LegalArticle";
 import { getDict } from "@/i18n";
 import { isLocale, type Locale } from "@/i18n/config";
 import { LEGAL } from "@/content/legal";
@@ -34,41 +34,10 @@ export default async function PrivacyPage({ params }: Params) {
       <Header lang={lang} t={t.nav} solid />
       <main className="checkout">
         <div className="wrap">
-          <article className="prose">
-            <h1>{doc.title}</h1>
-            <p className="muted">{UPDATED[lang]}: {doc.updated}</p>
-            {doc.intro ? <p>{doc.intro}</p> : null}
-            {doc.sections.map((s) => (
-              <section key={s.h} aria-labelledby={slug(s.h)} style={{ display: "grid", gap: "1rem" }}>
-                <h2 id={slug(s.h)}>{s.h}</h2>
-                {s.p?.map((p, i) => <p key={i}>{linkify(p)}</p>)}
-                {s.ul ? <ul>{s.ul.map((li, i) => <li key={i}>{linkify(li)}</li>)}</ul> : null}
-              </section>
-            ))}
-          </article>
+          <LegalArticle doc={doc} meta={`${UPDATED[lang]}: ${doc.updated}`} />
         </div>
       </main>
       <Footer lang={lang} t={t} />
     </>
   );
-}
-
-/** "7. Anulare, modificare și rambursare" → "anulare-modificare-si-rambursare" */
-function slug(h: string) {
-  return h
-    .replace(/^\d+\.\s*/, "")
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-}
-
-/** Turns URLs, www. hosts and email addresses in the copy into links. */
-function linkify(text: string): ReactNode[] {
-  return text.split(/(https?:\/\/[^\s,;]+|www\.[^\s,;]+[a-z]|[\w.+-]+@[\w-]+\.[\w.]+[a-z])/g).map((part, i) => {
-    if (i % 2 === 0) return part;
-    const href = part.includes("@") ? `mailto:${part}` : part.startsWith("http") ? part : `https://${part}`;
-    return <a key={i} href={href} {...(part.includes("@") ? {} : { target: "_blank", rel: "noopener" })}>{part}</a>;
-  });
 }

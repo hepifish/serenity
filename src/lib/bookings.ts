@@ -2,6 +2,7 @@ import { randomBytes } from "node:crypto";
 import { sql } from "./db";
 import { HOLD_MINUTES } from "./site";
 import type { Quote } from "./pricing";
+import { recordAcceptance, type AcceptanceInput } from "./terms";
 
 export type Booking = {
   id: string;
@@ -55,8 +56,9 @@ export type GuestDetails = {
  * guest pays, as one group: all of them or none. Advisory locks, taken in a
  * fixed order, make two guests racing for the same nights take turns.
  * Returns null when any of the nights was taken in the meantime.
+ * The guest's acceptance of the terms is stored in the same transaction.
  */
-export async function createPendingGroup(quotes: Quote[], g: GuestDetails): Promise<Booking[] | null> {
+export async function createPendingGroup(quotes: Quote[], g: GuestDetails, acceptance: AcceptanceInput): Promise<Booking[] | null> {
   return sql.begin(async (tx) => {
     for (const a of [...new Set(quotes.map((q) => q.apartment))].sort()) await tx`select pg_advisory_xact_lock(hashtext(${a}))`;
     for (const q of quotes) {
@@ -83,6 +85,8 @@ export async function createPendingGroup(quotes: Quote[], g: GuestDetails): Prom
         returning ${COLUMNS}`;
       rows.push(b);
     }
+    // The acceptance is part of the booking: no row without it, no it without the rows.
+    await recordAcceptance(tx, { context: "booking", group_id: groupId }, acceptance);
     return rows;
   });
 }
@@ -100,8 +104,13 @@ export async function getGroup(groupId: string) {
   return sql<Booking[]>`select ${COLUMNS} from bookings where group_id = ${groupId} order by ref`;
 }
 
+/** Admin only: no token check. */
+export async function groupByRef(groupRef: string) {
+  return sql<Booking[]>`select ${COLUMNS} from bookings where group_ref = ${groupRef} order by ref`;
+}
+
 export async function getGroupByRef(groupRef: string, token: string) {
-  const rows = await sql<Booking[]>`select ${COLUMNS} from bookings where group_ref = ${groupRef} order by ref`;
+  const rows = await groupByRef(groupRef);
   // compared outside SQL so a wrong token and an unknown code look the same
   return rows.length && rows[0].access_token === token ? rows : null;
 }
