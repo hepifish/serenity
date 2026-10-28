@@ -48,19 +48,20 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
     <>
       <a href="#main" className="skip">Skip to content</a>
       <Header lang={lang} t={t.nav} />
-      <JsonLd data={lodgingBusinessLd(lang, t.meta.description)} />
+      <JsonLd data={lodgingBusinessLd(lang, t.meta.description, Object.fromEntries(apartments.map((a, i) => [a.slug, prices[i]])))} />
       <JsonLd data={faqLd(t.faq.items)} />
       <Reveal />
 
       <main id="main">
         <section className="hero" id="book">
-          <div className="hero-copy">
-            <p className="eyebrow rv">{t.hero.eyebrow}</p>
-            <h1 className="display h1 rv d1">
+          {/* no .rv here: the hero copy is the likely LCP and must paint without waiting for JS */}
+          <div className="hero-copy hero-in">
+            <h1 className="display h1">
+              <span className="eyebrow h1-kicker">{t.hero.kicker}</span>
               <span>{t.hero.title.split(/(\S+-\S+)/).map((w, i) => (i % 2 ? <span key={i} className="nobr">{w}</span> : w))}</span> <em>{t.hero.titleEm}</em>
             </h1>
-            <p className="lead rv d2">{t.hero.lead}</p>
-            <div className="rv d3" style={{ width: "100%" }}>
+            <p className="lead">{t.hero.lead}</p>
+            <div style={{ width: "100%" }}>
               <HeroSearch lang={lang} today={today} maxGuests={maxGuests} />
             </div>
           </div>
@@ -189,6 +190,22 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           </div>
         </section>
 
+        <section className="section hosts" id="hosts" aria-labelledby="hosts-title">
+          <div className="wrap hosts-grid">
+            <div className="section-head">
+              <p className="eyebrow rv">{t.hosts.eyebrow}</p>
+              <h2 id="hosts-title" className="display h2 rv d1">{t.hosts.title}</h2>
+            </div>
+            <div className="hosts-text">
+              {t.hosts.text.map((p, i) => <p key={i} className={`lead rv d${i + 1}`}>{p}</p>)}
+              <p className="hosts-contact rv d3">
+                <a className="link" href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
+                {COMPANY.phone ? <> · <a className="link" href={`tel:${COMPANY.phone.tel}`}>{COMPANY.phone.display}</a></> : null}
+              </p>
+            </div>
+          </div>
+        </section>
+
         <section className="section" id="sibiu" aria-labelledby="sibiu-title">
           <div className="wrap sibiu">
             <div className="sibiu-text">
@@ -239,6 +256,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
               <p className="lead rv d2">{t.contact.lead}</p>
               <p className="rv d3 muted">
                 {t.contact.orEmail} <a className="link" href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
+                {COMPANY.phone ? <> {t.contact.orCall} <a className="link nobr" href={`tel:${COMPANY.phone.tel}`}>{COMPANY.phone.display}</a></> : null}
               </p>
             </div>
             <div className="rv d2">

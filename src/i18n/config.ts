@@ -6,6 +6,8 @@ export function isLocale(s: string | undefined): s is Locale {
   return !!s && (LOCALES as readonly string[]).includes(s);
 }
 
-/** Open Graph / hreflang codes. */
-export const LOCALE_TAG: Record<Locale, string> = { en: "en", ro: "ro-RO", de: "de-DE" };
+/** hreflang: language only, so the German pages also match Austria and Switzerland. */
+export const HREFLANG: Record<Locale, string> = { en: "en", ro: "ro", de: "de" };
+/** Open Graph wants language_TERRITORY. */
+export const OG_LOCALE: Record<Locale, string> = { en: "en_GB", ro: "ro_RO", de: "de_DE" };
 export const LOCALE_NAME: Record<Locale, string> = { en: "English", ro: "Română", de: "Deutsch" };

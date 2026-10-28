@@ -21,8 +21,16 @@ const nextConfig: NextConfig = {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
   async redirects() {
-    // The old site's Romanian terms page.
-    return [{ source: "/termeni", destination: "/ro/terms", permanent: true }];
+    // One canonical host, the apex (src/lib/site.ts): www answers with a 301 to it.
+    const site = new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://serenityapartments.ro");
+    const toApex = site.hostname.startsWith("www.") || site.hostname === "localhost"
+      ? []
+      : [{ source: "/:path*", has: [{ type: "host" as const, value: `www.${site.hostname}` }], destination: `${site.origin}/:path*`, statusCode: 301 as const }];
+    return [
+      ...toApex,
+      // The old site's Romanian terms page; it only ever had / and /termeni.
+      { source: "/termeni", destination: "/ro/terms", permanent: true },
+    ];
   },
 };
 

@@ -4,13 +4,15 @@
  * Romanian is the binding version; EN and DE are faithful translations.
  * Placeholders in [brackets] must be filled in by the owner before going live.
  */
+import { COMPANY } from "@/lib/site";
+
 export type LegalDoc = { title: string; updated: string; intro?: string; sections: { id?: string; h: string; p?: string[]; ul?: string[] }[] };
 
 const CO = {
   name: "SERENITY ADMIN APARTAMENTE SRL",
   cui: "47339489",
   regCom: "J32/2691/2022",
-  address: "Fundătura Lupeni nr. 2, 550205 Sibiu, România",
+  address: COMPANY.address,
   email: "serenityhouseap@gmail.com",
 };
 

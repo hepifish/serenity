@@ -5,13 +5,13 @@ const gaeste = (n: number) => (n === 1 ? "1 Gast" : `${n} Gäste`);
 
 const de: Dict = {
   meta: {
-    title: "Ferienwohnungen in Hermannstadt (Sibiu) · Serenity",
+    title: "Ferienwohnung Hermannstadt (Sibiu) nahe Altstadt · Serenity",
     description:
-      "Vier Design-Ferienwohnungen in Hermannstadt (Sibiu): drei nahe der Altstadt, eine für sechs Personen. Direkt buchen, zum besten Preis.",
+      "Vier Design-Ferienwohnungen in Hermannstadt (Sibiu), drei davon 20 Gehminuten vom Großen Ring. Gratis parken, Self-Check-in. Direkt zum besten Preis buchen.",
   },
   nav: {
     apartments: "Wohnungen",
-    sibiu: "Sibiu",
+    sibiu: "Hermannstadt",
     faq: "Fragen",
     contact: "Kontakt",
     book: "Direkt buchen",
@@ -20,10 +20,10 @@ const de: Dict = {
     close: "Schließen",
   },
   hero: {
-    eyebrow: "Sibiu · Siebenbürgen",
+    kicker: "Ferienwohnungen in Hermannstadt (Sibiu)",
     title: "Schlafen in",
     titleEm: "einer Geschichte",
-    lead: "Vier Ferienwohnungen in Sibiu (Hermannstadt), jede rund um eine einzige Idee gestaltet: Kino, gotische Gewölbe, eine private Galerie und ein rosaroter Panther über den Bergen.",
+    lead: "Vier Ferienwohnungen in Hermannstadt, jede rund um eine einzige Idee gestaltet: Kino, gotische Gewölbe, eine private Galerie und ein rosaroter Panther über den Bergen.",
   },
   search: {
     dates: "Reisedaten",
@@ -100,6 +100,8 @@ const de: Dict = {
   },
   apartment: {
     back: "Alle Wohnungen",
+    kind: "Ferienwohnung in Hermannstadt (Sibiu)",
+    goodToKnow: "Gut zu wissen",
     highlights: "In der Wohnung",
     availability: "Verfügbarkeit & Preis",
     availabilityLead: "Graue Tage sind belegt. Wählen Sie die Anreise, dann die Abreise: Der Preis aktualisiert sich dabei.",
@@ -116,7 +118,7 @@ const de: Dict = {
     guests: "Gäste",
     alsoOn: "Lieber über Booking.com? Diese Wohnung ist auch dort gelistet.",
     alsoOnLink: "Auf Booking.com ansehen",
-    houseRules: "Gut zu wissen",
+    houseRules: "Hausregeln",
     rules: [
       "Check-in ab 15:00 Uhr, Check-out bis 11:00 Uhr",
       "Self-Check-in mit Schlüsselbox, eigener Eingang",
@@ -190,8 +192,8 @@ const de: Dict = {
   map: {
     eyebrow: "Auf der Karte",
     title: "Zwei Adressen, eine Stadt",
-    region: "Karte von Sibiu mit den Wohnungen",
-    westSibiu: "Westen von Sibiu",
+    region: "Karte von Hermannstadt mit den Wohnungen",
+    westSibiu: "Westen von Hermannstadt",
     centre: "Piața Mare",
     toCentre: (km, minutes, by) =>
       `Etwa ${km} km bis zur Piața Mare, ${minutes} Minuten ${by === "foot" ? "zu Fuß" : "mit dem Auto"}`,
@@ -226,7 +228,7 @@ const de: Dict = {
     eyebrow: "Fragen",
     title: "Bevor Sie anreisen",
     items: [
-      { q: "Wo genau liegen die Wohnungen?", a: "In der Fundătura Lupeni 2 in Sibiu (Hermannstadt), in einer ruhigen Straße 1,3 km vom Großen Ring (Piața Mare): etwa 20 Minuten zu Fuß, 10 bis zur alten Stadtmauer. Der Bahnhof ist 900 m entfernt, der Flughafen 5 km. Pink Panther liegt in der Magnolia Residence am Westrand von Sibiu, etwa 10 Autominuten von der Altstadt, mit kostenlosem Privatparkplatz." },
+      { q: "Wo genau liegen die Wohnungen?", a: "In der Fundătura Lupeni 2 in Hermannstadt (Sibiu), in einer ruhigen Straße 1,3 km vom Großen Ring (Piața Mare): etwa 20 Minuten zu Fuß, 10 bis zur alten Stadtmauer. Der Bahnhof ist 900 m entfernt, der Flughafen 5 km. Pink Panther liegt in der Magnolia Residence am Westrand von Hermannstadt, etwa 10 Autominuten von der Altstadt, mit kostenlosem Privatparkplatz." },
       { q: "Ist eine Direktbuchung günstiger?", a: "Ja. Booking.com berechnet uns für jeden Aufenthalt eine Provision. Wenn Sie hier buchen, geben wir diese Ersparnis weiter, und dieselben Nächte kosten weniger." },
       { q: "Kann ich mit einer rumänischen Urlaubskarte (card de vacanță) bezahlen?", a: "Ja. Wir akzeptieren Urlaubskarten von Edenred, Up und Pluxee über NETOPIA Payments, zum gleichen Preis wie mit einer normalen Karte." },
       { q: "Warum gibt es eine separate Tourismusabgabe?", a: "Seit 2026 erhebt Hermannstadt eine Tourismusabgabe von 2 % des Übernachtungspreises (HCL 462/2025). Wir ziehen sie ein und führen sie an die Stadt ab. Wir zeigen sie in einer eigenen Zeile, damit Sie genau sehen, was sie ist." },
@@ -235,7 +237,23 @@ const de: Dict = {
       { q: "Sind meine Kartendaten sicher?", a: "Ihre Kartendaten geben Sie nur auf der sicheren Seite von NETOPIA Payments ein, mit 3-D Secure. Sie laufen nie über unsere Website, und wir speichern sie nie." },
       { q: "Stellen Sie eine Rechnung aus?", a: "Ja. Jede Direktbuchung erhält eine Rechnung von Serenity Admin Apartamente SRL. Wenn Sie sie auf eine Firma benötigen, tragen Sie Firmennamen und Steuernummer (CUI) im Notizfeld ein." },
       { q: "Gibt es Parkplätze?", a: "Ja, kostenlos: auf der Straße vor dem Haus und in einer kleinen abschließbaren Garage auf dem Grundstück (begrenzter Platz, Motorräder willkommen). Geben Sie in der Notiz an, wenn Sie die Garage brauchen." },
+      { q: "Liegen die Wohnungen in der Altstadt von Hermannstadt?", a: "Nicht innerhalb der Stadtmauern. Film Studio, Gothic Chambers und Art Station liegen in der Fundătura Lupeni 2, 1,3 km vom Großen Ring: etwa 20 Minuten zu Fuß, 10 bis zur alten Stadtmauer. Pink Panther liegt im Westen von Hermannstadt, etwa 10 Autominuten von der Altstadt." },
+      { q: "Welche Wohnung passt für Familien oder Gruppen?", a: "Pink Panther: zwei Schlafzimmer und ein Schlafsofa für bis zu 6 Gäste, voll ausgestattete Küche, Waschmaschine und kostenloser Privatparkplatz. Gruppen bis 12 Personen buchen Film Studio, Gothic Chambers und Art Station zusammen, in einer Buchung mit einer Zahlung; sie liegen im selben Haus." },
     ],
+  },
+  hosts: {
+    eyebrow: "Ihre Gastgeber",
+    title: "Bewusst klein",
+    text: [
+      "Serenity ist ein kleines Unternehmen aus Hermannstadt, das diese Wohnungen seit 2022 betreibt. Wir haben jede selbst eingerichtet, rund um eine einzige Idee, und wir kümmern uns auch selbst um sie.",
+      "Sie schreiben uns, keinem Callcenter: Meist antworten wir noch am selben Tag, auf Deutsch, Englisch oder Rumänisch. Auf Booking.com bewerten Gäste das Personal mit 9,3 von 10.",
+    ],
+  },
+  notFound: {
+    meta: "Seite nicht gefunden · Serenity Apartments Sibiu",
+    title: "Diese Tür führt nirgendwohin",
+    lead: "Die gesuchte Seite gibt es hier nicht, oder sie ist umgezogen. Die Wohnungen sind noch da, wo wir sie gelassen haben.",
+    home: "Zur Startseite",
   },
   contact: {
     eyebrow: "Kontakt",
@@ -249,6 +267,7 @@ const de: Dict = {
     sent: "Vielen Dank. Wir melden uns bald.",
     error: "Die Nachricht wurde nicht gesendet. Bitte schreiben Sie uns direkt per E-Mail.",
     orEmail: "Oder per E-Mail",
+    orCall: "oder telefonisch unter",
   },
   checkin: {
     meta: "Online-Check-in · Serenity Apartments Sibiu",

@@ -1,9 +1,9 @@
 // English is the source; ro.ts and de.ts follow this exact shape.
 const en = {
   meta: {
-    title: "Design apartments in Sibiu, near the old town · Serenity",
+    title: "Apartments in Sibiu, near the old town · Serenity",
     description:
-      "Four design apartments in Sibiu: Film Studio, Gothic Chambers and Art Station near the old town, and Pink Panther for six. Book direct, pay by card or holiday voucher card.",
+      "Four design apartments in Sibiu, three a 20-minute walk from Piața Mare. Free parking, self check-in. Book direct for our best price.",
   },
   nav: {
     apartments: "Apartments",
@@ -16,7 +16,7 @@ const en = {
     close: "Close",
   },
   hero: {
-    eyebrow: "Sibiu · Transylvania",
+    kicker: "Apartments in Sibiu, Transylvania",
     title: "Sleep inside",
     titleEm: "a story",
     lead: "Four apartments in Sibiu, each built around a single idea: cinema, gothic vaults, a private gallery, and a pink panther above the mountains.",
@@ -90,6 +90,8 @@ const en = {
   },
   apartment: {
     back: "All apartments",
+    kind: "Apartment in Sibiu",
+    goodToKnow: "Good to know",
     highlights: "In the apartment",
     availability: "Availability & price",
     availabilityLead: "Grey days are taken. Pick your arrival, then your departure: the price updates as you go.",
@@ -106,7 +108,7 @@ const en = {
     guests: "Guests",
     alsoOn: "Prefer Booking.com? This apartment is listed there too.",
     alsoOnLink: "View on Booking.com",
-    houseRules: "Good to know",
+    houseRules: "House rules",
     rules: [
       "Check-in from 15:00, check-out until 11:00",
       "Self check-in with a key box, private entrance",
@@ -225,7 +227,23 @@ const en = {
       { q: "Is my card data safe?", a: "Your card details are entered only on NETOPIA Payments' secure page, with 3-D Secure. They never pass through our website and we never store them." },
       { q: "Do you issue an invoice?", a: "Yes. Every direct booking gets an invoice from Serenity Admin Apartamente SRL. If you need it on a company, add the company name and CUI in the note field." },
       { q: "Is there parking?", a: "Yes, free: on the street outside, and a small locked garage on the property (limited space, motorcycles welcome). Tell us in the note if you need the garage." },
+      { q: "Are the apartments in Sibiu's old town?", a: "Not inside the walls. Film Studio, Gothic Chambers and Art Station are at Fundătura Lupeni 2, 1.3 km from Piața Mare: about 20 minutes on foot, 10 to the old citadel walls. Pink Panther is in west Sibiu, about 10 minutes by car from the old town." },
+      { q: "Which apartment suits a family or a group?", a: "Pink Panther: two bedrooms and a sofa bed for up to 6, a full kitchen, a washing machine and free private parking. Groups of up to 12 can book Film Studio, Gothic Chambers and Art Station together, in one booking and one payment; they share the same house." },
     ],
+  },
+  hosts: {
+    eyebrow: "Your hosts",
+    title: "Small on purpose",
+    text: [
+      "Serenity is a small Sibiu company that has run these apartments since 2022. We furnished each one ourselves, around a single idea, and we look after them ourselves too.",
+      "You write to us, not to a call centre: we usually answer the same day, in English, Romanian or German. On Booking.com, guests rate the staff 9.3 out of 10.",
+    ],
+  },
+  notFound: {
+    meta: "Page not found · Serenity Apartments Sibiu",
+    title: "This door leads nowhere",
+    lead: "The page you were looking for is not here, or it has moved. The apartments are still where we left them.",
+    home: "Back to the home page",
   },
   contact: {
     eyebrow: "Contact",
@@ -239,6 +257,7 @@ const en = {
     sent: "Thank you. We'll write back soon.",
     error: "The message didn't go through. Please email us directly.",
     orEmail: "Or email",
+    orCall: "or call",
   },
   checkin: {
     meta: "Online check-in · Serenity Apartments Sibiu",

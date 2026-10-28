@@ -2,8 +2,21 @@ import type { ApartmentCopy, ApartmentSlug } from "@/lib/apartments";
 
 // The words for each apartment. Facts (guests, size, photos) live in
 // src/lib/apartments.ts; ro and de mirror this file.
+
+// The three units in the Lupeni house share the way there and the arrival.
+const LUPENI_WAY = {
+  title: "Getting there",
+  text: "Fundătura Lupeni 2 is a quiet lane 1.3 km from Piața Mare: about 20 minutes on foot to the main square, 10 to the old citadel walls. The train station is 900 m away and Sibiu airport 5 km, about ten minutes by taxi.",
+};
+const LUPENI_ARRIVAL = {
+  title: "Arrival and parking",
+  text: "Self check-in from 15:00: the key waits in a key box at your private entrance, and the code reaches you before you arrive. Check-out is until 11:00. Parking is free on the street outside; a small locked garage on the property has room for a few, so ask us first.",
+};
+
 const copy: Record<ApartmentSlug, ApartmentCopy> = {
   "film-studio": {
+    seoTitle: "Film Studio: cinema-themed apartment in Sibiu · Serenity",
+    seoDescription: "Cinema-themed 45 m² apartment in Sibiu for up to 4, with private entrance, kitchen and free parking. 20 minutes on foot to Piața Mare. Book direct.",
     tagline: "A love letter to cinema",
     intro: "Fall asleep under The Godfather, wake to light through green velvet curtains.",
     story: [
@@ -20,11 +33,35 @@ const copy: Record<ApartmentSlug, ApartmentCopy> = {
       "Private bathroom",
       "Terrace",
     ],
+    goodToKnow: [
+      { title: "Sleeping and kitchen", text: "A queen bed stands against the black cinema wall in the bedroom; the yellow sofa in the living room opens into a bed for two more. The kitchen has a microwave, a Nespresso machine and a table for four. All 45 m² are on the ground floor." },
+      LUPENI_WAY,
+      LUPENI_ARRIVAL,
+    ],
     alts: [
-      "Yellow sofa beneath the cinema poster wall",
+      "Film Studio living room: the yellow sofa under a wall of film posters",
+      "Film Studio bedroom, the bed against the black wall with Léon and Spirited Away posters",
+      "Queen bed in Film Studio, with Pulp Fiction and Whiplash posters on the wall",
+      "Vintage slide projector on the open shelving in Film Studio",
+      "Léon and Spirited Away posters above the bed in Film Studio",
+      "Film Studio desk with a black lamp under a Kill Bill poster",
+      "Film Studio living area with the dining table and the yellow and grey kitchen",
+      "Film Studio kitchen with microwave and Nespresso machine",
+      "Film Studio bedroom with the black accent wall and framed posters",
+      "Sofa and floor lamp under The Godfather and Dune posters in Film Studio",
+      "Film Studio bedroom, with open shelving between the bed and the desk",
+      "View past the bed in Film Studio to the window and the reading corner",
+      "Dining table between green velvet curtains in Film Studio",
+      "The Godfather and Dune posters above the yellow sofa in Film Studio",
+      "Kill Bill poster and a black desk lamp in Film Studio",
+      "Film posters above the bed in Film Studio, seen from the nightstand",
+      "Film Studio bathroom with shower and basin",
+      "Reed diffuser on the bathroom shelf in Film Studio",
     ],
   },
   "gothic-chambers": {
+    seoTitle: "Gothic Chambers: vaulted apartment in Sibiu · Serenity",
+    seoDescription: "45 m² apartment under original 19th-century stone vaults in Sibiu, for up to 4. Private entrance, kitchen, free parking, 20 minutes on foot to Piața Mare.",
     tagline: "Under stone vaults",
     intro: "Step through an arch into another century: vaulted ceilings, iron chandeliers, Tiffany light.",
     story: [
@@ -41,11 +78,38 @@ const copy: Record<ApartmentSlug, ApartmentCopy> = {
       "Walk-in shower in dark stone",
       "Fast Wi-Fi",
     ],
+    goodToKnow: [
+      { title: "Sleeping and kitchen", text: "A queen bed sits under the iron chandelier, between two Tiffany lamps; the sofa under the living-room vaults opens into a bed for two more. The kitchen has a coffee machine and a round table for four, and the bathroom a walk-in shower in dark stone." },
+      LUPENI_WAY,
+      LUPENI_ARRIVAL,
+    ],
     alts: [
-      "Gothic Chambers living area under the vaulted ceiling",
+      "Gothic Chambers living area under the vaulted ceiling, with sofa, dining table and kitchen",
+      "Iron chandelier seen through the arched glass partition in Gothic Chambers",
+      "Gothic Chambers bedroom: the bed between Tiffany lamps, under an iron chandelier",
+      "Tiffany stained-glass lamp beside the bed in Gothic Chambers",
+      "Gothic Chambers living room seen through the arched glass partition",
+      "Peacock feathers and candles below an arched mirror in Gothic Chambers",
+      "Gothic Chambers living room with the tall arched window and dark curtains",
+      "Round dining table under the arched window in Gothic Chambers",
+      "Sofa with red cushions beneath the vaults of Gothic Chambers",
+      "Vaulted ceiling and arched niches above the sofa in Gothic Chambers",
+      "Glass coffee table and sofa under the stone vaults of Gothic Chambers",
+      "Lounge corner with a patterned rug in Gothic Chambers",
+      "Arched window, dining chairs and an iron lantern in Gothic Chambers",
+      "Bed by the tall arched window in Gothic Chambers",
+      "Peacock feathers, a green incense burner and a copy of Dracula in Gothic Chambers",
+      "Iron lantern and green incense burner on the console in Gothic Chambers",
+      "Old gilt-spined books under an arched mirror in Gothic Chambers",
+      "Gothic Chambers bathroom with dark tiles and a walk-in shower",
+      "Basin and dark wood vanity in the Gothic Chambers bathroom",
+      "Washbasin with reed diffusers in the Gothic Chambers bathroom",
+      "Walk-in shower in dark stone tiles, Gothic Chambers",
     ],
   },
   "art-station": {
+    seoTitle: "Art Station: gallery apartment in Sibiu · Serenity",
+    seoDescription: "45 m² apartment in Sibiu hung with museum prints, for up to 4. Private entrance, kitchen, workspace, free parking, 20 minutes on foot to Piața Mare.",
     tagline: "A small private gallery",
     intro: "Van Gogh, Kandinsky, Matisse, Rousseau on the walls. A red sofa in the middle of it all.",
     story: [
@@ -62,17 +126,37 @@ const copy: Record<ApartmentSlug, ApartmentCopy> = {
       "Bathroom with walk-in shower",
       "Terrace",
     ],
+    goodToKnow: [
+      { title: "Sleeping and kitchen", text: "The bedroom has a queen bed under a woven wicker pendant and a desk by the window; the red sofa in the living room opens into a bed for two more. The kitchen corner has a microwave, a coffee maker and a round table for four." },
+      LUPENI_WAY,
+      LUPENI_ARRIVAL,
+    ],
     alts: [
-      "Art Station living area with its wall of museum prints",
-      "Rysselberghe and Rousseau prints above the red sofa",
-      "Red sofa and round dining table",
-      "Bedroom with the desk by the window",
-      "Bed under the woven wicker pendant",
-      "Workspace lit by an Edison lamp",
-      "Candle and prints on the console",
+      "Art Station living room: the red sofa beneath a row of museum prints",
+      "Rysselberghe and Rousseau prints above the red sofa in Art Station",
+      "Art Station living room with the red sofa, round dining table and wire chandelier",
+      "Art Station bedroom with the desk by the window",
+      "Bed under the woven wicker pendant in Art Station",
+      "Bosch and Rysselberghe prints above the desk in Art Station",
+      "Candle, Edison lamp and Pop Art books on the console in Art Station",
+      "Art Station bedroom with white linen and a red rug",
+      "Art Station kitchen corner with the round table, microwave and TV",
+      "Desk with an Edison lamp under a Hieronymus Bosch print in Art Station",
+      "View from the hall into the Art Station living room",
+      "Open wardrobe and desk in the Art Station bedroom",
+      "Wooden clothes rack and floor lamp in Art Station",
+      "Mushroom lamp on the nightstand in Art Station",
+      "Edison bulb, with the hallway behind, in Art Station",
+      "Console under a round mirror and a red pendant in Art Station",
+      "Entry nook with console, round mirror and red pendant in Art Station",
+      "Washbasin in the grey-tiled Art Station bathroom",
+      "Reed diffuser by the patterned shower curtain in Art Station",
+      "Art Station bathroom with shower, basin and toilet",
     ],
   },
   "pink-panther": {
+    seoTitle: "Pink Panther: two-bedroom apartment in Sibiu · Serenity",
+    seoDescription: "Two-bedroom Pink Panther apartment in west Sibiu for up to 6: 56 m², balcony with mountain view, free private parking, 10 minutes by car to the old town.",
     tagline: "Pop art above the mountains",
     intro: "Two bedrooms, a balcony facing the mountains, and a pink cat who refuses to behave.",
     story: [
@@ -89,16 +173,35 @@ const copy: Record<ApartmentSlug, ApartmentCopy> = {
       "Wi-Fi rated 10 by guests",
       "Self check-in with a lockbox",
     ],
+    goodToKnow: [
+      { title: "Sleeping and kitchen", text: "Two bedrooms, each with a king-size bed, and a sofa bed in the living room: room for six. The kitchen is complete, with oven, hob, fridge and a washing machine; the bathroom has a bathtub. The apartment is on an upper floor, with a lift." },
+      { title: "Getting there", text: "Pink Panther is in Magnolia Residence, a modern complex on Sibiu's western edge, about 5 km from Piața Mare: roughly 10 minutes by car. The balcony looks over open fields to the mountains." },
+      { title: "Arrival and parking", text: "Self check-in from 15:00 with a lockbox; the code reaches you before you arrive. Check-out is until 11:00. Parking is free and private, in front of the building." },
+    ],
     alts: [
       "Pink Panther living room with the graffiti canvas and the balcony door",
       "A Pink Panther toy beside a pink vase",
       "Blush bedroom under a pop-art Pink Panther canvas",
-      "Sunset over the mountains from the balcony",
-      "Living and dining area with the open kitchen",
-      "Second bedroom with pink linen and a desk",
+      "Sunset over the mountains from the Pink Panther balcony",
+      "Pink Panther living and dining area with the open kitchen",
+      "Second bedroom in Pink Panther, with pink linen, a desk and a mirrored wardrobe",
+      "Pink Panther main bedroom with grey linen by the balcony window",
+      "Dining table and kitchen by the balcony door in Pink Panther",
+      "Pink Panther kitchen with oven, hob and a tall fridge",
+      "Pop-art Pink Panther canvas above the bed, under a paper pendant",
+      "Eucalyptus in a glass vase on a shelf in Pink Panther",
+      "An “I've got the travel bug” print beside a white vase in Pink Panther",
+      "Black alarm clock and a pink ribbed vase in Pink Panther",
+      "The Pink Panther balcony, looking over fields to the mountains",
+      "Clouds over the mountains, seen from the Pink Panther balcony",
+      "Fields and mountains under a blue sky, from the Pink Panther balcony",
+      "Pink Panther bathroom with bathtub, round mirror and white vanity",
+      "Bathtub and round mirror in the Pink Panther bathroom",
+      "White vanity, round mirror and toilet in the Pink Panther bathroom",
+      "Pink Panther front door, open onto the hallway",
+      "The Magnolia Residence building and its car park, home of Pink Panther",
     ],
   },
-
 };
 
 export default copy;

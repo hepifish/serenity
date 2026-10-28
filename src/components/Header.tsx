@@ -72,7 +72,7 @@ export default function Header({ lang, t, solid = false }: { lang: Locale; t: Di
           </nav>
           <div className="header-end">
             {langs}
-            <Link href={`/${lang}?pick=1`} className="btn" onClick={book}>{t.book}</Link>
+            <Link href={`/${lang}?pick=1`} rel="nofollow" className="btn" onClick={book}>{t.book}</Link>
             <button type="button" className="burger" aria-expanded={open} aria-controls="drawer" aria-label={open ? t.close : t.menu} onClick={() => setOpen(!open)}>
               <span /><span />
             </button>
@@ -86,7 +86,7 @@ export default function Header({ lang, t, solid = false }: { lang: Locale; t: Di
           ))}
         </ul>
         {langs}
-        <Link href={`/${lang}?pick=1`} className="btn block" onClick={book}>{t.book}</Link>
+        <Link href={`/${lang}?pick=1`} rel="nofollow" className="btn block" onClick={book}>{t.book}</Link>
       </div>
     </>
   );

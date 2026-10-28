@@ -14,9 +14,10 @@ export default function Footer({ lang, t }: { lang: Locale; t: Dict }) {
             <p className="logo" style={{ color: "var(--bone)", marginBottom: "1rem" }}>Serenity<span>.</span></p>
             <p style={{ maxWidth: "22rem" }}>{t.footer.tagline}</p>
             <p style={{ marginTop: "1rem" }}><a className="link" href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a></p>
+            {COMPANY.phone ? <p style={{ marginTop: "0.4rem" }}><a className="link" href={`tel:${COMPANY.phone.tel}`}>{COMPANY.phone.display}</a></p> : null}
           </div>
           <div>
-            <h2>{t.nav.apartments}</h2>
+            <p className="footer-title">{t.nav.apartments}</p>
             <ul>
               {apartmentList().map((a) => (
                 <li key={a.slug}><Link href={`/${lang}/apartments/${a.slug}`}>{a.name}</Link></li>
@@ -24,7 +25,7 @@ export default function Footer({ lang, t }: { lang: Locale; t: Dict }) {
             </ul>
           </div>
           <div>
-            <h2>{t.footer.legal}</h2>
+            <p className="footer-title">{t.footer.legal}</p>
             <ul>
               <li><Link href={`/${lang}/terms`}>{t.footer.terms}</Link></li>
               <li><Link href={`/${lang}/privacy`}>{t.footer.privacy}</Link></li>

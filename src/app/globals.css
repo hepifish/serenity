@@ -1935,7 +1935,7 @@ textarea {
   grid-template-columns: 1.4fr 1fr 1fr;
   gap: 2.5rem;
 }
-.footer h2 {
+.footer .footer-title {
   font-size: 0.7rem;
   letter-spacing: 0.24em;
   text-transform: uppercase;
@@ -2768,3 +2768,149 @@ textarea {
 .locmap-wrap {
   margin-top: clamp(5rem, 10vw, 8rem);
 }
+
+/* ═════════ SEO / content (audit 2026-10-28) ═════════ */
+
+/* the home H1 carries the keyword line, styled exactly like the old eyebrow above it */
+.hero .h1 > .h1-kicker {
+  display: flex;
+  line-height: 1.4;
+  margin-bottom: 1.6rem;
+}
+/* the hero copy paints at once (it is the LCP); only a short rise, never hidden */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-in > * {
+    animation: hero-rise 0.7s var(--ease) both;
+  }
+  .hero-in > :nth-child(2) {
+    animation-delay: 0.08s;
+  }
+  .hero-in > :nth-child(3) {
+    animation-delay: 0.16s;
+  }
+}
+@keyframes hero-rise {
+  from {
+    transform: translateY(14px);
+  }
+}
+
+/* "Apartment in Sibiu" under the apartment's name, in plain type whatever the theme */
+.apt-hero .h1-sub {
+  display: block;
+  margin-top: 1rem;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  line-height: 1.5;
+  text-transform: uppercase;
+  color: var(--bone-2);
+}
+
+/* Good to know: short answers, one row each */
+.know {
+  display: grid;
+  border-top: 1px solid var(--line);
+}
+.know > div {
+  display: grid;
+  grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+  gap: 0.5rem 2rem;
+  padding: 1.2rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.know dt {
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--stone);
+  padding-top: 0.25rem;
+}
+.know dd {
+  color: var(--bone-2);
+  font-size: 0.98rem;
+  line-height: 1.75;
+  max-width: 40rem;
+}
+@media (max-width: 640px) {
+  .know > div {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Your hosts */
+.hosts {
+  padding-bottom: 0;
+}
+.hosts-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+  gap: clamp(2rem, 6vw, 6rem);
+  align-items: start;
+}
+.hosts-grid .section-head {
+  margin-bottom: 0;
+}
+.hosts-text {
+  display: grid;
+  gap: 1.2rem;
+}
+.hosts-contact {
+  color: var(--stone);
+  overflow-wrap: anywhere;
+}
+@media (max-width: 860px) {
+  .hosts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 404 */
+.nf {
+  padding: calc(var(--header) + clamp(3rem, 8vw, 6rem)) 0 clamp(5rem, 10vw, 8rem);
+}
+.nf-wrap {
+  display: grid;
+  gap: 1.6rem;
+  justify-items: start;
+  max-width: 860px;
+}
+.nf-list {
+  list-style: none;
+  width: 100%;
+  margin: 1rem 0;
+  border-top: 1px solid var(--line);
+}
+.nf-list a {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.nf-name {
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  color: var(--bone);
+}
+.nf-tag {
+  font-size: 0.85rem;
+  text-align: right;
+}
+@media (hover: hover) {
+  .nf-list a:hover .nf-name {
+    color: var(--accent);
+  }
+}
+@media (max-width: 640px) {
+  .nf-list a {
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+  }
+  .nf-tag {
+    grid-column: 2;
+    text-align: left;
+  }
+}
+/* ═════════ end SEO / content ═════════ */

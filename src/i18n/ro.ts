@@ -7,9 +7,9 @@ const oaspeti = (n: number) => (n === 1 ? "1 oaspete" : `${n} ${de(n)}oaspeți`)
 
 const ro: Dict = {
   meta: {
-    title: "Apartamente Sibiu aproape de centrul vechi · Serenity",
+    title: "Apartamente în regim hotelier în Sibiu, lângă centru · Serenity",
     description:
-      "Cazare Sibiu în patru apartamente de design: trei aproape de centrul vechi, unul pentru șase persoane. Rezervă direct, cu card sau vouchere de vacanță.",
+      "Cazare în regim hotelier în Sibiu: patru apartamente, trei la 20 de minute pe jos de Piața Mare. Parcare gratuită, plata cu cardul sau cardul de vacanță.",
   },
   nav: {
     apartments: "Apartamente",
@@ -22,7 +22,7 @@ const ro: Dict = {
     close: "Închide",
   },
   hero: {
-    eyebrow: "Sibiu · Transilvania",
+    kicker: "Apartamente în regim hotelier, Sibiu",
     title: "Dormi într-o",
     titleEm: "poveste",
     lead: "Patru apartamente în Sibiu, fiecare construit în jurul unei singure idei: cinema, bolți gotice, o galerie privată și o panteră roz deasupra munților.",
@@ -102,6 +102,8 @@ const ro: Dict = {
   },
   apartment: {
     back: "Toate apartamentele",
+    kind: "Apartament în regim hotelier, Sibiu",
+    goodToKnow: "Bine de știut",
     highlights: "În apartament",
     availability: "Disponibilitate și preț",
     availabilityLead: "Zilele gri sunt ocupate. Alege sosirea, apoi plecarea: prețul se actualizează pe loc.",
@@ -118,7 +120,7 @@ const ro: Dict = {
     guests: "Oaspeți",
     alsoOn: "Preferi Booking.com? Apartamentul este listat și acolo.",
     alsoOnLink: "Vezi pe Booking.com",
-    houseRules: "Bine de știut",
+    houseRules: "Regulile casei",
     rules: [
       "Check-in de la 15:00, check-out până la 11:00",
       "Self check-in cu cutie pentru chei, intrare privată",
@@ -237,7 +239,23 @@ const ro: Dict = {
       { q: "Datele cardului meu sunt în siguranță?", a: "Datele cardului se introduc doar pe pagina securizată NETOPIA Payments, cu 3-D Secure. Nu trec niciodată prin site-ul nostru și nu le stocăm niciodată." },
       { q: "Emiteți factură?", a: "Da. Fiecare rezervare directă primește factură de la Serenity Admin Apartamente SRL. Dacă ai nevoie de ea pe o firmă, adaugă numele firmei și CUI-ul în câmpul pentru observații." },
       { q: "Există parcare?", a: "Da, gratuită: pe stradă, în fața casei, și un garaj mic, încuiat, în curte (loc limitat, motocicletele sunt binevenite). Spune-ne în observații dacă ai nevoie de garaj." },
+      { q: "Apartamentele sunt în centrul vechi al Sibiului?", a: "Nu în interiorul zidurilor. Film Studio, Gothic Chambers și Art Station sunt pe Fundătura Lupeni 2, la 1,3 km de Piața Mare: cam 20 de minute pe jos, 10 până la zidurile cetății. Pink Panther este în vestul Sibiului, la circa 10 minute cu mașina de centrul vechi." },
+      { q: "Ce apartament se potrivește unei familii sau unui grup?", a: "Pink Panther: două dormitoare și o canapea extensibilă pentru până la 6 persoane, bucătărie completă, mașină de spălat și parcare privată gratuită. Grupurile de până la 12 persoane pot rezerva împreună Film Studio, Gothic Chambers și Art Station, într-o singură rezervare și o singură plată; sunt în aceeași casă." },
     ],
+  },
+  hosts: {
+    eyebrow: "Gazdele tale",
+    title: "Mici, și așa ne place",
+    text: [
+      "Serenity este o firmă mică din Sibiu, care se ocupă de aceste apartamente din 2022. Le-am mobilat noi, pe fiecare în jurul unei singure idei, și tot noi avem grijă de ele.",
+      "Ne scrii nouă, nu unui call center: de obicei răspundem în aceeași zi, în română, engleză sau germană. Pe Booking.com, oaspeții dau personalului nota 9,3 din 10.",
+    ],
+  },
+  notFound: {
+    meta: "Pagina nu există · Serenity Apartments Sibiu",
+    title: "Ușa aceasta nu duce nicăieri",
+    lead: "Pagina căutată nu mai este aici sau s-a mutat. Apartamentele sunt tot unde le-am lăsat.",
+    home: "Înapoi la prima pagină",
   },
   contact: {
     eyebrow: "Contact",
@@ -251,6 +269,7 @@ const ro: Dict = {
     sent: "Mulțumim. Îți răspundem în curând.",
     error: "Mesajul nu a putut fi trimis. Scrie-ne direct pe email.",
     orEmail: "Sau pe email",
+    orCall: "ori la telefon",
   },
   checkin: {
     meta: "Check-in online · Serenity Apartments Sibiu",

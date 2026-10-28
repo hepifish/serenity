@@ -16,7 +16,7 @@ import { APARTMENTS, APARTMENT_SLUGS, PIATA_MARE, apartmentList, isApartmentSlug
 import { addDays, todayInSibiu } from "@/lib/dates";
 import { fromPrice } from "@/lib/pricing";
 import { COMPANY, SITE_URL } from "@/lib/site";
-import { JsonLd, apartmentLd, breadcrumbLd, pageMeta } from "@/lib/seo";
+import { JsonLd, apartmentLd, breadcrumbLd, ogImage, pageMeta } from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   if (!isLocale(lang) || !isApartmentSlug(slug)) return {};
   const a = APARTMENTS[slug];
   const c = apartmentCopy(lang, slug);
-  const meta = pageMeta(lang, `/apartments/${slug}`, `${a.name} · ${c.tagline} · Serenity Apartments Sibiu`, `${c.intro} ${c.story[0]}`.slice(0, 158), a.gallery[0]?.src);
+  const meta = pageMeta(lang, `/apartments/${slug}`, c.seoTitle, c.seoDescription, { url: ogImage(slug), alt: c.alts[a.pageHeroIndex ?? 0] ?? a.name });
   return a.comingSoon ? { ...meta, robots: { index: false, follow: true } } : meta;
 }
 
@@ -58,6 +58,19 @@ export default async function ApartmentPage({ params }: Params) {
           <ul className="highlights rv d1">{c.highlights.map((h) => <li key={h}>{h}</li>)}</ul>
         </section>
       ) : null}
+      {c.goodToKnow.length ? (
+        <section aria-labelledby="know-title" style={{ display: "grid", gap: "1.4rem" }}>
+          <h2 id="know-title" className="display h3 rv">{t.apartment.goodToKnow}</h2>
+          <dl className="know rv d1">
+            {c.goodToKnow.map((k) => (
+              <div key={k.title}>
+                <dt>{k.title}</dt>
+                <dd>{k.text}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      ) : null}
       <section aria-labelledby="rules-title" style={{ display: "grid", gap: "1.4rem" }}>
         <h2 id="rules-title" className="display h3 rv">{t.apartment.houseRules}</h2>
         <ul className="highlights rv d1">{t.apartment.rules.map((h) => <li key={h}>{h}</li>)}</ul>
@@ -69,7 +82,7 @@ export default async function ApartmentPage({ params }: Params) {
     <>
       <a href="#main" className="skip">Skip to content</a>
       <Header lang={lang} t={t.nav} />
-      <JsonLd data={apartmentLd(lang, slug, a.name, c.intro, price)} />
+      <JsonLd data={apartmentLd(lang, slug, c.seoDescription, photos[0]?.alt ?? a.name, price)} />
       <JsonLd data={breadcrumbLd([
         { name: "Serenity Apartments", url: `${SITE_URL}/${lang}` },
         { name: a.name, url: `${SITE_URL}/${lang}/apartments/${slug}` },
@@ -84,14 +97,13 @@ export default async function ApartmentPage({ params }: Params) {
           <div className="wrap">
             <nav className="crumbs" aria-label="Breadcrumb"><Link href={`/${lang}#apartments`}>← {t.apartment.back}</Link></nav>
             <p className="eyebrow">{a.number} · {c.tagline}</p>
-            <h1 className="display h1"><AptName slug={slug} name={a.name} /></h1>
+            <h1 className="display h1"><AptName slug={slug} name={a.name} />{" "}<span className="h1-sub">{t.apartment.kind}</span></h1>
             <p className="lead" style={{ color: "var(--bone)" }}>{c.intro}</p>
             {!a.comingSoon ? (
               <ul className="facts">
                 <li>{t.apartments.upTo(a.maxGuests)}</li>
                 <li>{t.apartments.bedrooms(a.bedrooms)}</li>
                 {a.sizeM2 ? <li>{a.sizeM2} m²</li> : null}
-                <li>Sibiu</li>
               </ul>
             ) : null}
           </div>
@@ -130,7 +142,7 @@ export default async function ApartmentPage({ params }: Params) {
               {others.map((o) => (
                 <Link key={o.slug} href={`/${lang}/apartments/${o.slug}`} className="result" style={{ ["--accent" as string]: o.accent }}>
                   {o.gallery[0] ? (
-                    <Image src={o.gallery[0].src} alt={o.name} width={o.gallery[0].w} height={o.gallery[0].h} sizes="(max-width: 860px) 100vw, 33vw" style={{ aspectRatio: "4 / 3", objectFit: "cover", width: "100%", height: "auto" }} />
+                    <Image src={o.gallery[0].src} alt={apartmentCopy(lang, o.slug).alts[0] ?? o.name} width={o.gallery[0].w} height={o.gallery[0].h} sizes="(max-width: 860px) 100vw, 33vw" style={{ aspectRatio: "4 / 3", objectFit: "cover", width: "100%", height: "auto" }} />
                   ) : <div style={{ aspectRatio: "4 / 3", background: "radial-gradient(120% 90% at 30% 20%, #4a2738, var(--ink-2))" }} />}
                   <div className="result-body">
                     <p className="apt-num">{o.number}</p>

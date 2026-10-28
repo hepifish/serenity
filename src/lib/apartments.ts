@@ -1,5 +1,6 @@
 import type { Locale } from "@/i18n/config";
 import manifest from "./image-manifest.json";
+import { ADDRESS } from "./site";
 
 /**
  * The four apartments. Facts live here once; the words about them live in
@@ -34,17 +35,41 @@ export type Apartment = {
   /** the way to Piața Mare, measured on OpenStreetMap routes and rounded */
   toCentre: { km: number; minutes: number; by: "foot" | "car" };
   gallery: { src: string; w: number; h: number }[];
+  /** what the structured data lists; the guest-facing words are the highlights in i18n */
+  amenities: Amenity[];
+  bedDetails: { count: number; type: string }[];
+  /** the inside of the Lupeni house, so it belongs to the business node */
+  inHouse: boolean;
 };
 
 export type Address = { streetAddress: string; postalCode?: string; locality: string };
+
+export const AMENITY_NAME = {
+  privateEntrance: "Private entrance",
+  groundFloor: "Ground floor",
+  terrace: "Terrace",
+  balcony: "Balcony with mountain view",
+  elevator: "Elevator",
+  kitchen: "Kitchen",
+  washingMachine: "Washing machine",
+  workspace: "Workspace",
+  walkInShower: "Walk-in shower",
+  bathtub: "Bathtub",
+  wifi: "Free Wi-Fi",
+  freeParking: "Free parking",
+  selfCheckIn: "Self check-in",
+} as const;
+export type Amenity = keyof typeof AMENITY_NAME;
 
 /** Film Studio, Gothic Chambers and Art Station share one house, so one pin. */
 const LUPENI_2 = {
   lat: 45.803159,
   lng: 24.1634059,
-  address: { streetAddress: "Fundătura Lupeni 2", postalCode: "550206", locality: "Sibiu" },
+  address: { streetAddress: ADDRESS.street, postalCode: ADDRESS.postalCode, locality: ADDRESS.city },
   // OSRM foot route: 1.33 km, 18 min
   toCentre: { km: 1.3, minutes: 20, by: "foot" as const },
+  bedDetails: [{ count: 1, type: "Queen" }, { count: 1, type: "Sofa bed" }],
+  inHouse: true,
 };
 
 /** Piața Mare, the old town's main square (OSM way 24536785): the map's reference point. */
@@ -77,6 +102,7 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
     beds: "queen + sofa bed",
     sizeM2: 45,
     icalEnv: "BOOKING_ICAL_FILM",
+    amenities: ["privateEntrance", "groundFloor", "terrace", "kitchen", "workspace", "wifi", "freeParking", "selfCheckIn"],
     heroIndex: 0,
     heroFocus: "55% 40%",
     bookingUrl: BOOKING_PAGE,
@@ -93,6 +119,7 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
     beds: "queen + sofa bed",
     sizeM2: 45,
     icalEnv: "BOOKING_ICAL_GOTHIC",
+    amenities: ["privateEntrance", "groundFloor", "kitchen", "walkInShower", "wifi", "freeParking", "selfCheckIn"],
     heroIndex: 1,
     heroFocus: "50% 40%",
     bookingUrl: BOOKING_PAGE,
@@ -109,6 +136,7 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
     beds: "queen + sofa bed",
     sizeM2: 45,
     icalEnv: "BOOKING_ICAL_ART",
+    amenities: ["privateEntrance", "groundFloor", "terrace", "kitchen", "workspace", "walkInShower", "wifi", "freeParking", "selfCheckIn"],
     heroIndex: 0,
     heroFocus: "64% 55%",
     bookingUrl: BOOKING_PAGE,
@@ -116,7 +144,7 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
   },
   "pink-panther": {
     slug: "pink-panther",
-    // Magnolia Residence, west Sibiu; the street and number are not known yet
+    // Magnolia Residence, west Sibiu. TODO(Pati): street and number, then the postcode
     lat: 45.807145443669,
     lng: 24.106024925935,
     address: { streetAddress: "Magnolia Residence", locality: "Sibiu" },
@@ -130,6 +158,9 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
     beds: "2 king + sofa bed",
     sizeM2: 56,
     icalEnv: "BOOKING_ICAL_PINK",
+    amenities: ["elevator", "balcony", "kitchen", "washingMachine", "bathtub", "wifi", "freeParking", "selfCheckIn"],
+    bedDetails: [{ count: 2, type: "King" }, { count: 1, type: "Sofa bed" }],
+    inHouse: false,
     heroIndex: 1,
     heroFocus: "50% 45%",
     pageHeroIndex: 2,
@@ -161,10 +192,16 @@ export function places(): Place[] {
 }
 
 export type ApartmentCopy = {
+  /** the search result: what it is, where, and the one fact that sells it */
+  seoTitle: string;
+  seoDescription: string;
   tagline: string;
   intro: string;
   story: string[];
   highlights: string[];
+  /** short factual passages (beds, the way there, arrival): what guests and AI answers quote */
+  goodToKnow: { title: string; text: string }[];
+  /** one per gallery photo, in gallery order */
   alts: string[];
 };
 export type ApartmentCopyByLocale = Record<Locale, Record<ApartmentSlug, ApartmentCopy>>;
