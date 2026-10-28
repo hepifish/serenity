@@ -8,8 +8,8 @@ export const cormorant = Cormorant_Garamond({
   style: ["normal", "italic"],
 });
 
+// Both are variable fonts: one file covers every weight we use.
 export const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   subsets: ["latin", "latin-ext"],
-  weight: ["300", "400", "500"],
 });

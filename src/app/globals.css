@@ -430,7 +430,7 @@ textarea {
   min-height: 100svh;
   display: grid;
   align-content: center;
-  padding: calc(var(--header) + 2rem) 0 clamp(10rem, 30vh, 19rem);
+  padding: calc(var(--header) + 2rem) 0 clamp(9rem, 24vw, 21rem);
   overflow: hidden;
   isolation: isolate;
 }
@@ -456,7 +456,8 @@ textarea {
   right: 0;
   bottom: 0;
   width: 100%;
-  height: min(36vh, 360px);
+  /* height follows width, so the drawing keeps its proportions and the spire stays whole */
+  height: clamp(300px, 40vw, 600px);
   z-index: -1;
 }
 .hero-copy {
