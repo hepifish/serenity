@@ -8,7 +8,8 @@ export async function POST(req: Request) {
   const url = new URL(req.url);
   const form = await req.formData();
   const next = safeNext(form.get("next"));
-  if (!gateActive()) return NextResponse.redirect(new URL(next, url), 303);
+  // with the gate off there is nothing to unlock: never follow `next` then
+  if (!gateActive()) return NextResponse.redirect(new URL("/", url), 303);
   const lang = ["en", "ro", "de"].includes(String(form.get("lang"))) ? String(form.get("lang")) : "en";
   const back = (error: string) => NextResponse.redirect(new URL(`/${lang}/gate?error=${error}&next=${encodeURIComponent(next)}`, url), 303);
   if (isForeignOrigin(req)) return back("1");

@@ -13,7 +13,8 @@ import { importSPKI, jwtVerify } from "jose";
  */
 
 const PRODUCTION = process.env.VERCEL_ENV === "production";
-export const MOCK = process.env.NETOPIA_MOCK === "1" && !PRODUCTION;
+// local only: never on any Vercel deployment, preview included
+export const MOCK = process.env.NETOPIA_MOCK === "1" && !PRODUCTION && !process.env.VERCEL;
 // Live unless sandbox is asked for by name. Sandbox in production would let the
 // public test card "pay", so it stops every payment instead.
 const SANDBOX = process.env.NETOPIA_SANDBOX === "true";

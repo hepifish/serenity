@@ -19,7 +19,7 @@ export default async function GatePage({ params, searchParams }: Props) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
   const { next, error } = await searchParams;
-  if (!gateActive()) redirect(safeNext(next ?? `/${lang}`));
+  if (!gateActive()) redirect(`/${lang}`);
   const t = T[lang];
   return (
     <main className="status">
