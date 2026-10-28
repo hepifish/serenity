@@ -22,7 +22,7 @@ export default async function RootLayout({ children, params }: { children: React
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
   return (
-    <html lang={lang} className={`${circumflex.variable} ${cormorant.variable} ${dmSans.variable} ${apartmentFontVars}`} suppressHydrationWarning>
+    <html data-scroll-behavior="smooth" lang={lang} className={`${circumflex.variable} ${cormorant.variable} ${dmSans.variable} ${apartmentFontVars}`} suppressHydrationWarning>
       <head>
         {/* lets CSS hide reveal-animated content only when JS will reveal it */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />

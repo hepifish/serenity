@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Serenity · Admin", robots: { index:
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${circumflex.variable} ${cormorant.variable} ${dmSans.variable}`}>
+    <html data-scroll-behavior="smooth" lang="en" className={`${circumflex.variable} ${cormorant.variable} ${dmSans.variable}`}>
       <body className="admin">{children}</body>
     </html>
   );

@@ -8,7 +8,7 @@ import "./globals.css";
 
 export default function GlobalNotFound() {
   return (
-    <html lang="en" className={`${circumflex.variable} ${cormorant.variable} ${dmSans.variable} ${apartmentFontVars}`} suppressHydrationWarning>
+    <html data-scroll-behavior="smooth" lang="en" className={`${circumflex.variable} ${cormorant.variable} ${dmSans.variable} ${apartmentFontVars}`} suppressHydrationWarning>
       <body>
         <NotFoundView />
       </body>
