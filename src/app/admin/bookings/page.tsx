@@ -1,3 +1,4 @@
+import Link from "next/link";
 import AdminNav from "@/components/AdminNav";
 import CopyButton from "@/components/CopyButton";
 import { APARTMENTS, apartmentList, isApartmentSlug } from "@/lib/apartments";
@@ -20,7 +21,7 @@ export default async function BookingsPage() {
       <main className="admin-main" style={{ display: "grid", gap: "3.5rem" }}>
         <section style={{ display: "grid", gap: "1rem" }}>
           <h1 className="display h3">Direct bookings</h1>
-          <p className="muted">Paid and pending direct bookings. Booking.com reservations stay in the extranet; both block the website calendar.</p>
+          <p className="muted">Paid and pending direct bookings. Booking.com reservations stay in the extranet; both block the website calendar. Open a code for its evidence file (who accepted which terms, when, from where), ready to print for a damage claim.</p>
           {live.length + bookings.length === 0 ? <p className="notice">No direct bookings yet.</p> : (
             <div style={{ overflowX: "auto" }}>
               <table className="bk-table">
@@ -30,7 +31,10 @@ export default async function BookingsPage() {
                 <tbody>
                   {bookings.map((b) => (
                     <tr key={b.id}>
-                      <td style={{ fontFamily: "var(--serif)", fontSize: "1.05rem", color: "var(--gold)" }}>{b.ref}</td>
+                      <td>
+                        <Link href={`/admin/bookings/${b.group_ref}`} style={{ fontFamily: "var(--serif)", fontSize: "1.05rem", color: "var(--gold)" }}>{b.ref}</Link>
+                        <br /><Link className="link muted" href={`/admin/bookings/${b.group_ref}`} style={{ fontSize: "0.75rem" }}>Evidence</Link>
+                      </td>
                       <td>{isApartmentSlug(b.apartment) ? APARTMENTS[b.apartment].name : b.apartment}</td>
                       <td style={{ whiteSpace: "nowrap" }}>{d(b.check_in)} → {d(b.check_out)}<br /><span className="muted">{b.guests} guests</span></td>
                       <td>{b.guest_name}<br /><span className="muted">{b.guest_country} · {b.lang.toUpperCase()}</span>{b.guest_note ? <><br /><i className="muted">“{b.guest_note}”</i></> : null}</td>

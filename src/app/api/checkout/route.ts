@@ -6,6 +6,7 @@ import { attachPayment, createPendingGroup, markFailed } from "@/lib/bookings";
 import { startPayment } from "@/lib/netopia";
 import { getRate, quote, type Quote } from "@/lib/pricing";
 import { checkStay, splitGuests } from "@/lib/stay";
+import { acceptanceOf, checkoutStatement } from "@/lib/terms";
 
 const Body = z.object({
   apartments: z.array(z.enum(APARTMENT_SLUGS)).min(1).max(APARTMENT_SLUGS.length),
@@ -60,7 +61,7 @@ export async function POST(req: Request) {
 
   const rows = await createPendingGroup(quotes, {
     name: b.name, email: b.email, phone: b.phone, country: b.country, note: b.note, lang: b.lang, payMethod: b.payMethod,
-  });
+  }, acceptanceOf(req, b.lang, checkoutStatement(b.lang)));
   if (!rows) return fail("taken", 409);
   const group = rows[0];
   const total = Math.round(quotes.reduce((s, q) => s + q.total, 0) * 100) / 100;
