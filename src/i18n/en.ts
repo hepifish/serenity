@@ -301,6 +301,7 @@ const en = {
   common: {
     ron: "RON",
     loading: "Loading…",
+    opening: "Opening the door",
   },
 };
 

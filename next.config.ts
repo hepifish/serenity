@@ -41,6 +41,8 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   images: {
     formats: ["image/avif", "image/webp"],
+    // 60 for the Sibiu carousel, which sits darkened under a gradient
+    qualities: [60, 75],
     minimumCacheTTL: 60 * 60 * 24 * 30,
   },
   // Netopia's public IPN key is committed and read from disk.

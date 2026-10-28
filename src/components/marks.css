@@ -1,0 +1,99 @@
+/* Apartment marks and the morphing loader (AptMark.tsx, MorphLoader.tsx). */
+
+.apt-mark {
+  display: block;
+  flex: none;
+  overflow: visible;
+}
+
+.morph {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  color: var(--stone);
+}
+.morph svg {
+  overflow: visible;
+}
+.morph-still {
+  display: none;
+}
+.morph-delay {
+  animation: morph-in 0.7s var(--ease) 0.3s both;
+}
+@keyframes morph-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.morph-label {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  color: var(--stone);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .morph-anim {
+    display: none;
+  }
+  .morph-still {
+    display: block;
+    animation: morph-breathe 2.4s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+  }
+  .morph-delay {
+    animation-duration: 0.01s;
+  }
+}
+@keyframes morph-breathe {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.4;
+  }
+}
+
+/* route loading: the page is on its way */
+.page-loader {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: var(--gutter);
+}
+.page-loader .morph-l {
+  display: none;
+}
+html:lang(en) .page-loader .morph-l:lang(en),
+html:lang(ro) .page-loader .morph-l:lang(ro),
+html:lang(de) .page-loader .morph-l:lang(de) {
+  display: inline;
+}
+
+/* checkout: leaving for the payment page */
+.pay-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 200; /* above the header (100) and the date sheet (150) */
+  display: grid;
+  place-items: center;
+  background: rgba(14, 11, 16, 0.9);
+}
+
+/* the apartment's mark above its eyebrow and title, set clear of the breadcrumb */
+.mark-eyebrow {
+  margin-top: clamp(1rem, 4vh, 2.5rem);
+}
+
+/* the number beside its mark, on the apartment cards */
+.apt-num.with-mark {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}

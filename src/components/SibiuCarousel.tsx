@@ -11,11 +11,16 @@ type Slide = { src: string; w: number; h: number; alt: string; author: string; l
  * motion. Arrows, dots, swipe and the keyboard all move it.
  */
 export default function SibiuCarousel({ slides, labels }: { slides: Slide[]; labels: { prev: string; next: string; photo: string; of: string } }) {
-  const [i, setI] = useState(0);
+  // `was` is the slide fading out, kept mounted until its fade ends
+  const [{ i, was }, setShow] = useState({ i: 0, was: 0 });
   const [paused, setPaused] = useState(false);
   const touch = useRef<number | null>(null);
   const n = slides.length;
-  const go = useCallback((d: number) => setI((x) => (x + d + n) % n), [n]);
+  const show = useCallback((k: number) => setShow((s) => (k === s.i ? s : { i: k, was: s.i })), []);
+  const go = useCallback((d: number) => setShow((s) => ({ i: (s.i + d + n) % n, was: s.i })), [n]);
+  // Only the slide on screen, the one fading out and the next one hold a photo, so a
+  // crossfade never decodes or paints six large images at once.
+  const live = (k: number) => k === i || k === was || k === (i + 1) % n;
 
   useEffect(() => {
     const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -46,7 +51,7 @@ export default function SibiuCarousel({ slides, labels }: { slides: Slide[]; lab
       <div className="carousel-frame">
         {slides.map((s, k) => (
           <figure key={s.src} className={`carousel-slide ${k === i ? "on" : ""}`} aria-hidden={k !== i} role="group" aria-roledescription="slide" aria-label={`${k + 1} ${labels.of} ${n}`}>
-            <Image src={s.src} alt={s.alt} fill sizes="(max-width: 1280px) 100vw, 1280px" priority={k === 0} loading={k === 0 ? undefined : "lazy"} style={{ objectFit: "cover" }} />
+            {live(k) && <Image src={s.src} alt={s.alt} fill sizes="(max-width: 1280px) 92vw, 1170px" quality={60} style={{ objectFit: "cover" }} />}
             <figcaption>
               <span className="carousel-caption">{s.alt}</span>
               <a href={s.source} target="_blank" rel="noopener" tabIndex={k === i ? 0 : -1}>
@@ -64,7 +69,7 @@ export default function SibiuCarousel({ slides, labels }: { slides: Slide[]; lab
       </div>
       <div className="carousel-dots">
         {slides.map((s, k) => (
-          <button key={s.src} type="button" aria-label={`${k + 1} ${labels.of} ${n}`} aria-current={k === i} onClick={() => setI(k)} />
+          <button key={s.src} type="button" aria-label={`${k + 1} ${labels.of} ${n}`} aria-current={k === i} onClick={() => show(k)} />
         ))}
       </div>
     </div>

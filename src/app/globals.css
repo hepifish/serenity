@@ -481,14 +481,18 @@ textarea {
   transition: transform 1.2s var(--ease);
   will-change: transform;
 }
-/* The dim exists only to be lifted by a pointer; touch screens show the photos at full light. */
+/*
+ * The dim exists only to be lifted by a pointer; touch screens show the photos
+ * at full light. One shade, varied by opacity alone: 0.64 of it at rest, all of
+ * it on the panels not being hovered.
+ */
 .panel-door .door-dim {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: rgba(14, 11, 16, 0.32);
+  background: rgba(14, 11, 16, 0.5);
   opacity: 0;
-  transition: opacity 0.6s var(--ease), background 0.6s var(--ease);
+  transition: opacity 0.6s var(--ease);
 }
 .panel-door::after {
   content: "";
@@ -502,7 +506,7 @@ textarea {
 }
 @media (hover: hover) {
   .panel-door .door-dim {
-    opacity: 1;
+    opacity: 0.64;
   }
   .panel-door:hover img {
     transform: scale(1.05);
@@ -512,7 +516,7 @@ textarea {
     opacity: 0;
   }
   .triptych:hover .panel-door:not(:hover) .door-dim {
-    background: rgba(14, 11, 16, 0.5);
+    opacity: 1;
   }
 }
 /* touch: the tile darkens under the finger, the way native list cells do, then the page navigates */
@@ -521,7 +525,76 @@ textarea {
     transition-duration: 0.12s;
   }
   .panel-door:active .door-dim {
-    opacity: 1;
+    opacity: 0.64;
+  }
+}
+.door-photo {
+  position: absolute;
+  inset: 0;
+}
+/*
+ * The door opening, wide screens with a pointer only. Animating panel widths
+ * re-lays out every panel and repaints every photo on each frame, so the
+ * widths here never change. Each panel is laid out at its widest (1.6 of a
+ * quarter, --s), absolutely placed, and the next panel covers its right part,
+ * its ink left border drawing the gap. Hovering only slides panels sideways
+ * with translate, which the compositor moves without layout or paint:
+ * panels up to the hovered one shift left, those after it shift right, so the
+ * hovered one shows 1.6 quarters and each other 0.8, the old flex-grow sizes.
+ * The photo slides by half the change in width, staying centred in what shows.
+ * Every offset is rounded to a whole pixel: at a fractional one the photo's
+ * layer and its shade snap apart and a bright hairline shows in the gap.
+ */
+@media (hover: hover) and (min-width: 901px) and (prefers-reduced-motion: no-preference) {
+  .triptych {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    container-type: inline-size;
+  }
+  .panel-door {
+    --s: round(down, (100cqw + 4px) / 4, 1px);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--j) * var(--s) - 4px);
+    width: calc(1.6 * var(--s));
+    border-left: 4px solid var(--ink);
+    contain: layout paint;
+    transition: translate 0.9s var(--ease);
+    will-change: translate;
+  }
+  .door-photo {
+    right: auto;
+    left: round((var(--s) - 4px) / 2 - 0.8 * var(--s), 1px);
+    width: calc(1.6 * var(--s));
+    transition: translate 0.9s var(--ease);
+  }
+  /* past the panel's edges, so the shade is cut by the same clip as the photo and no unshaded hairline shows */
+  .panel-door .door-dim,
+  .panel-door::after {
+    inset: 0 -4px;
+  }
+  .triptych:has(.panel-door:hover) .panel-door {
+    translate: round(-0.2 * var(--j) * var(--s), 1px) 0;
+  }
+  .triptych .panel-door:hover ~ .panel-door {
+    translate: round((0.8 - 0.2 * var(--j)) * var(--s), 1px) 0;
+  }
+  .triptych:has(.panel-door:hover) .door-photo {
+    translate: round(-0.1 * var(--s), 1px) 0;
+  }
+  .triptych .panel-door:hover .door-photo {
+    translate: round(0.3 * var(--s), 1px) 0;
+  }
+  /* sized to the narrowest a panel gets, so a name never slips under its neighbour or rewraps */
+  .triptych .door-label {
+    right: auto;
+    width: calc(0.8 * var(--s) - 4px - 1.6rem);
+  }
+  /* the longest word (CHAMBERS, PANTHER) is about 5.3 ems wide; on narrower screens the type gives way so it still fits a squeezed panel */
+  .triptych .door-name {
+    font-size: min(clamp(1.15rem, 1.6vw, 1.6rem), calc(3.7cqw - 4px));
   }
 }
 .door-label {
@@ -1967,13 +2040,13 @@ textarea {
 }
 .theme-gothic-chambers {
   --display: var(--font-gothic-chambers);
-  --accent: #b5475f; /* wine */
+  --accent: #8f6bb0; /* stained-glass amethyst */
   --gold: #d9a35b; /* candlelight */
-  --tint: #4a1e2b;
+  --tint: #2e1d40; /* aubergine under the vaults */
 }
 .theme-art-station {
   --display: var(--font-art-station);
-  --accent: #d0503c; /* the red sofa */
+  --accent: #c8312c; /* the red sofa */
   --gold: #e0b45a;
   --tint: #2c4a3a; /* Rousseau's jungle */
 }
@@ -2042,28 +2115,35 @@ textarea {
   overflow: hidden;
   background: var(--ink-2);
 }
+/* Opacity and transform only. A slide that has faded out goes hidden, so it is no longer painted. */
 .carousel-slide {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 1.4s var(--ease);
+  visibility: hidden;
+  transition: opacity 1.4s var(--ease), visibility 0s 1.4s;
+  will-change: opacity;
 }
 .carousel-slide.on {
   opacity: 1;
+  visibility: visible;
+  transition: opacity 1.4s var(--ease);
 }
+/* the slow drift resets only once its slide is out of sight */
 .carousel-slide img {
-  filter: saturate(0.92) brightness(0.86);
   transform: scale(1.04);
-  transition: transform 7s linear;
+  transition: transform 0s 1.4s;
 }
 .carousel-slide.on img {
   transform: scale(1);
+  transition: transform 7s linear;
 }
+/* the shade is painted once on top instead of filtering a moving photo every frame */
 .carousel-slide::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 55%, rgba(14, 11, 16, 0.85) 100%);
+  background: linear-gradient(180deg, rgba(14, 11, 16, 0.14) 0%, rgba(14, 11, 16, 0.14) 55%, rgba(14, 11, 16, 0.87) 100%);
 }
 .carousel-slide figcaption {
   position: absolute;
