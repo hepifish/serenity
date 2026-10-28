@@ -92,14 +92,18 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
     name: "Pink Panther",
     number: "04",
     accent: "#E39AB4",
-    maxGuests: 4,
-    bedrooms: 1,
-    beds: "",
+    maxGuests: 6,
+    bedrooms: 2,
+    beds: "2 king + sofa bed",
+    sizeM2: 56,
     icalEnv: "BOOKING_ICAL_PINK",
-    bookingUrl: BOOKING_PAGE,
-    comingSoon: true,
-    gallery: [],
+    heroIndex: 0,
+    heroFocus: "35% 50%",
+    bookingUrl: "https://www.booking.com/hotel/ro/feel-like-home-pink-panther-apartment.html",
+    gallery: img("pink", ["pink-01", "pink-03", "pink-10", "pink-19", "pink-02", "pink-09", "pink-06", "pink-04", "pink-05", "pink-07",
+      "pink-08", "pink-11", "pink-12", "pink-18", "pink-16", "pink-17", "pink-13", "pink-14", "pink-15", "pink-20", "pink-21"]),
   },
+
 };
 
 export const apartmentList = () => APARTMENT_SLUGS.map((s) => APARTMENTS[s]);

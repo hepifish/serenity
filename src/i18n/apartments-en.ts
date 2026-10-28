@@ -73,15 +73,32 @@ const copy: Record<ApartmentSlug, ApartmentCopy> = {
     ],
   },
   "pink-panther": {
-    tagline: "The fourth story",
-    intro: "Our newest apartment, styled after a certain pink cat. Photos and online booking are on their way.",
+    tagline: "Pop art above the mountains",
+    intro: "Two bedrooms, a balcony facing the mountains, and a pink cat who refuses to behave.",
     story: [
-      "Pink Panther is the fourth Serenity apartment in Sibiu. It is being photographed now, and online booking opens here soon.",
-      "Want to be the first to stay? Write to us with your dates and we'll tell you if it's free.",
+      "The fourth Serenity apartment is the bright one: a modern building on Sibiu's quiet western edge, two bedrooms, and a balcony where the sun goes down behind the mountains.",
+      "The rooms are calm, oak and soft grey, and then the Panther walks in: a graffiti canvas in the living room, pop art above the bed, blush linen, a pink vase or two. It sleeps six, so it is the one for families and friends travelling together. The old town is about ten minutes by car, and parking is free and private.",
     ],
-    highlights: [],
-    alts: [],
+    highlights: [
+      "Up to 6 guests · 2 bedrooms + sofa bed",
+      "56 m², lift, balcony with mountain view",
+      "Pink Panther pop-art canvases",
+      "Full kitchen and washing machine",
+      "Bathroom with bathtub",
+      "Free private parking",
+      "Wi-Fi rated 10 by guests",
+      "Self check-in with a lockbox",
+    ],
+    alts: [
+      "Pink Panther living room with the graffiti canvas and the balcony door",
+      "A Pink Panther toy beside a pink vase",
+      "Blush bedroom under a pop-art Pink Panther canvas",
+      "Sunset over the mountains from the balcony",
+      "Living and dining area with the open kitchen",
+      "Second bedroom with pink linen and a desk",
+    ],
   },
+
 };
 
 export default copy;

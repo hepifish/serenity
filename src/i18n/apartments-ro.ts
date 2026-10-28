@@ -71,15 +71,32 @@ const copy: Record<ApartmentSlug, ApartmentCopy> = {
     ],
   },
   "pink-panther": {
-    tagline: "A patra poveste",
-    intro: "Cel mai nou apartament al nostru, inspirat de o anumită pisică roz. Fotografiile și rezervarea online sunt pe drum.",
+    tagline: "Pop art deasupra munților",
+    intro: "Două dormitoare, un balcon cu vedere spre munți și o pisică roz care refuză să stea cuminte.",
     story: [
-      "Pink Panther este al patrulea apartament Serenity din Sibiu. Acum îl fotografiem, iar rezervarea online se deschide aici în curând.",
-      "Vrei să fii primul care stă aici? Scrie-ne cu perioada dorită și îți spunem dacă e liber.",
+      "Al patrulea apartament Serenity este cel luminos: un bloc nou în partea liniștită de vest a Sibiului, două dormitoare și un balcon de unde soarele apune în spatele munților.",
+      "Camerele sunt calme, stejar și gri cald, iar apoi intră Pantera: o pânză graffiti în living, pop art deasupra patului, lenjerie roz pal, o vază roz sau două. Are loc pentru șase persoane, așa că este alegerea pentru familii și prieteni care călătoresc împreună. Centrul vechi este la circa zece minute cu mașina, iar parcarea este privată și gratuită.",
     ],
-    highlights: [],
-    alts: [],
+    highlights: [
+      "Până la 6 oaspeți · 2 dormitoare + canapea extensibilă",
+      "56 m², lift, balcon cu vedere la munte",
+      "Tablouri pop art cu Pantera Roz",
+      "Bucătărie completă și mașină de spălat",
+      "Baie cu cadă",
+      "Parcare privată gratuită",
+      "Wi-Fi notat cu 10 de oaspeți",
+      "Self check-in cu cutie cu cifru",
+    ],
+    alts: [
+      "Livingul Pink Panther cu pânza graffiti și ușa spre balcon",
+      "O jucărie Pantera Roz lângă o vază roz",
+      "Dormitor roz pal sub un tablou pop art cu Pantera Roz",
+      "Apus peste munți, văzut din balcon",
+      "Zona de living și dining cu bucătăria deschisă",
+      "Al doilea dormitor, cu lenjerie roz și birou",
+    ],
   },
+
 };
 
 export default copy;

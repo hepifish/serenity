@@ -94,3 +94,13 @@ export async function sendContactMessage(m: { name: string; email: string; messa
     <p style="line-height:1.7"><b>${esc(m.name)}</b> &lt;${esc(m.email)}&gt; (${esc(m.lang)})</p>
     <p style="line-height:1.7;white-space:pre-wrap">${esc(m.message)}</p>`), m.email);
 }
+
+/** Tells the owner a guest has checked in online. Never includes the CNP. */
+export async function sendCheckinNotice(c: { id: string; fullName: string; arrival: string; apartment?: string; reservation?: string; source: string; companyName?: string }) {
+  const apt = c.apartment && isApartmentSlug(c.apartment) ? APARTMENTS[c.apartment].name : "";
+  await send(OWNER, `Check-in online · ${c.fullName} · ${c.arrival}${apt ? " · " + apt : ""}`, layout(`
+    <h1 style="font-weight:400;font-size:24px;margin:0 0 16px">Check-in online primit</h1>
+    <p style="line-height:1.7">${esc(c.fullName)} · sosire ${esc(c.arrival)}${apt ? " · " + esc(apt) : ""}<br>
+    Sursa: ${esc(c.source)}${c.reservation ? " · " + esc(c.reservation) : ""}${c.companyName ? "<br>Factură pe firmă: " + esc(c.companyName) : ""}</p>
+    <p><a href="${SITE_URL}/admin/checkins" style="color:#C9A45C">Vezi datele în admin</a></p>`));
+}

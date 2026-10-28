@@ -71,15 +71,32 @@ const copy: Record<ApartmentSlug, ApartmentCopy> = {
     ],
   },
   "pink-panther": {
-    tagline: "Die vierte Geschichte",
-    intro: "Unsere neueste Wohnung, gestaltet nach einer gewissen rosaroten Katze. Fotos und Onlinebuchung folgen in Kürze.",
+    tagline: "Pop-Art über den Bergen",
+    intro: "Zwei Schlafzimmer, ein Balkon mit Blick auf die Berge und ein rosaroter Kater, der sich nicht benehmen will.",
     story: [
-      "Pink Panther ist die vierte Serenity-Wohnung in Sibiu. Sie wird gerade fotografiert, und die Onlinebuchung öffnet hier bald.",
-      "Möchten Sie unser erster Gast hier sein? Schreiben Sie uns Ihre Reisedaten, und wir sagen Ihnen, ob sie frei ist.",
+      "Die vierte Serenity-Wohnung ist die helle: ein modernes Haus am ruhigen Westrand von Sibiu (Hermannstadt), zwei Schlafzimmer und ein Balkon, von dem aus die Sonne hinter den Bergen untergeht.",
+      "Die Räume sind ruhig, Eiche und warmes Grau, und dann tritt der Panther auf: ein Graffiti-Bild im Wohnzimmer, Pop-Art über dem Bett, zartrosa Bettwäsche, eine rosa Vase oder zwei. Sie bietet Platz für sechs Personen und ist damit die Wohnung für Familien und Freunde, die zusammen reisen. Die Altstadt ist etwa zehn Autominuten entfernt, der Parkplatz ist privat und kostenlos.",
     ],
-    highlights: [],
-    alts: [],
+    highlights: [
+      "Bis zu 6 Gäste · 2 Schlafzimmer + Schlafsofa",
+      "56 m², Aufzug, Balkon mit Bergblick",
+      "Pop-Art-Bilder mit dem Rosaroten Panther",
+      "Voll ausgestattete Küche und Waschmaschine",
+      "Bad mit Badewanne",
+      "Kostenloser privater Parkplatz",
+      "WLAN, von Gästen mit 10 bewertet",
+      "Self-Check-in mit Schlüsselsafe",
+    ],
+    alts: [
+      "Wohnzimmer der Pink Panther mit Graffiti-Bild und Balkontür",
+      "Eine Pink-Panther-Figur neben einer rosa Vase",
+      "Zartrosa Schlafzimmer unter einem Pop-Art-Bild des Panthers",
+      "Sonnenuntergang über den Bergen vom Balkon aus",
+      "Wohn- und Essbereich mit offener Küche",
+      "Zweites Schlafzimmer mit rosa Bettwäsche und Schreibtisch",
+    ],
   },
+
 };
 
 export default copy;

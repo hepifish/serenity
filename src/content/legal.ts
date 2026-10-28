@@ -176,7 +176,8 @@ const roPrivacy: LegalDoc = {
         "Jurnale tehnice ale serverului (de exemplu, adresa IP, data și ora, pagina accesată), pentru securitate și funcționare.",
       ],
     },
-    {
+    { h: "2a. Check-in online", p: ["Înainte de sosire vă putem cere să completați formularul de check-in online: nume complet, adresa de domiciliu, email, opțional telefonul, opțional CNP-ul (doar pentru cetățenii români, dacă doriți să apară pe factură) și, opțional, datele firmei pentru factură. Folosim aceste date pentru emiterea facturii (obligație legală, art. 6 alin. (1) lit. c GDPR) și pentru evidența oaspeților cerută de lege. CNP-ul este stocat criptat (AES-256) și este accesibil doar operatorului. Datele de check-in se păstrează 10 ani, ca documente justificative contabile, apoi se șterg."] },
+      {
       h: "3. Scopuri și temeiuri legale",
       ul: [
         "Încheierea și executarea contractului de cazare (rezervare, plată, comunicări despre sejur, acces în apartament): art. 6 alin. (1) lit. b GDPR.",
@@ -410,7 +411,8 @@ const enPrivacy: LegalDoc = {
         "Technical server logs (for example IP address, date and time, page requested), for security and operation.",
       ],
     },
-    {
+    { h: "2a. Online check-in", p: ["Before arrival we may ask you to complete the online check-in form: full name, home address, email, optionally your phone, optionally your CNP (Romanian personal numeric code, only for Romanian citizens who want it on the invoice) and optionally company details for the invoice. We use these data to issue the invoice (legal obligation, Art. 6(1)(c) GDPR) and for the guest records required by law. The CNP is stored encrypted (AES-256) and is accessible only to the operator. Check-in data are kept for 10 years as accounting records, then deleted."] },
+      {
       h: "3. Purposes and legal bases",
       ul: [
         "Concluding and performing the accommodation contract (booking, payment, messages about your stay, access to the apartment): art. 6(1)(b) GDPR.",
@@ -644,7 +646,8 @@ const dePrivacy: LegalDoc = {
         "Technische Server-Logs (zum Beispiel IP-Adresse, Datum und Uhrzeit, aufgerufene Seite) für Sicherheit und Betrieb.",
       ],
     },
-    {
+    { h: "2a. Online-Check-in", p: ["Vor der Anreise können wir Sie bitten, das Online-Check-in-Formular auszufüllen: vollständiger Name, Wohnadresse, E-Mail, optional Telefon, optional die CNP (rumänische persönliche Identifikationsnummer, nur für rumänische Staatsbürger, die sie auf der Rechnung wünschen) und optional Firmendaten für die Rechnung. Wir verwenden diese Daten zur Rechnungsstellung (rechtliche Verpflichtung, Art. 6 Abs. 1 lit. c DSGVO) und für das gesetzlich vorgeschriebene Gästeregister. Die CNP wird verschlüsselt (AES-256) gespeichert und ist nur dem Betreiber zugänglich. Check-in-Daten werden 10 Jahre als Buchhaltungsbelege aufbewahrt und danach gelöscht."] },
+      {
       h: "3. Zwecke und Rechtsgrundlagen",
       ul: [
         "Abschluss und Erfüllung des Beherbergungsvertrags (Buchung, Zahlung, Mitteilungen zum Aufenthalt, Zugang zum Apartment): Art. 6 Abs. 1 lit. b DSGVO.",
