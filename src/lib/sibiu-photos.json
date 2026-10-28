@@ -1,0 +1,62 @@
+[
+  {
+    "src": "/images/sibiu/01-eyes-night.webp",
+    "w": 2400,
+    "h": 1800,
+    "alt_en": "A weathered green Baroque house on Strada Ocnei at night, its tiled roof watching the street through Sibiu's famous eyelid dormer windows",
+    "alt_ro": "Casă barocă verde, cu tencuiala scorojită, pe Strada Ocnei noaptea; acoperișul de țiglă privește strada prin celebrii „ochi” ai Sibiului",
+    "alt_de": "Ein verwittertes grünes Barockhaus in der Ocnei-Straße bei Nacht; das Ziegeldach blickt durch die berühmten Augen-Dachgauben von Hermannstadt auf die Gasse",
+    "author": "-wuppertaler",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:ROM_Sibiu,_Strada_Ocnei_0004.jpg"
+  },
+  {
+    "src": "/images/sibiu/02-piata-mare.webp",
+    "w": 2400,
+    "h": 1600,
+    "alt_en": "Piața Mare at blue hour, the Brukenthal Palace and the lit facade of Sibiu City Hall framing the cobbled Large Square",
+    "alt_ro": "Piața Mare la ora albastră, cu Palatul Brukenthal și fațada luminată a Primăriei Sibiu încadrând piața pavată",
+    "alt_de": "Der Große Ring zur blauen Stunde, das Brukenthal-Palais und die beleuchtete Fassade des Rathauses von Hermannstadt rahmen den gepflasterten Platz",
+    "author": "Sergey Norin",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Sibiu_(15257629580).jpg"
+  },
+  {
+    "src": "/images/sibiu/03-skyline.webp",
+    "w": 2400,
+    "h": 1600,
+    "alt_en": "View from the Council Tower over Piața Mică and the red tiled roofs of the Upper Town, the spire of the Lutheran Cathedral rising above them",
+    "alt_ro": "Vedere din Turnul Sfatului peste Piața Mică și acoperișurile roșii ale Orașului de Sus, cu turla Catedralei Evanghelice înălțându-se deasupra",
+    "alt_de": "Blick vom Ratturm über den Kleinen Ring und die roten Ziegeldächer der Oberstadt, darüber der Turm der Evangelischen Stadtpfarrkirche",
+    "author": "Antony Stanley",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Sibiu_Rooftops,_Romania_(8136341762).jpg"
+  },
+  {
+    "src": "/images/sibiu/04-bridge-of-lies.webp",
+    "w": 2400,
+    "h": 1800,
+    "alt_en": "Lantern-lit Strada Ocnei curving up toward Piața Mică at night, old brick walls on both sides and the Council Tower glowing in the distance",
+    "alt_ro": "Strada Ocnei luminată de felinare, urcând în curbă spre Piața Mică noaptea, între ziduri vechi de cărămidă, cu Turnul Sfatului luminat în depărtare",
+    "alt_de": "Die laternenbeleuchtete Ocnei-Straße windet sich nachts zum Kleinen Ring hinauf, zwischen alten Backsteinmauern, in der Ferne leuchtet der Ratturm",
+    "author": "-wuppertaler",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:ROM_Sibiu,_Pia%C8%9Ba_Mic%C4%83_0019.jpg"
+  },
+  {
+    "src": "/images/sibiu/05-christmas.webp",
+    "w": 2400,
+    "h": 1591,
+    "alt_en": "Sibiu Christmas Market on Piața Mare at night, a canopy of warm string lights radiating over wooden stalls toward the Roman Catholic church tower",
+    "alt_ro": "Târgul de Crăciun din Piața Mare a Sibiului noaptea, cu un baldachin de luminițe calde deasupra căsuțelor de lemn și turnul bisericii romano-catolice",
+    "alt_de": "Der Hermannstädter Weihnachtsmarkt auf dem Großen Ring bei Nacht, ein Baldachin aus warmen Lichterketten über Holzbuden, dahinter der Turm der katholischen Stadtpfarrkirche",
+    "author": "Neighbor's goat",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Pia%C8%9Ba_Mare_Sibiu_-_vedere_c%C4%83tre_biserica_romano-catolic%C4%83.jpg"
+  }
+]

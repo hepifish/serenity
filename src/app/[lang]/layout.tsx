@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
-import { cormorant, dmSans } from "../fonts";
+import { apartmentFontVars, cormorant, dmSans } from "../fonts";
 import { LOCALES, isLocale } from "@/i18n/config";
 import { SITE_URL } from "@/lib/site";
 import "../globals.css";
@@ -22,7 +22,7 @@ export default async function RootLayout({ children, params }: { children: React
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
   return (
-    <html lang={lang} className={`${cormorant.variable} ${dmSans.variable}`} suppressHydrationWarning>
+    <html lang={lang} className={`${cormorant.variable} ${dmSans.variable} ${apartmentFontVars}`} suppressHydrationWarning>
       <head>
         {/* lets CSS hide reveal-animated content only when JS will reveal it */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />

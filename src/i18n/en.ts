@@ -66,7 +66,7 @@ const en = {
     points: [
       { title: "Our best price", text: "No platform commission, so the nightly price here is lower than on Booking.com." },
       { title: "Card or holiday voucher card", text: "Pay securely through NETOPIA Payments. We never see or store your card details." },
-      { title: "You talk to us", text: "Questions, early arrival, a cot for the little one: you write, we answer. No call centre in between." },
+      { title: "Instant confirmation", text: "The calendar is live. Pay, and the apartment is yours, confirmed by email within a minute. No request, no waiting." },
     ],
   },
   apartments: {
@@ -91,7 +91,7 @@ const en = {
     lodging: "Accommodation",
     cleaning: "Cleaning, once per stay",
     cityTax: "Sibiu tourism tax (2%)",
-    cityTaxNote: "Required by the Sibiu municipality for every stay and paid on to the city. Booking.com charges it too.",
+    cityTaxNote: "Required by the Sibiu municipality for every stay and paid on to the city.",
     total: "Total",
     reserve: "Continue to booking",
     pickDates: "Choose dates to see the price",
@@ -161,6 +161,7 @@ const en = {
       "Sibiu's roofs are watched by small eyelid windows, the city's oldest joke and its best guard. Below them: Saxon squares, the Council Tower, the Brukenthal, and the Christmas market that made the city famous across Europe.",
       "Our apartments sit a short walk from the old town, close enough to stroll in for dinner and far enough for a quiet night.",
     ],
+    photoBy: "Photo:",
     facts: ["European Capital of Culture 2007", "Christmas Market, Nov–Jan", "FITS Theatre Festival, June", "Transfăgărășan, 1.5 h by car"],
   },
   reviews: {

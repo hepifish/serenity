@@ -78,7 +78,7 @@ const ro: Dict = {
     points: [
       { title: "Cel mai bun preț al nostru", text: "Fără comision de platformă, așa că prețul pe noapte e mai mic aici decât pe Booking.com." },
       { title: "Card sau card de vacanță", text: "Plătești în siguranță prin NETOPIA Payments. Nu vedem și nu stocăm niciodată datele cardului tău." },
-      { title: "Vorbești cu noi", text: "Întrebări, sosire mai devreme, un pătuț pentru cel mic: tu scrii, noi răspundem. Fără call center la mijloc." },
+      { title: "Confirmare imediată", text: "Calendarul este live. Plătești și apartamentul e al tău, cu confirmare pe email în mai puțin de un minut. Fără cereri, fără așteptare." },
     ],
   },
   apartments: {
@@ -103,7 +103,7 @@ const ro: Dict = {
     lodging: "Cazare",
     cleaning: "Curățenie, o dată pe sejur",
     cityTax: "Taxa specială pentru promovarea turistică (2%)",
-    cityTaxNote: "Impusă de Primăria Sibiu pentru fiecare sejur și virată orașului. Booking.com o percepe și el.",
+    cityTaxNote: "Impusă de Primăria Sibiu pentru fiecare sejur și virată orașului.",
     total: "Total",
     reserve: "Continuă spre rezervare",
     pickDates: "Alege perioada ca să vezi prețul",
@@ -173,6 +173,7 @@ const ro: Dict = {
       "Acoperișurile Sibiului sunt păzite de mici ferestre în formă de pleoapă, cea mai veche glumă a orașului și cel mai bun paznic al lui. Sub ele: piețe săsești, Turnul Sfatului, Brukenthal și Târgul de Crăciun care a făcut orașul cunoscut în toată Europa.",
       "Apartamentele noastre sunt la câțiva pași de centrul vechi: destul de aproape cât să mergi pe jos la cină, destul de departe cât să ai o noapte liniștită.",
     ],
+    photoBy: "Foto:",
     facts: ["Capitală Culturală Europeană 2007", "Târgul de Crăciun, nov.–ian.", "Festivalul de Teatru FITS, iunie", "Transfăgărășan, 1,5 h cu mașina"],
   },
   reviews: {

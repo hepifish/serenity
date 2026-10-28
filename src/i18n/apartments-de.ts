@@ -19,14 +19,7 @@ const copy: Record<ApartmentSlug, ApartmentCopy> = {
       "Terrasse",
     ],
     alts: [
-      "Wohnbereich von Film Studio, dahinter Küche und Essplatz",
       "Gelbes Sofa unter der Wand mit Kinoplakaten",
-      "Schlafzimmer vor der schwarzen Akzentwand",
-      "Alter Aspectomat-Projektor im Regal",
-      "Küchenzeile mit der Nespresso-Maschine",
-      "Schreibtisch und grüner Samtvorhang",
-      "Drucke von Leon und Chihiros Reise ins Zauberland",
-      "Schlafsofa im Wohnzimmer",
     ],
   },
   "gothic-chambers": {
@@ -48,12 +41,6 @@ const copy: Record<ApartmentSlug, ApartmentCopy> = {
     ],
     alts: [
       "Wohnbereich von Gothic Chambers unter der Gewölbedecke",
-      "Tiffany-Lampe aus Buntglas neben dem Bett",
-      "Schlafzimmer unter einem schmiedeeisernen Kronleuchter",
-      "Bogenspiegel, in dem sich Kronleuchter und Gewölbe spiegeln",
-      "Wohnbereich mit Blick zum Bogenfenster",
-      "Pfauenfedern und ein Dracula-Band im Regal",
-      "Esstisch unter den Vorhängen",
     ],
   },
   "art-station": {
@@ -76,11 +63,11 @@ const copy: Record<ApartmentSlug, ApartmentCopy> = {
     alts: [
       "Wohnbereich von Art Station mit der Wand voller Museumsdrucke",
       "Drucke von Rysselberghe und Rousseau über dem roten Sofa",
+      "Rotes Sofa und runder Esstisch",
       "Schlafzimmer mit dem Schreibtisch am Fenster",
       "Bett unter der geflochtenen Korbleuchte",
       "Arbeitsplatz im Licht einer Edison-Lampe",
       "Kerze und Drucke auf der Konsole",
-      "Rotes Sofa und runder Esstisch",
     ],
   },
   "pink-panther": {

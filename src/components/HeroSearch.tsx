@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import DateSheet from "./DateSheet";
 import { searchStore, useSearch } from "@/lib/search-store";
 import { addDays, isISODate, type ISODate } from "@/lib/dates";
@@ -9,11 +9,44 @@ import { getDict } from "@/i18n";
 import type { Locale } from "@/i18n/config";
 
 type Props = { lang: Locale; today: ISODate; maxGuests: number };
+type Combined = { today: ISODate; maxDate: ISODate; apartments: { slug: string; minNights: number; busy: ISODate[]; prices: Record<ISODate, number> }[] };
 
 export default function HeroSearch({ lang, today, maxGuests }: Props) {
   const t = getDict(lang).search;
   const s = useSearch();
   const [open, setOpen] = useState(false);
+  const [cal, setCal] = useState<Combined | null>(null);
+
+  // All calendars together: a night is closed only when no apartment can take it.
+  useEffect(() => {
+    fetch("/api/availability").then((r) => (r.ok ? r.json() : null)).then(setCal).catch(() => null);
+  }, []);
+  const merged = useMemo(() => {
+    if (!cal?.apartments.length) return null;
+    const sets = cal.apartments.map((a) => new Set(a.busy));
+    const busy = new Set<ISODate>();
+    const prices = new Map<ISODate, number>();
+    for (let d = cal.today; d <= cal.maxDate; d = addDays(d, 1)) {
+      const open = cal.apartments.filter((a, i) => !sets[i].has(d) && a.prices[d]);
+      if (!open.length) busy.add(d);
+      else prices.set(d, Math.min(...open.map((a) => a.prices[d])));
+    }
+    return { busy, prices, sets, minNights: Math.min(...cal.apartments.map((a) => a.minNights)) };
+  }, [cal]);
+  const limitFor = useCallback(
+    (arrival: ISODate) => {
+      if (!cal || !merged) return null;
+      let best: ISODate | null = null;
+      cal.apartments.forEach((a, i) => {
+        if (merged.sets[i].has(arrival)) return;
+        let d = addDays(arrival, 1);
+        while (d <= cal.maxDate && !merged.sets[i].has(d)) d = addDays(d, 1);
+        if (!best || d > best) best = d;
+      });
+      return best ?? arrival;
+    },
+    [cal, merged],
+  );
 
   // A shared link (?in=&out=&guests=) runs its search straight away.
   useEffect(() => {
@@ -61,8 +94,11 @@ export default function HeroSearch({ lang, today, maxGuests }: Props) {
         onClose={() => setOpen(false)}
         lang={lang}
         title={t.pickDates}
-        today={addDays(today, 1)}
-        maxDate={addDays(today, 180)}
+        today={cal?.today ?? addDays(today, 1)}
+        maxDate={cal?.maxDate ?? addDays(today, 180)}
+        busy={merged?.busy}
+        minNights={merged?.minNights ?? 1}
+        limitFor={merged ? limitFor : undefined}
         checkIn={s.checkIn}
         checkOut={s.checkOut}
         onChange={(a, b) => {

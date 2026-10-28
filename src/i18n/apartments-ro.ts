@@ -19,14 +19,7 @@ const copy: Record<ApartmentSlug, ApartmentCopy> = {
       "Terasă",
     ],
     alts: [
-      "Livingul Film Studio, cu bucătăria și zona de luat masa în spate",
       "Canapeaua galbenă sub peretele cu afișe de film",
-      "Dormitorul, lângă peretele negru",
-      "Proiectorul vintage Aspectomat pe raft",
-      "Blatul din bucătărie cu espressorul Nespresso",
-      "Biroul și draperia de catifea verde",
-      "Printuri cu Leon și Călătoria lui Chihiro",
-      "Canapeaua extensibilă din living",
     ],
   },
   "gothic-chambers": {
@@ -48,12 +41,6 @@ const copy: Record<ApartmentSlug, ApartmentCopy> = {
     ],
     alts: [
       "Livingul Gothic Chambers sub tavanul boltit",
-      "Lampă Tiffany cu vitraliu lângă pat",
-      "Dormitorul sub un candelabru din fier forjat",
-      "Oglindă în arc în care se reflectă candelabrul și bolțile",
-      "Livingul spre fereastra în arc",
-      "Pene de păun și un volum Dracula pe raft",
-      "Masa de servit sub draperii",
     ],
   },
   "art-station": {
@@ -76,11 +63,11 @@ const copy: Record<ApartmentSlug, ApartmentCopy> = {
     alts: [
       "Livingul Art Station cu peretele de reproduceri de muzeu",
       "Reproduceri Rysselberghe și Rousseau deasupra canapelei roșii",
+      "Canapeaua roșie și masa rotundă",
       "Dormitorul cu biroul lângă fereastră",
       "Patul sub lustra din răchită împletită",
       "Spațiul de lucru luminat de o lampă Edison",
       "Lumânare și reproduceri pe consolă",
-      "Canapeaua roșie și masa rotundă",
     ],
   },
   "pink-panther": {

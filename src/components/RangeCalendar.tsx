@@ -15,6 +15,8 @@ type Props = {
   /** Nightly price, shown small under each day. */
   prices?: Map<ISODate, number>;
   minNights?: number;
+  /** Latest possible departure for an arrival, when that depends on more than one calendar. */
+  limitFor?: (checkIn: ISODate) => ISODate | null;
   labels: { prev: string; next: string; checkIn: string; checkOut: string; minNights: (n: number) => string };
   months?: number;
 };
@@ -36,7 +38,7 @@ function addMonths(first: ISODate, n: number): ISODate {
  * never be selected in the first place.
  */
 export default function RangeCalendar({
-  locale, today, maxDate, checkIn, checkOut, onChange, busy, prices, minNights = 1, labels, months = 2,
+  locale, today, maxDate, checkIn, checkOut, onChange, busy, prices, minNights = 1, limitFor, labels, months = 2,
 }: Props) {
   const [first, setFirst] = useState<ISODate>(monthStart(checkIn ?? today));
   const [hover, setHover] = useState<ISODate | null>(null);
@@ -51,12 +53,23 @@ export default function RangeCalendar({
 
   const selectingOut = !!checkIn && !checkOut;
 
-  /** First booked night after the chosen arrival: departure can be that day, never later. */
-  const limit = useMemo(() => {
-    if (!selectingOut || !busy) return null;
-    for (let d = checkIn!; d <= maxDate; d = addDays(d, 1)) if (busy.has(d)) return d;
-    return null;
-  }, [selectingOut, busy, checkIn, maxDate]);
+  /** Latest departure for an arrival: the first booked night after it (departing that morning is fine). */
+  const latestOut = useMemo(() => {
+    const cache = new Map<ISODate, ISODate>();
+    return (arrival: ISODate): ISODate => {
+      const hit = cache.get(arrival);
+      if (hit) return hit;
+      let out: ISODate;
+      if (limitFor) out = limitFor(arrival) ?? arrival;
+      else {
+        out = addDays(maxDate, 1);
+        if (busy) for (let d = addDays(arrival, 1); d <= maxDate; d = addDays(d, 1)) if (busy.has(d)) { out = d; break; }
+      }
+      cache.set(arrival, out);
+      return out;
+    };
+  }, [busy, limitFor, maxDate]);
+  const limit = selectingOut ? latestOut(checkIn!) : null;
 
   function state(d: ISODate) {
     const past = d < today || d > maxDate;
@@ -66,9 +79,10 @@ export default function RangeCalendar({
       const tooShort = d > checkIn! && d < addDays(checkIn!, minNights);
       const beyond = limit !== null && d > limit;
       // Before the arrival, a tap restarts the stay, so only busy nights block it.
-      disabled = past || (d <= checkIn! ? nightBusy && d !== checkIn : tooShort || beyond);
+      disabled = past || (d <= checkIn! ? (nightBusy || latestOut(d) < addDays(d, minNights)) && d !== checkIn : tooShort || beyond);
     } else {
-      disabled = past || nightBusy;
+      // an arrival is only offered if the shortest allowed stay fits after it
+      disabled = past || nightBusy || latestOut(d) < addDays(d, minNights);
     }
     const end = checkOut ?? (selectingOut && hover && hover > checkIn! ? hover : null);
     const inRange = !!checkIn && !!end && d > checkIn && d < end;

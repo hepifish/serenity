@@ -76,7 +76,7 @@ const de: Dict = {
     points: [
       { title: "Unser bester Preis", text: "Keine Plattformprovision, daher ist der Preis pro Nacht hier niedriger als auf Booking.com." },
       { title: "Karte oder rumänische Urlaubskarte", text: "Sie zahlen sicher über NETOPIA Payments. Ihre Kartendaten sehen und speichern wir nie." },
-      { title: "Sie sprechen mit uns", text: "Fragen, frühere Anreise, ein Kinderbett für die Kleinen: Sie schreiben, wir antworten. Kein Callcenter dazwischen." },
+      { title: "Sofort bestätigt", text: "Der Kalender ist live. Sie zahlen, und die Wohnung gehört Ihnen, bestätigt per E-Mail innerhalb einer Minute. Keine Anfrage, kein Warten." },
     ],
   },
   apartments: {
@@ -101,7 +101,7 @@ const de: Dict = {
     lodging: "Unterkunft",
     cleaning: "Endreinigung, einmal pro Aufenthalt",
     cityTax: "Tourismusabgabe Sibiu (2 %)",
-    cityTaxNote: "Von der Stadt Sibiu für jeden Aufenthalt vorgeschrieben und an die Stadt abgeführt. Auch Booking.com berechnet sie.",
+    cityTaxNote: "Von der Stadt Sibiu für jeden Aufenthalt vorgeschrieben und an die Stadt abgeführt.",
     total: "Gesamt",
     reserve: "Weiter zur Buchung",
     pickDates: "Wählen Sie Ihre Daten, um den Preis zu sehen",
@@ -171,6 +171,7 @@ const de: Dict = {
       "Über die Dächer von Hermannstadt wachen kleine Gauben in Form von Augenlidern, der älteste Scherz der Stadt und ihr bester Wächter. Darunter: sächsische Plätze, der Ratturm, das Brukenthal-Museum und der Weihnachtsmarkt, der die Stadt in ganz Europa bekannt gemacht hat.",
       "Unsere Wohnungen liegen wenige Gehminuten von der Altstadt entfernt: nah genug für einen Spaziergang zum Abendessen, weit genug für eine ruhige Nacht.",
     ],
+    photoBy: "Foto:",
     facts: ["Kulturhauptstadt Europas 2007", "Weihnachtsmarkt, Nov.–Jan.", "Theaterfestival FITS, Juni", "Transfăgărășan, 1,5 Std. mit dem Auto"],
   },
   reviews: {

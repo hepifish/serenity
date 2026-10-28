@@ -4,8 +4,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Skyline from "@/components/Skyline";
-import Stars from "@/components/Stars";
+import HeroTriptych from "@/components/HeroTriptych";
+import SibiuPhotos from "@/components/SibiuPhotos";
 import HeroSearch from "@/components/HeroSearch";
 import RowAvailability from "@/components/RowAvailability";
 import ContactForm from "@/components/ContactForm";
@@ -50,20 +50,17 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
       <main id="main">
         <section className="hero" id="book">
-          <Stars />
-          <Skyline />
-          <div className="wrap">
-            <div className="hero-copy">
-              <p className="eyebrow rv">{t.hero.eyebrow}</p>
-              <h1 className="display h1 rv d1">
-                {t.hero.title} <em>{t.hero.titleEm}</em>
-              </h1>
-              <p className="lead rv d2">{t.hero.lead}</p>
-              <div className="rv d3" style={{ width: "100%" }}>
-                <HeroSearch lang={lang} today={today} maxGuests={maxGuests} />
-              </div>
+          <div className="hero-copy">
+            <p className="eyebrow rv">{t.hero.eyebrow}</p>
+            <h1 className="display h1 rv d1">
+              <span>{t.hero.title}</span> <em>{t.hero.titleEm}</em>
+            </h1>
+            <p className="lead rv d2">{t.hero.lead}</p>
+            <div className="rv d3" style={{ width: "100%" }}>
+              <HeroSearch lang={lang} today={today} maxGuests={maxGuests} />
             </div>
           </div>
+          <HeroTriptych lang={lang} />
         </section>
 
         <section className="section direct" aria-labelledby="direct-title">
@@ -94,7 +91,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                 const c = apartmentCopy(lang, a.slug);
                 const [main, ...rest] = a.gallery;
                 return (
-                  <article key={a.slug} className="apt-row" style={{ ["--row-accent" as string]: a.accent }} aria-labelledby={`apt-${a.slug}`}>
+                  <article key={a.slug} className="apt-row" style={{ ["--row-accent" as string]: a.accent, ["--row-font" as string]: `var(--font-${a.slug})` }} aria-labelledby={`apt-${a.slug}`}>
                     <div className="apt-media rv">
                       {main ? (
                         <>
@@ -176,6 +173,9 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             <ul className="sibiu-facts">
               {t.why.facts.map((f, i) => <li key={f} className={`rv d${(i % 3) + 1}`}>{f}</li>)}
             </ul>
+          </div>
+          <div className="wrap">
+            <SibiuPhotos lang={lang} label={t.why.photoBy} />
           </div>
         </section>
 

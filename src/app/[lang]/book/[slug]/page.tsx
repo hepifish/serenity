@@ -38,7 +38,7 @@ export default async function BookPage({ params, searchParams }: Props) {
   return (
     <>
       <Header lang={lang} t={t.nav} solid />
-      <main className="checkout" style={{ ["--accent" as string]: a.accent }}>
+      <main className={`checkout theme-${slug}`}>
         <div className="wrap">
           <p className="crumbs" style={{ marginBottom: "1rem" }}><Link href={`${back}?in=${qq.checkIn}&out=${qq.checkOut}&guests=${guests}`}>← {a.name}</Link></p>
           <h1 className="display h2" style={{ marginBottom: "clamp(2rem, 5vw, 3.5rem)" }}>{t.checkout.title}</h1>

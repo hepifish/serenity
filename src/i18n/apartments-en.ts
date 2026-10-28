@@ -21,14 +21,7 @@ const copy: Record<ApartmentSlug, ApartmentCopy> = {
       "Terrace",
     ],
     alts: [
-      "Film Studio living area, kitchen and dining beyond",
       "Yellow sofa beneath the cinema poster wall",
-      "Bedroom against the black accent wall",
-      "Vintage Aspectomat projector on the shelving unit",
-      "Kitchen counter with the Nespresso machine",
-      "Desk and green velvet curtain",
-      "Leon and Spirited Away prints",
-      "Sofa bed in the living room",
     ],
   },
   "gothic-chambers": {
@@ -50,12 +43,6 @@ const copy: Record<ApartmentSlug, ApartmentCopy> = {
     ],
     alts: [
       "Gothic Chambers living area under the vaulted ceiling",
-      "Tiffany stained-glass lamp beside the bed",
-      "Bedroom beneath a wrought-iron chandelier",
-      "Arched mirror reflecting the chandelier and vaults",
-      "Living area toward the arched window",
-      "Peacock feathers and a Dracula volume on the shelf",
-      "Dining table under the drapes",
     ],
   },
   "art-station": {
@@ -78,11 +65,11 @@ const copy: Record<ApartmentSlug, ApartmentCopy> = {
     alts: [
       "Art Station living area with its wall of museum prints",
       "Rysselberghe and Rousseau prints above the red sofa",
+      "Red sofa and round dining table",
       "Bedroom with the desk by the window",
       "Bed under the woven wicker pendant",
       "Workspace lit by an Edison lamp",
       "Candle and prints on the console",
-      "Red sofa and round dining table",
     ],
   },
   "pink-panther": {

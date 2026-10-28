@@ -19,6 +19,7 @@ type Props = {
   busy?: Set<ISODate>;
   prices?: Map<ISODate, number>;
   minNights?: number;
+  limitFor?: (checkIn: ISODate) => ISODate | null;
   footer?: React.ReactNode;
 };
 
