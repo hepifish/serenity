@@ -27,8 +27,30 @@ export type Apartment = {
   comingSoon?: boolean;
   icalEnv: string;
   bookingUrl: string;
+  /** where it is: the map pin, directions and the structured data */
+  lat: number;
+  lng: number;
+  address: Address;
+  /** the way to Piața Mare, measured on OpenStreetMap routes and rounded */
+  toCentre: { km: number; minutes: number; by: "foot" | "car" };
   gallery: { src: string; w: number; h: number }[];
 };
+
+export type Address = { streetAddress: string; postalCode?: string; locality: string };
+
+/** Film Studio, Gothic Chambers and Art Station share one house, so one pin. */
+const LUPENI_2 = {
+  lat: 45.803159,
+  lng: 24.1634059,
+  address: { streetAddress: "Fundătura Lupeni 2", postalCode: "550206", locality: "Sibiu" },
+  // OSRM foot route: 1.33 km, 18 min
+  toCentre: { km: 1.3, minutes: 20, by: "foot" as const },
+};
+
+/** Piața Mare, the old town's main square (OSM way 24536785): the map's reference point. */
+export const PIATA_MARE = { lat: 45.796777, lng: 24.151826 };
+
+export const directionsUrl = (lat: number, lng: number) => `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
 
 export function isApartmentSlug(s: string): s is ApartmentSlug {
   return (APARTMENT_SLUGS as readonly string[]).includes(s);
@@ -46,6 +68,7 @@ const img = (dir: string, files: string[]) =>
 export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
   "film-studio": {
     slug: "film-studio",
+    ...LUPENI_2,
     name: "Film Studio",
     number: "01",
     accent: "#D9A93B",
@@ -61,6 +84,7 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
   },
   "gothic-chambers": {
     slug: "gothic-chambers",
+    ...LUPENI_2,
     name: "Gothic Chambers",
     number: "02",
     accent: "#B5475F",
@@ -76,6 +100,7 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
   },
   "art-station": {
     slug: "art-station",
+    ...LUPENI_2,
     name: "Art Station",
     number: "03",
     accent: "#D0503C",
@@ -91,6 +116,12 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
   },
   "pink-panther": {
     slug: "pink-panther",
+    // Magnolia Residence, west Sibiu; the street and number are not known yet
+    lat: 45.807145443669,
+    lng: 24.106024925935,
+    address: { streetAddress: "Magnolia Residence", locality: "Sibiu" },
+    // OSRM car route: 5.35 km, 9 min without traffic
+    toCentre: { km: 5.3, minutes: 10, by: "car" },
     name: "Pink Panther",
     number: "04",
     accent: "#E39AB4",
@@ -110,6 +141,24 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
 };
 
 export const apartmentList = () => APARTMENT_SLUGS.map((s) => APARTMENTS[s]);
+
+/** One entry per front door: apartments that share coordinates share a pin. */
+export type Place = Pick<Apartment, "lat" | "lng" | "address" | "toCentre"> & {
+  id: string;
+  href: string;
+  apartments: Pick<Apartment, "slug" | "name" | "accent">[];
+};
+
+export function places(): Place[] {
+  const byDoor = new Map<string, Place>();
+  for (const { slug, name, accent, lat, lng, address, toCentre } of apartmentList()) {
+    const id = `${lat},${lng}`;
+    const place = byDoor.get(id) ?? { id, lat, lng, address, toCentre, href: directionsUrl(lat, lng), apartments: [] };
+    place.apartments.push({ slug, name, accent });
+    byDoor.set(id, place);
+  }
+  return [...byDoor.values()];
+}
 
 export type ApartmentCopy = {
   tagline: string;

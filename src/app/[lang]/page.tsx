@@ -15,7 +15,8 @@ import Reveal from "@/components/Reveal";
 import { getDict } from "@/i18n";
 import { apartmentCopy } from "@/i18n/apartments";
 import { isLocale } from "@/i18n/config";
-import { apartmentList } from "@/lib/apartments";
+import LocationMap from "@/components/LocationMap";
+import { PIATA_MARE, apartmentList, places } from "@/lib/apartments";
 import { addDays, todayInSibiu } from "@/lib/dates";
 import { fromPrice } from "@/lib/pricing";
 import { COMPANY } from "@/lib/site";
@@ -201,6 +202,15 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           </div>
           <div className="wrap">
             <SibiuPhotos lang={lang} />
+          </div>
+          <div className="wrap locmap-wrap" id="map">
+            <div className="section-head">
+              <p className="eyebrow rv">{t.map.eyebrow}</p>
+              <h3 className="display h2 rv d1">{t.map.title}</h3>
+            </div>
+            <div className="rv">
+              <LocationMap lang={lang} places={places()} centre={PIATA_MARE} />
+            </div>
           </div>
         </section>
 

@@ -11,7 +11,8 @@ import Reveal from "@/components/Reveal";
 import { getDict } from "@/i18n";
 import { apartmentCopy } from "@/i18n/apartments";
 import { LOCALES, isLocale } from "@/i18n/config";
-import { APARTMENTS, APARTMENT_SLUGS, apartmentList, isApartmentSlug } from "@/lib/apartments";
+import LocationMap from "@/components/LocationMap";
+import { APARTMENTS, APARTMENT_SLUGS, PIATA_MARE, apartmentList, isApartmentSlug, places } from "@/lib/apartments";
 import { addDays, todayInSibiu } from "@/lib/dates";
 import { fromPrice } from "@/lib/pricing";
 import { COMPANY, SITE_URL } from "@/lib/site";
@@ -109,6 +110,18 @@ export default async function ApartmentPage({ params }: Params) {
             {story}
           </ApartmentBooking>
         )}
+
+        <section className="section" style={{ borderTop: "1px solid var(--line)" }} aria-labelledby="where-title">
+          <div className="wrap">
+            <div className="section-head">
+              <p className="eyebrow rv">{t.map.eyebrow}</p>
+              <h2 id="where-title" className="display h3 rv d1">{a.address.streetAddress}</h2>
+            </div>
+            <div className="rv">
+              <LocationMap lang={lang} places={places()} centre={PIATA_MARE} focus={slug} />
+            </div>
+          </div>
+        </section>
 
         <section className="section" style={{ borderTop: "1px solid var(--line)" }} aria-labelledby="others-title">
           <div className="wrap">
