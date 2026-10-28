@@ -14,6 +14,7 @@ type Availability = {
   today: ISODate;
   maxDate: ISODate;
   minNights: number;
+  minStay?: Record<ISODate, number>;
   cleaningFee: number;
   cityTaxPercent: number;
   busy: ISODate[];
@@ -80,7 +81,8 @@ export default function ApartmentBooking({ lang, slug, name, maxGuests, bookingU
   const tax = Math.round(((lodging + cleaning) * (data?.cityTaxPercent ?? 0)) ) / 100;
   const total = lodging + cleaning + tax;
   const minPrice = prices.size ? Math.min(...prices.values()) : null;
-  const tooShort = valid && data && nights.length < data.minNights;
+  const minFor = (arrival: ISODate) => data?.minStay?.[arrival] ?? data?.minNights ?? 1;
+  const tooShort = valid && data && nights.length < minFor(checkIn!);
   const canBook = valid && !tooShort;
   const href = canBook ? `/${lang}/book?apts=${slug}&in=${checkIn}&out=${checkOut}&guests=${guests}` : "#";
 
@@ -124,7 +126,7 @@ export default function ApartmentBooking({ lang, slug, name, maxGuests, bookingU
                   onChange={onDates}
                   busy={busy}
                   prices={prices}
-                  minNights={data.minNights}
+                  minNights={minFor}
                   labels={labels}
                 />
               )}
@@ -153,7 +155,7 @@ export default function ApartmentBooking({ lang, slug, name, maxGuests, bookingU
                 <button type="button" aria-label={t.search.more} disabled={guests >= maxGuests} onClick={() => setGuests(guests + 1)}>+</button>
               </span>
             </div>
-            {summary ?? <p className="muted" style={{ fontSize: "0.92rem" }}>{tooShort && data ? t.search.minNights(data.minNights) : a.pickDates}</p>}
+            {summary ?? <p className="muted" style={{ fontSize: "0.92rem" }}>{tooShort && data ? t.search.minNights(minFor(checkIn!)) : a.pickDates}</p>}
             {canBook ? (
               <Link href={href} className="btn block">{a.reserve}</Link>
             ) : (
@@ -194,7 +196,7 @@ export default function ApartmentBooking({ lang, slug, name, maxGuests, bookingU
           onChange={onDates}
           busy={busy}
           prices={prices}
-          minNights={data.minNights}
+          minNights={minFor}
           footer={
             canBook ? (
               <Link href={href} className="btn">{a.reserve} · {money(total, lang)}</Link>

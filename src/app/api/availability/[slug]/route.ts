@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { isApartmentSlug } from "@/lib/apartments";
 import { unavailableNights } from "@/lib/availability";
 import { addDays, todayInSibiu } from "@/lib/dates";
-import { getRate, nightlyPrices } from "@/lib/pricing";
+import { getRate, nightRules } from "@/lib/pricing";
 import { CITY_TAX, MAX_AHEAD_DAYS, MIN_LEAD_DAYS } from "@/lib/site";
 
 /** What the apartment calendar needs: busy nights and a price for every free one. */
@@ -12,11 +12,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
   const today = todayInSibiu();
   const from = addDays(today, MIN_LEAD_DAYS);
   const to = addDays(today, MAX_AHEAD_DAYS);
-  const [rate, busy, prices] = await Promise.all([
-    getRate(slug),
-    unavailableNights(slug).catch(() => null),
-    nightlyPrices(slug, from, to),
-  ]);
+  const [rate, busy] = await Promise.all([getRate(slug), unavailableNights(slug).catch(() => null)]);
+  const rules = rate ? await nightRules(slug, from, to, rate) : [];
   if (!busy) return NextResponse.json({ error: "calendar_unavailable" }, { status: 503 });
   return NextResponse.json(
     {
@@ -26,7 +23,9 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
       cleaningFee: rate?.cleaning_fee ?? 0,
       cityTaxPercent: CITY_TAX.kind === "percent" ? CITY_TAX.value : 0,
       busy: [...busy].filter((d) => d >= today).sort(),
-      prices: Object.fromEntries(prices.map((p) => [p.night, p.price])),
+      prices: Object.fromEntries(rules.map((r) => [r.night, r.price])),
+      // arrivals whose season or special date asks for another minimum stay
+      minStay: Object.fromEntries(rules.filter((r) => r.minNights !== rate?.min_nights).map((r) => [r.night, r.minNights])),
     },
     { headers: { "Cache-Control": "no-store" } },
   );

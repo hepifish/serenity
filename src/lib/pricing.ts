@@ -1,5 +1,6 @@
 import { sql } from "./db";
-import { eachNight, isWeekendNight, nightsBetween, type ISODate } from "./dates";
+import { addDays, eachNight, isISODate, nightsBetween, type ISODate } from "./dates";
+import { nightRule, type NightRule, type Period } from "./price-rules";
 import { CITY_TAX } from "./site";
 import type { ApartmentSlug } from "./apartments";
 import { checkStay, splitGuests, type StayError } from "./stay";
@@ -25,18 +26,32 @@ export async function getRate(apartment: string): Promise<Rate | null> {
   return r ?? null;
 }
 
-/** Nightly prices for a date window: the override if one is set, else the weekday or weekend rate. */
-export async function nightlyPrices(apartment: string, from: ISODate, to: ISODate, known?: Rate): Promise<NightPrice[]> {
+const periodColumns = () => sql`id::int, apartment, kind, label, to_char(first_night, 'YYYY-MM-DD') as first_night,
+  to_char(last_night, 'YYYY-MM-DD') as last_night, yearly, price, weekend_price, min_nights`;
+
+/** The seasons and special dates of one apartment that can touch [from, to); all of them without a window. */
+export async function getPeriods(apartment: string, from?: ISODate, to?: ISODate): Promise<Period[]> {
+  if (!from || !to) return sql<Period[]>`select ${periodColumns()} from rate_periods where apartment = ${apartment} order by first_night, id`;
+  return sql<Period[]>`select ${periodColumns()} from rate_periods
+    where apartment = ${apartment} and first_night < ${to} and (yearly or last_night >= ${from}) order by first_night, id`;
+}
+
+/** Price and minimum stay of every night in [from, to), by the rules in price-rules.ts. */
+export async function nightRules(apartment: string, from: ISODate, to: ISODate, known?: Rate): Promise<NightRule[]> {
   const rate = known ?? (await getRate(apartment));
   if (!rate) return [];
-  const rows = await sql<{ night: string; price: number }[]>`
-    select to_char(night, 'YYYY-MM-DD') as night, price from rate_overrides
-    where apartment = ${apartment} and night >= ${from} and night < ${to}`;
-  const overrides = new Map(rows.map((r) => [r.night, r.price]));
-  return eachNight(from, to).map((night) => ({
-    night,
-    price: overrides.get(night) ?? (isWeekendNight(night) ? rate.weekend_price ?? rate.base_price : rate.base_price),
-  }));
+  const periods = await getPeriods(apartment, from, to);
+  return eachNight(from, to).map((night) => nightRule(rate, periods, night));
+}
+
+export async function nightlyPrices(apartment: string, from: ISODate, to: ISODate, known?: Rate): Promise<NightPrice[]> {
+  return (await nightRules(apartment, from, to, known)).map(({ night, price }) => ({ night, price }));
+}
+
+/** The shortest stay allowed for an arrival on this night. */
+export async function minNightsOn(apartment: string, arrival: ISODate, known?: Rate): Promise<number> {
+  const [r] = await nightRules(apartment, arrival, addDays(arrival, 1), known);
+  return r?.minNights ?? known?.min_nights ?? 1;
 }
 
 /** Sibiu taxes the whole accommodation service, cleaning included, as Booking.com does. */
@@ -49,7 +64,8 @@ export function cityTaxFor(accommodation: number, guests: number, nights: number
 export async function quote(apartment: string, checkIn: ISODate, checkOut: ISODate, guests: number, known?: Rate): Promise<Quote | null> {
   const rate = known ?? (await getRate(apartment));
   if (!rate) return null;
-  const nightly = await nightlyPrices(apartment, checkIn, checkOut, rate);
+  const rules = await nightRules(apartment, checkIn, checkOut, rate);
+  const nightly = rules.map(({ night, price }) => ({ night, price }));
   const lodging = nightly.reduce((s, n) => s + n.price, 0);
   const nights = nightsBetween(checkIn, checkOut);
   const cleaning = rate.cleaning_fee;
@@ -57,7 +73,7 @@ export async function quote(apartment: string, checkIn: ISODate, checkOut: ISODa
   return {
     apartment, checkIn, checkOut, guests, nights, nightly, lodging, cleaning, cityTax,
     total: Math.round((lodging + cleaning + cityTax) * 100) / 100,
-    minNights: rate.min_nights,
+    minNights: rules[0]?.minNights ?? rate.min_nights,
   };
 }
 
@@ -73,7 +89,8 @@ export async function quoteStays(slugs: ApartmentSlug[], checkIn: unknown, check
   for (const [i, slug] of slugs.entries()) {
     const rate = await getRate(slug);
     if (!rate) return { error: "no_price" };
-    const error = checkStay(slug, checkIn, checkOut, split[i], rate.min_nights);
+    const minNights = isISODate(checkIn) ? await minNightsOn(slug, checkIn, rate) : 1;
+    const error = checkStay(slug, checkIn, checkOut, split[i], minNights);
     if (error) return { error };
     quotes.push((await quote(slug, checkIn as ISODate, checkOut as ISODate, split[i], rate))!);
   }

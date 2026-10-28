@@ -14,7 +14,8 @@ type Props = {
   busy?: Set<ISODate>;
   /** Nightly price, shown small under each day. */
   prices?: Map<ISODate, number>;
-  minNights?: number;
+  /** Shortest stay, or the shortest stay for each arrival when seasons differ. */
+  minNights?: number | ((arrival: ISODate) => number);
   /** Latest possible departure for an arrival, when that depends on more than one calendar. */
   limitFor?: (checkIn: ISODate) => ISODate | null;
   labels: { prev: string; next: string; checkIn: string; checkOut: string; minNights: (n: number) => string };
@@ -52,6 +53,7 @@ export default function RangeCalendar({
   const dayName = useMemo(() => new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" }), [locale]);
 
   const selectingOut = !!checkIn && !checkOut;
+  const minFor = (arrival: ISODate) => (typeof minNights === "function" ? minNights(arrival) : minNights);
 
   /** Latest departure for an arrival: the first booked night after it (departing that morning is fine). */
   const latestOut = useMemo(() => {
@@ -76,13 +78,13 @@ export default function RangeCalendar({
     const nightBusy = !!busy?.has(d);
     let disabled = past;
     if (selectingOut) {
-      const tooShort = d > checkIn! && d < addDays(checkIn!, minNights);
+      const tooShort = d > checkIn! && d < addDays(checkIn!, minFor(checkIn!));
       const beyond = limit !== null && d > limit;
       // Before the arrival, a tap restarts the stay, so only busy nights block it.
-      disabled = past || (d <= checkIn! ? (nightBusy || latestOut(d) < addDays(d, minNights)) && d !== checkIn : tooShort || beyond);
+      disabled = past || (d <= checkIn! ? (nightBusy || latestOut(d) < addDays(d, minFor(d))) && d !== checkIn : tooShort || beyond);
     } else {
       // an arrival is only offered if the shortest allowed stay fits after it
-      disabled = past || nightBusy || latestOut(d) < addDays(d, minNights);
+      disabled = past || nightBusy || latestOut(d) < addDays(d, minFor(d));
     }
     const end = checkOut ?? (selectingOut && hover && hover > checkIn! ? hover : null);
     const inRange = !!checkIn && !!end && d > checkIn && d < end;
@@ -151,7 +153,7 @@ export default function RangeCalendar({
         })}
       </div>
       <p className="cal-hint" aria-live="polite">
-        {!checkIn ? labels.checkIn : !checkOut ? (minNights > 1 ? `${labels.checkOut} · ${labels.minNights(minNights)}` : labels.checkOut) : " "}
+        {!checkIn ? labels.checkIn : !checkOut ? (minFor(checkIn) > 1 ? `${labels.checkOut} · ${labels.minNights(minFor(checkIn))}` : labels.checkOut) : " "}
       </p>
     </div>
   );

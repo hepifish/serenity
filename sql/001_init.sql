@@ -11,14 +11,7 @@ create table if not exists rates (
   updated_at    timestamptz not null default now()
 );
 
--- A price for one specific night (Christmas market, a festival week). Wins over rates.
-create table if not exists rate_overrides (
-  apartment  text not null,
-  night      date not null,
-  price      integer not null check (price > 0),
-  updated_at timestamptz not null default now(),
-  primary key (apartment, night)
-);
+-- Seasons and special dates live in rate_periods (006).
 
 create table if not exists bookings (
   id               uuid primary key default gen_random_uuid(),

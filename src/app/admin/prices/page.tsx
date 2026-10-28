@@ -1,5 +1,5 @@
 import AdminNav from "@/components/AdminNav";
-import PriceMatrix from "@/components/PriceMatrix";
+import PriceManager from "@/components/PriceManager";
 import { requireAdmin } from "@/lib/admin-auth";
 import { todayInSibiu } from "@/lib/dates";
 
@@ -11,7 +11,7 @@ export default async function PricesPage() {
     <>
       <AdminNav active="prices" />
       <main className="admin-main">
-        <PriceMatrix today={todayInSibiu()} />
+        <PriceManager today={todayInSibiu()} />
       </main>
     </>
   );
