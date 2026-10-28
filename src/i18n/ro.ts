@@ -1,5 +1,238 @@
-import en, { type Dict } from "./en";
+import type { Dict } from "./en";
 
-// TODO: translated by the i18n pass
-const ro: Dict = en;
+// Romanian plural: 1 noapte, 2 nopți, 20 de nopți (101 nopți, 120 de nopți).
+const de = (n: number) => (n % 100 === 0 || n % 100 >= 20 ? "de " : "");
+const nopti = (n: number) => (n === 1 ? "1 noapte" : `${n} ${de(n)}nopți`);
+const oaspeti = (n: number) => (n === 1 ? "1 oaspete" : `${n} ${de(n)}oaspeți`);
+
+const ro: Dict = {
+  meta: {
+    title: "Apartamente Sibiu aproape de centrul vechi · Serenity",
+    description:
+      "Cazare Sibiu în apartamente de design, într-o casă din sec. XIX aproape de centrul vechi. Nota 8,9 de la 253 de oaspeți. Plată cu card sau vouchere de vacanță.",
+  },
+  nav: {
+    apartments: "Apartamente",
+    sibiu: "Sibiu",
+    faq: "Întrebări",
+    contact: "Contact",
+    book: "Rezervă direct",
+    language: "Limba",
+    menu: "Meniu",
+    close: "Închide",
+  },
+  hero: {
+    eyebrow: "Sibiu · Transilvania",
+    title: "Dormi într-o",
+    titleEm: "poveste",
+    lead: "Apartamente de design într-o casă din secolul XIX, la câțiva pași de centrul vechi al Sibiului. Fiecare construit în jurul unei singure idei: cinema, bolți gotice, pictură.",
+  },
+  search: {
+    dates: "Perioada",
+    checkIn: "Sosire",
+    checkOut: "Plecare",
+    guests: "Oaspeți",
+    fewer: "Mai puțini oaspeți",
+    more: "Mai mulți oaspeți",
+    guest: (n: number) => oaspeti(n),
+    submit: "Vezi ce e liber",
+    pickDates: "Alege perioada",
+    pickArrival: "Alege ziua sosirii",
+    pickDeparture: "Acum alege ziua plecării",
+    minNights: (n: number) => `minimum ${nopti(n)}`,
+    prev: "Luna anterioară",
+    next: "Luna următoare",
+    clear: "Șterge datele",
+    done: "Gata",
+    status: (free: number, total: number) =>
+      free === 0
+        ? "Niciun apartament liber în această perioadă"
+        : free === total
+          ? "Toate apartamentele sunt libere în perioada aleasă"
+          : free === 1
+            ? `1 din ${total} apartamente este liber în perioada aleasă`
+            : `${free} din ${total} apartamente sunt libere în perioada aleasă`,
+  },
+  results: {
+    title: "Perioada ta",
+    free: "Liber în perioada aleasă",
+    taken: "Ocupat în unele dintre aceste nopți",
+    total: "total",
+    nights: (n: number) => nopti(n),
+    choose: "Rezervă acest apartament",
+    reasons: {
+      taken: "Deja rezervat în unele dintre aceste nopți",
+      min_nights: "Necesită un sejur mai lung",
+      guests: "Prea mulți oaspeți pentru acest apartament",
+      too_soon: "Rezervările directe încep de mâine",
+      too_far: "Prea departe în viitor",
+      too_long: "Pentru sejururi de peste 30 de nopți, scrie-ne",
+      dates: "Alege perioada",
+      no_price: "Încă nu este deschis pentru rezervare directă",
+    } as Record<string, string>,
+    noneFree: "Nu e nimic liber exact în această perioadă. Încearcă să muți datele cu o zi sau scrie-ne: uneori putem ajuta.",
+  },
+  direct: {
+    eyebrow: "De ce să rezervi direct",
+    title: "Aceleași apartamente. Condiții mai bune.",
+    points: [
+      { title: "Cel mai bun preț al nostru", text: "Fără comision de platformă, așa că prețul pe noapte e mai mic aici decât pe Booking.com." },
+      { title: "Card sau card de vacanță", text: "Plătești în siguranță prin NETOPIA Payments. Nu vedem și nu stocăm niciodată datele cardului tău." },
+      { title: "Vorbești cu noi", text: "Întrebări, sosire mai devreme, un pătuț pentru cel mic: tu scrii, noi răspundem. Fără call center la mijloc." },
+    ],
+  },
+  apartments: {
+    eyebrow: "Apartamentele",
+    title: "Patru camere, patru lumi",
+    from: "de la",
+    perNight: "noapte",
+    upTo: (n: number) => `Până la ${oaspeti(n)}`,
+    bedrooms: (n: number) => (n === 1 ? "1 dormitor" : `${n} ${de(n)}dormitoare`),
+    discover: "Intră",
+    photos: (n: number) => `Toate cele ${n} ${de(n)}fotografii`,
+    checkAvailability: "Verifică disponibilitatea",
+  },
+  apartment: {
+    back: "Toate apartamentele",
+    highlights: "În apartament",
+    availability: "Disponibilitate și preț",
+    availabilityLead: "Zilele gri sunt ocupate. Alege sosirea, apoi plecarea: prețul se actualizează pe loc.",
+    loading: "Citim calendarul…",
+    calendarError: "Calendarul nu a putut fi citit acum. Încearcă din nou peste un minut sau scrie-ne.",
+    nightsLabel: (n: number) => nopti(n),
+    lodging: "Cazare",
+    cleaning: "Curățenie, o dată pe sejur",
+    cityTax: "Taxa specială pentru promovarea turistică (2%)",
+    cityTaxNote: "Impusă de Primăria Sibiu pentru fiecare sejur și virată orașului. Booking.com o percepe și el.",
+    total: "Total",
+    reserve: "Continuă spre rezervare",
+    pickDates: "Alege perioada ca să vezi prețul",
+    guests: "Oaspeți",
+    alsoOn: "Preferi Booking.com? Apartamentul este listat și acolo.",
+    alsoOnLink: "Vezi pe Booking.com",
+    houseRules: "Bine de știut",
+    rules: [
+      "Check-in de la 15:00, check-out până la 11:00",
+      "Self check-in cu cutie pentru chei, intrare privată",
+      "Fumatul, animalele și petrecerile nu sunt permise · liniște după 22:00",
+      "Parcare gratuită pe stradă sau în garaj",
+      "Anulare gratuită cu până la 7 zile înainte de sosire",
+    ],
+  },
+  checkout: {
+    title: "Rezervarea ta",
+    stay: "Sejurul tău",
+    change: "Modifică",
+    details: "Datele tale",
+    name: "Nume complet",
+    email: "Email",
+    emailHint: "Aici primești confirmarea.",
+    phone: "Telefon",
+    phoneHint: "Doar pentru ziua sosirii.",
+    country: "Țara",
+    note: "Ceva ce ar trebui să știm? (opțional)",
+    pay: "Cum plătești",
+    card: "Card bancar",
+    cardHint: "Visa, Mastercard, Apple Pay, Google Pay",
+    voucher: "Card de vacanță",
+    voucherHint: "Edenred, Up, Pluxee",
+    voucherNote: "Cardurile de vacanță funcționează pe aceeași pagină securizată NETOPIA. Același preț ca la plata cu cardul.",
+    terms: (a: string, b: string) => `Accept ${a} și ${b}, inclusiv politica de anulare.`,
+    termsLink: "termenii și condițiile",
+    privacyLink: "politica de confidențialitate",
+    withdrawal:
+      "Pentru rezervările de cazare pe date fixe nu se aplică dreptul de retragere de 14 zile (OUG 34/2014, art. 16 lit. l). Se aplică în schimb politica noastră de anulare gratuită.",
+    submit: (amount: string) => `Plătește ${amount} în siguranță`,
+    submitting: "Te ducem la NETOPIA…",
+    secure: "Plătești pe pagina securizată NETOPIA Payments. Datele cardului nu ajung niciodată la noi.",
+    hold: "Îți păstrăm aceste nopți timp de 20 de minute cât plătești.",
+    errors: {
+      invalid: "Verifică, te rugăm, câmpurile marcate.",
+      taken: "Cineva a rezervat aceste nopți chiar acum. Alege, te rugăm, alte date.",
+      calendar_unavailable: "Nu am putut confirma disponibilitatea acum. Încearcă din nou peste un minut.",
+      payment_unavailable: "Pagina de plată nu s-a deschis. Nu s-a încasat nimic. Încearcă din nou.",
+      no_price: "Apartamentul nu este încă deschis pentru rezervare directă în această perioadă. Scrie-ne.",
+      generic: "Ceva nu a mers. Nu s-a încasat nimic. Încearcă din nou.",
+    } as Record<string, string>,
+  },
+  booking: {
+    paid: { title: "Rezervarea e confirmată.", text: "Plata a trecut și apartamentul e al tău. Confirmarea e deja pe drum spre emailul tău." },
+    pending: { title: "Confirmăm plata…", text: "De obicei durează câteva secunde. Poți lăsa pagina deschisă." },
+    failed: { title: "Plata nu a trecut.", text: "Nu s-a încasat nimic, iar nopțile sunt din nou libere. Poți încerca încă o dată." },
+    expired: { title: "Rezervarea a expirat.", text: "Plata nu a fost finalizată la timp, așa că nopțile au fost eliberate. Poți rezerva din nou." },
+    cancelled: { title: "Rezervarea a fost anulată.", text: "Dacă ai întrebări despre rambursare, scrie-ne." },
+    ref: "Cod rezervare",
+    tryAgain: "Alege din nou perioada",
+    home: "Înapoi la Serenity",
+    arrival: "Check-in de la 15:00 · Check-out până la 11:00",
+  },
+  why: {
+    eyebrow: "Sibiu",
+    title: "Orașul cu ochi",
+    text: [
+      "Acoperișurile Sibiului sunt păzite de mici ferestre în formă de pleoapă, cea mai veche glumă a orașului și cel mai bun paznic al lui. Sub ele: piețe săsești, Turnul Sfatului, Brukenthal și Târgul de Crăciun care a făcut orașul cunoscut în toată Europa.",
+      "Apartamentele noastre sunt la câțiva pași de centrul vechi: destul de aproape cât să mergi pe jos la cină, destul de departe cât să ai o noapte liniștită.",
+    ],
+    facts: ["Capitală Culturală Europeană 2007", "Târgul de Crăciun, nov.–ian.", "Festivalul de Teatru FITS, iunie", "Transfăgărășan, 1,5 h cu mașina"],
+  },
+  reviews: {
+    eyebrow: "Ce spun oaspeții",
+    title: "Nota 8,9 de la 253 de oaspeți",
+    source: "Recenzii verificate pe Booking.com",
+    items: [
+      { text: "Mobilat frumos. Curat lună. Baie uriașă.", who: "Peter, Danemarca" },
+      { text: "Apartamente frumoase și spațioase, cu teme: artă, filme…", who: "Sapan, Regatul Unit" },
+      { text: "Foarte curat, o locație liniștită și o gazdă foarte prietenoasă.", who: "Raluca, România" },
+      { text: "Am fost în ianuarie și în apartament a fost foarte cald și plăcut.", who: "Lavinia, România" },
+    ],
+    scores: [
+      { label: "Personal", value: "9,3" },
+      { label: "Raport calitate-preț", value: "9,1" },
+      { label: "Curățenie", value: "9,0" },
+      { label: "Locație", value: "9,0" },
+    ],
+  },
+  faq: {
+    eyebrow: "Întrebări",
+    title: "Înainte să vii",
+    items: [
+      { q: "Unde sunt exact apartamentele?", a: "Pe Fundătura Lupeni 2, Sibiu, pe o stradă liniștită la 1,3 km de Piața Mare: cam 20 de minute pe jos, 10 până la zidurile cetății vechi. Gara e la 900 m, aeroportul la 5 km." },
+      { q: "Este mai ieftin să rezerv direct?", a: "Da. Booking.com ne ia un comision pentru fiecare sejur. Când rezervi aici, economia ajunge la tine, așa că aceleași nopți costă mai puțin." },
+      { q: "Pot plăti cu cardul de vacanță?", a: "Da. Acceptăm carduri de vacanță Edenred, Up și Pluxee prin NETOPIA Payments, la același preț ca un card obișnuit." },
+      { q: "De ce există o taxă turistică separată?", a: "Din 2026, Sibiul aplică taxa specială pentru promovarea turistică, de 2% din valoarea cazării (HCL 462/2025). O încasăm și o virăm orașului. O afișăm pe un rând separat ca să vezi exact ce este." },
+      { q: "Cum funcționează check-in-ul?", a: "Self check-in de la 15:00, cu o cutie pentru chei la intrarea ta privată. Înainte de sosire îți trimitem codul și un scurt ghid. Check-out-ul este până la 11:00." },
+      { q: "Care este politica de anulare?", a: "Anulare gratuită cu până la 7 zile înainte de sosire, cu rambursare integrală pe cardul cu care ai plătit. Cu mai puțin de 7 zile înainte de sosire, rezervarea nu mai este rambursabilă. Scrie-ne și ne ocupăm noi." },
+      { q: "Datele cardului meu sunt în siguranță?", a: "Datele cardului se introduc doar pe pagina securizată NETOPIA Payments, cu 3-D Secure. Nu trec niciodată prin site-ul nostru și nu le stocăm niciodată." },
+      { q: "Emiteți factură?", a: "Da. Fiecare rezervare directă primește factură de la Serenity Admin Apartamente SRL. Dacă ai nevoie de ea pe o firmă, adaugă numele firmei și CUI-ul în câmpul pentru observații." },
+      { q: "Există parcare?", a: "Da, gratuită: pe stradă, în fața casei, și un garaj mic, încuiat, în curte (loc limitat, motocicletele sunt binevenite). Spune-ne în observații dacă ai nevoie de garaj." },
+    ],
+  },
+  contact: {
+    eyebrow: "Contact",
+    title: "Scrie-ne",
+    lead: "O întrebare despre perioadă, un sejur mai lung sau ceva special? De obicei răspundem în aceeași zi.",
+    name: "Numele tău",
+    email: "Emailul tău",
+    message: "Mesajul tău",
+    send: "Trimite mesajul",
+    sending: "Se trimite…",
+    sent: "Mulțumim. Îți răspundem în curând.",
+    error: "Mesajul nu a putut fi trimis. Scrie-ne direct pe email.",
+    orEmail: "Sau pe email",
+  },
+  footer: {
+    tagline: "Patru camere. Un oraș. Multe povești.",
+    legal: "Informații legale",
+    terms: "Termeni și condiții",
+    privacy: "Politica de confidențialitate",
+    company: "Companie",
+    payments: "Plăți securizate prin",
+    anpc: "Protecția consumatorilor",
+  },
+  common: {
+    ron: "lei",
+    loading: "Se încarcă…",
+  },
+};
+
 export default ro;

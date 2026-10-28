@@ -1,22 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
-import { Cormorant_Garamond, DM_Sans } from "next/font/google";
+import { cormorant, dmSans } from "../fonts";
 import { LOCALES, isLocale } from "@/i18n/config";
 import { SITE_URL } from "@/lib/site";
 import "../globals.css";
 
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
-  subsets: ["latin", "latin-ext"],
-  weight: ["300", "400", "500"],
-  style: ["normal", "italic"],
-});
-
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
-  subsets: ["latin", "latin-ext"],
-  weight: ["300", "400", "500"],
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

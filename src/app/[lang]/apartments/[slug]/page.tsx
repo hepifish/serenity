@@ -29,7 +29,8 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   if (!isLocale(lang) || !isApartmentSlug(slug)) return {};
   const a = APARTMENTS[slug];
   const c = apartmentCopy(lang, slug);
-  return pageMeta(lang, `/apartments/${slug}`, `${a.name} · ${c.tagline} · Serenity Apartments Sibiu`, `${c.intro} ${c.story[0]}`.slice(0, 158), a.gallery[0]?.src);
+  const meta = pageMeta(lang, `/apartments/${slug}`, `${a.name} · ${c.tagline} · Serenity Apartments Sibiu`, `${c.intro} ${c.story[0]}`.slice(0, 158), a.gallery[0]?.src);
+  return a.comingSoon ? { ...meta, robots: { index: false, follow: true } } : meta;
 }
 
 export default async function ApartmentPage({ params }: Params) {

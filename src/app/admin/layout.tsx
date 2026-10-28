@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, DM_Sans } from "next/font/google";
+import { cormorant, dmSans } from "../fonts";
 import "../globals.css";
 import "./admin.css";
 
-const cormorant = Cormorant_Garamond({ variable: "--font-cormorant", subsets: ["latin", "latin-ext"], weight: ["300", "400"] });
-const dmSans = DM_Sans({ variable: "--font-dm-sans", subsets: ["latin", "latin-ext"], weight: ["300", "400", "500"] });
 
 export const metadata: Metadata = { title: "Serenity · Admin", robots: { index: false, follow: false } };
 

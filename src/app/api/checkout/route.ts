@@ -6,7 +6,6 @@ import { attachPayment, createPendingBooking, markFailed } from "@/lib/bookings"
 import { startPayment } from "@/lib/netopia";
 import { getRate, quote } from "@/lib/pricing";
 import { checkStay } from "@/lib/stay";
-import { SITE_URL } from "@/lib/site";
 
 const Body = z.object({
   apartment: z.string(),
@@ -56,7 +55,8 @@ export async function POST(req: Request) {
   });
   if (!booking) return fail("taken", 409);
 
-  const origin = SITE_URL.startsWith("http://localhost") ? new URL(req.url).origin : SITE_URL;
+  // Netopia calls back the deployment that started the payment (production, a preview, or localhost).
+  const origin = new URL(req.url).origin;
   const back = `${origin}/${b.lang}/booking/${booking.ref}?t=${booking.access_token}`;
   const [firstName, ...rest] = b.name.split(/\s+/);
   try {

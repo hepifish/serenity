@@ -1,7 +1,7 @@
 // English is the source; ro.ts and de.ts follow this exact shape.
 const en = {
   meta: {
-    title: "Serenity Apartments Sibiu · Design apartments near the old town",
+    title: "Design apartments in Sibiu, near the old town · Serenity",
     description:
       "Design apartments in a 19th-century house near Sibiu's old town: Film Studio, Gothic Chambers, Art Station and Pink Panther. Rated 8.9 by 253 guests. Book direct for our best price, pay by card or holiday voucher card.",
   },
