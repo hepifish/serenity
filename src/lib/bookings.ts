@@ -168,10 +168,12 @@ export async function listBookings(limit = 200) {
     order by check_in desc, ref limit ${limit}`;
 }
 
+// What Booking.com sees: only stays a guest has paid for (a "conflict" is paid too).
+// Unpaid holds stay off the feed, or a 20-minute hold could close nights there until its next sync.
 export async function directBookingsFor(apartment: string) {
   return sql<{ id: string; check_in: string; check_out: string }[]>`
     select id, to_char(check_in,'YYYY-MM-DD') as check_in, to_char(check_out,'YYYY-MM-DD') as check_out
     from bookings where apartment = ${apartment}
-      and (status = 'paid' or (status = 'pending' and hold_until > now()))
+      and status in ('paid', 'conflict')
       and check_out >= current_date`;
 }
