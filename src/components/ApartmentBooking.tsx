@@ -131,11 +131,11 @@ export default function ApartmentBooking({ lang, slug, name, maxGuests, bookingU
             <div className="panel-dates">
               <button type="button" onClick={() => setSheet(true)} disabled={!data}>
                 <span className="search-label">{t.search.checkIn}</span>
-                <span>{checkIn ? mediumDate(checkIn, lang) : "—"}</span>
+                <span>{checkIn ? mediumDate(checkIn, lang) : "…"}</span>
               </button>
               <button type="button" onClick={() => setSheet(true)} disabled={!data}>
                 <span className="search-label">{t.search.checkOut}</span>
-                <span>{checkOut ? mediumDate(checkOut, lang) : "—"}</span>
+                <span>{checkOut ? mediumDate(checkOut, lang) : "…"}</span>
               </button>
             </div>
             <div className="panel-guests">

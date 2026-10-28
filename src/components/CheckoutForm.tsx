@@ -74,7 +74,7 @@ export default function CheckoutForm({ lang, slug, checkIn, checkOut, guests, to
         <div className="field">
           <label htmlFor="country">{t.country}</label>
           <select id="country" name="country" required defaultValue={lang === "ro" ? "Romania" : lang === "de" ? "Germany" : ""} autoComplete="country-name">
-            <option value="" disabled>—</option>
+            <option value="" disabled>…</option>
             {COUNTRIES.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
         </div>
