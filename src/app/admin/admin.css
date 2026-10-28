@@ -367,3 +367,69 @@
     display: none;
   }
 }
+
+/* booking evidence: reads on screen, prints as a plain document */
+.ev-block {
+  display: grid;
+  gap: 1rem;
+}
+.ev-block h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 1.4rem;
+}
+.ev-list {
+  display: grid;
+  grid-template-columns: minmax(140px, 220px) 1fr;
+  gap: 0.5rem 1.2rem;
+  font-size: 0.9rem;
+}
+.ev-list dt {
+  color: var(--stone);
+}
+.ev-terms {
+  display: grid;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--bone-2);
+  border-top: 1px solid var(--line);
+  padding-top: 1rem;
+}
+.ev-terms h3 {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--bone);
+}
+.ev-terms h4 {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 0.6rem;
+}
+.ev-terms ul {
+  padding-left: 1.2rem;
+}
+@media (max-width: 700px) {
+  .ev-list {
+    grid-template-columns: 1fr;
+  }
+  .ev-list dd {
+    margin-bottom: 0.4rem;
+  }
+}
+@media print {
+  .no-print,
+  .admin-bar,
+  nav {
+    display: none !important;
+  }
+  body.admin,
+  .evidence,
+  .evidence * {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .evidence {
+    padding: 0 !important;
+  }
+}

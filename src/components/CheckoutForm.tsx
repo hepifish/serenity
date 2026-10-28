@@ -16,6 +16,7 @@ export default function CheckoutForm({ lang, slugs, checkIn, checkOut, guests, t
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [touched, setTouched] = useState(false);
+  const [accepted, setAccepted] = useState(false);
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -103,22 +104,27 @@ export default function CheckoutForm({ lang, slugs, checkIn, checkOut, guests, t
 
       <input className="honeypot" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
 
-      <label className="check">
-        <input type="checkbox" name="terms" required />
-        <span>
-          {t.terms("§", "¶").split(/([§¶])/).map((part, i) =>
-            part === "§" ? <Link key={i} className="link" href={`/${lang}/terms`} target="_blank">{t.termsLink}</Link>
-            : part === "¶" ? <Link key={i} className="link" href={`/${lang}/privacy`} target="_blank">{t.privacyLink}</Link>
-            : part)}
-        </span>
-      </label>
+      {/* The damage rule sits right above the box it is accepted with: brought to the guest's attention, not buried in the terms. */}
+      <div className="consent">
+        <p id="damage-rule" className="consent-rule"><strong>{t.damageLabel}:</strong> {t.damage}</p>
+        <label className="check">
+          <input type="checkbox" name="terms" required checked={accepted} onChange={(e) => setAccepted(e.target.checked)} aria-describedby="damage-rule" />
+          <span>
+            {t.terms("§", "¶").split(/([§¶])/).map((part, i) =>
+              part === "§" ? <Link key={i} className="link" href={`/${lang}/terms#damage`} target="_blank">{t.termsLink}</Link>
+              : part === "¶" ? <Link key={i} className="link" href={`/${lang}/privacy`} target="_blank">{t.privacyLink}</Link>
+              : part)}
+          </span>
+        </label>
+      </div>
       <p className="hint">{t.withdrawal}</p>
 
       {error ? <p className="notice err" role="alert">{error}</p> : null}
 
-      <button className="btn block" disabled={busy} style={{ minHeight: 56 }}>
+      <button className="btn block" disabled={busy || !accepted} aria-describedby={accepted ? undefined : "pay-gate"} style={{ minHeight: 56 }}>
         {busy ? t.submitting : t.submit(money(total, lang, true))}
       </button>
+      {accepted ? null : <p id="pay-gate" className="hint gate" aria-live="polite">{t.acceptFirst}</p>}
       <p className="hint" style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="1" /><path d="M8 11V7a4 4 0 018 0v4" /></svg>
         {t.secure} {t.hold}

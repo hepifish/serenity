@@ -7,6 +7,7 @@ import { startPayment } from "@/lib/netopia";
 import { quoteStays } from "@/lib/pricing";
 import { holdCapExceeded, rateLimited } from "@/lib/rate-limit";
 import { SITE_URL } from "@/lib/site";
+import { acceptanceOf, checkoutStatement } from "@/lib/terms";
 
 const Body = z.object({
   apartments: z.array(z.enum(APARTMENT_SLUGS)).min(1).max(APARTMENT_SLUGS.length),
@@ -53,7 +54,7 @@ export async function POST(req: Request) {
 
   const rows = await createPendingGroup(quotes, {
     name: b.name, email: b.email, phone: b.phone, country: b.country, note: b.note, lang: b.lang, payMethod: b.payMethod,
-  });
+  }, acceptanceOf(req, b.lang, checkoutStatement(b.lang)));
   if (!rows) return fail("taken", 409);
   const capped = await holdCapExceeded(req, rows);
   if (capped) return capped;
