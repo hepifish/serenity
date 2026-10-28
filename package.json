@@ -10,12 +10,8 @@
   },
   "dependencies": {
     "jose": "^6.2.13",
-<<<<<<< HEAD
-    "next": "16.4.3",
-=======
     "maplibre-gl": "6.13.0",
-    "next": "16.1.7",
->>>>>>> feature/direct-booking
+    "next": "16.4.3",
     "postgres": "^3.4.9",
     "react": "19.2.9",
     "react-dom": "19.2.9",
