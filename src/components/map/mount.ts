@@ -16,23 +16,30 @@ type Point = { lat: number; lng: number };
 export type MountOptions = {
   container: HTMLElement;
   fit: Point[];
+  /** also framed when the frame is wide; on a phone they would shrink the doors until the pin cards overlap */
+  fitWide: Point[];
   locale: Record<string, string>;
   reducedMotion: boolean;
   onError: () => void;
 };
 
 /** Room for the pin cards, which stand above their points. */
+const isNarrow = (el: HTMLElement) => el.clientWidth < 600;
+
 function padding(el: HTMLElement) {
-  const narrow = el.clientWidth < 600;
+  const narrow = isNarrow(el);
   return { top: narrow ? 150 : 170, bottom: narrow ? 56 : 72, left: narrow ? 96 : 140, right: narrow ? 96 : 140 };
 }
 
-export function mount({ container, fit, locale, reducedMotion, onError }: MountOptions) {
-  const bounds = fit.reduce((b, p) => b.extend([p.lng, p.lat]), new LngLatBounds([fit[0].lng, fit[0].lat], [fit[0].lng, fit[0].lat]));
+export function mount({ container, fit, fitWide, locale, reducedMotion, onError }: MountOptions) {
+  const boundsFor = () => {
+    const points = isNarrow(container) ? fit : [...fit, ...fitWide];
+    return points.reduce((b, p) => b.extend([p.lng, p.lat]), new LngLatBounds([fit[0].lng, fit[0].lat], [fit[0].lng, fit[0].lat]));
+  };
   const map = new Map({
     container,
     style: mapStyle,
-    bounds,
+    bounds: boundsFor(),
     fitBoundsOptions: { padding: padding(container), maxZoom: 15.5 },
     minZoom: 10,
     maxZoom: 17.5,
@@ -62,7 +69,7 @@ export function mount({ container, fit, locale, reducedMotion, onError }: MountO
     if (container.clientWidth === width || container.clientWidth < 200) return;
     width = container.clientWidth;
     map.resize();
-    map.fitBounds(bounds, { padding: padding(container), maxZoom: 15.5, animate: false });
+    map.fitBounds(boundsFor(), { padding: padding(container), maxZoom: 15.5, animate: false });
   });
   ro.observe(container);
 

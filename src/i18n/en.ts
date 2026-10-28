@@ -182,9 +182,16 @@ const en = {
     title: "Two addresses, one city",
     region: "Map of Sibiu with the apartments",
     westSibiu: "west Sibiu",
-    centre: "Piața Mare",
-    toCentre: (km: string, minutes: number, by: "foot" | "car") =>
-      `About ${km} km to Piața Mare, ${minutes} minutes ${by === "foot" ? "on foot" : "by car"}`,
+    /** landmark name, and a quieter second line */
+    landmarks: {
+      centre: ["Piața Mare", "Brukenthal Museum"],
+      airport: ["Sibiu Airport", "SBZ"],
+      station: ["Sibiu station"],
+      bridge: ["Bridge of Lies", "Piața Mică"],
+      astra: ["ASTRA Museum", "Dumbrava Sibiului"],
+    } as Record<string, string[]>,
+    way: (distance: string, minutes: number, by: "foot" | "car", to: "centre" | "station" | "airport") =>
+      `About ${distance} ${{ centre: "to Piața Mare", station: "to the train station", airport: "to the airport" }[to]}, ${minutes} minutes ${by === "foot" ? "on foot" : "by car"}`,
     directions: "Directions",
     directionsTo: (names: string) => `Directions to ${names} in Google Maps (opens in a new tab)`,
     loading: "Loading the map",

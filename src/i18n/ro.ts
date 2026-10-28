@@ -194,9 +194,15 @@ const ro: Dict = {
     title: "Două adrese, un singur oraș",
     region: "Harta Sibiului cu apartamentele",
     westSibiu: "vestul Sibiului",
-    centre: "Piața Mare",
-    toCentre: (km, minutes, by) =>
-      `Cam ${km} km până în Piața Mare, ${minutes} ${de(minutes)}minute ${by === "foot" ? "pe jos" : "cu mașina"}`,
+    landmarks: {
+      centre: ["Piața Mare", "Muzeul Brukenthal"],
+      airport: ["Aeroportul Sibiu", "SBZ"],
+      station: ["Gara Sibiu"],
+      bridge: ["Podul Minciunilor", "Piața Mică"],
+      astra: ["Muzeul ASTRA", "Dumbrava Sibiului"],
+    },
+    way: (distance, minutes, by, to) =>
+      `Cam ${distance} ${{ centre: "până în Piața Mare", station: "până la gară", airport: "până la aeroport" }[to]}, ${minutes} ${de(minutes)}minute ${by === "foot" ? "pe jos" : "cu mașina"}`,
     directions: "Indicații",
     directionsTo: (names) => `Indicații spre ${names} în Google Maps (se deschide într-o filă nouă)`,
     loading: "Se încarcă harta",

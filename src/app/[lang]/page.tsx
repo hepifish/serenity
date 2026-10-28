@@ -17,7 +17,7 @@ import { getDict } from "@/i18n";
 import { apartmentCopy } from "@/i18n/apartments";
 import { isLocale } from "@/i18n/config";
 import LocationMap from "@/components/LocationMap";
-import { PIATA_MARE, apartmentList, places } from "@/lib/apartments";
+import { LANDMARKS, apartmentList, places } from "@/lib/apartments";
 import { addDays, todayInSibiu } from "@/lib/dates";
 import { fromPrice } from "@/lib/pricing";
 import { COMPANY } from "@/lib/site";
@@ -210,7 +210,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
               <h3 className="display h2 rv d1">{t.map.title}</h3>
             </div>
             <div className="rv">
-              <LocationMap lang={lang} places={places()} centre={PIATA_MARE} />
+              <LocationMap lang={lang} places={places()} landmarks={LANDMARKS} />
             </div>
           </div>
         </section>
