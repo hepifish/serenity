@@ -532,18 +532,30 @@ textarea {
   position: absolute;
   inset: 0;
 }
+.door-photo img {
+  object-position: calc(var(--fx) * 100%) var(--fy);
+}
 /*
  * The door opening, wide screens with a pointer only. Animating panel widths
  * re-lays out every panel and repaints every photo on each frame, so the
  * widths here never change. Each panel is laid out at its widest (1.6 of a
- * quarter, --s), absolutely placed, and the next panel covers its right part,
- * its ink left border drawing the gap. Hovering only slides panels sideways
- * with translate, which the compositor moves without layout or paint:
- * panels up to the hovered one shift left, those after it shift right, so the
- * hovered one shows 1.6 quarters and each other 0.8, the old flex-grow sizes.
- * The photo slides by half the change in width, staying centred in what shows.
- * Every offset is rounded to a whole pixel: at a fractional one the photo's
- * layer and its shade snap apart and a bright hairline shows in the gap.
+ * quarter, --s, plus the gap), absolutely placed, and the next panel covers
+ * its right part. Hovering only slides whole panels sideways with translate,
+ * which the compositor moves without layout or paint: panels up to the
+ * hovered one shift left, those after it shift right, so the hovered one
+ * shows 1.6 quarters and each other 0.8, the old flex-grow sizes.
+ *
+ * Why the gap holds still while it moves: a moving layer's outer edge, and
+ * any clip on it, can be drawn on whole pixels while an edge painted inside a
+ * layer glides between them. When the gap's two sides were of different kinds
+ * (a clip on one side, a painted border on the other), it went 3, 4, 3 pixels
+ * wide from frame to frame and trembled. So no panel clips its content,
+ * nothing in a panel moves against the panel, and the gap is a 4px ink strip
+ * that is a layer of its own (will-change): both of its sides are that
+ * layer's edges, drawn the same way, so its width cannot change. The photo,
+ * its shade and gradient start under the strip and run on under the next
+ * panel; only the triptych, which never moves, clips. Rest and hover
+ * positions are whole pixels so the photos settle sharp.
  */
 @media (hover: hover) and (min-width: 901px) and (prefers-reduced-motion: no-preference) {
   .triptych {
@@ -558,22 +570,38 @@ textarea {
     top: 0;
     bottom: 0;
     left: calc(var(--j) * var(--s) - 4px);
-    width: calc(1.6 * var(--s));
-    border-left: 4px solid var(--ink);
-    contain: layout paint;
+    width: calc(1.6 * var(--s) + 4px);
+    overflow: visible;
     transition: translate 0.9s var(--ease);
     will-change: translate;
   }
-  .door-photo {
-    right: auto;
-    left: round((var(--s) - 4px) / 2 - 0.8 * var(--s), 1px);
-    width: calc(1.6 * var(--s));
-    transition: translate 0.9s var(--ease);
+  .panel-door::before {
+    content: "";
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 4px;
+    background: var(--ink);
+    will-change: transform;
   }
-  /* past the panel's edges, so the shade is cut by the same clip as the photo and no unshaded hairline shows */
+  .panel-door .door-photo,
   .panel-door .door-dim,
   .panel-door::after {
-    inset: 0 -4px;
+    left: 2px;
+  }
+  .door-photo {
+    right: auto;
+    width: calc(1.6 * var(--s) + 2px);
+  }
+  /* aimed so the resting crop matches the old one: the box is 0.6 quarters plus the gap wider than what shows */
+  .door-photo img {
+    object-position: calc(var(--fx) * 100% - var(--fx) * (0.6 * var(--s) + 6px) + 2px) var(--fy);
+  }
+  /* the zoom grows from the hinge, so the photo never reaches past its own gap */
+  .panel-door img {
+    transform-origin: 0 50%;
   }
   .triptych:has(.panel-door:hover) .panel-door {
     translate: round(-0.2 * var(--j) * var(--s), 1px) 0;
@@ -581,14 +609,9 @@ textarea {
   .triptych .panel-door:hover ~ .panel-door {
     translate: round((0.8 - 0.2 * var(--j)) * var(--s), 1px) 0;
   }
-  .triptych:has(.panel-door:hover) .door-photo {
-    translate: round(-0.1 * var(--s), 1px) 0;
-  }
-  .triptych .panel-door:hover .door-photo {
-    translate: round(0.3 * var(--s), 1px) 0;
-  }
   /* sized to the narrowest a panel gets, so a name never slips under its neighbour or rewraps */
   .triptych .door-label {
+    left: calc(1.1rem + 4px);
     right: auto;
     width: calc(0.8 * var(--s) - 4px - 1.6rem);
   }
@@ -2092,7 +2115,8 @@ textarea {
   font-family: var(--row-font, var(--serif));
 }
 
-@media (max-width: 520px) {
+/* also on small desktops, where the hero's copy column is about as narrow as a phone and German ran under the photos */
+@media (max-width: 520px), (min-width: 901px) and (max-width: 999px) {
   /* dates, guests and the button each get a full row: long German labels fit */
   .search {
     grid-template-columns: 1fr;
