@@ -10,10 +10,10 @@
   },
   "dependencies": {
     "jose": "^6.2.13",
-    "next": "16.1.7",
+    "next": "16.4.3",
     "postgres": "^3.4.9",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
+    "react": "19.2.9",
+    "react-dom": "19.2.9",
     "resend": "^6.35.0",
     "zod": "^4.6.7"
   },
@@ -23,7 +23,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.1.7",
+    "eslint-config-next": "16.4.3",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

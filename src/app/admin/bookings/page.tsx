@@ -1,5 +1,6 @@
 import AdminNav from "@/components/AdminNav";
 import CopyButton from "@/components/CopyButton";
+import { requireAdmin } from "@/lib/admin-auth";
 import { APARTMENTS, apartmentList, isApartmentSlug } from "@/lib/apartments";
 import { listBookings } from "@/lib/bookings";
 import { SITE_URL } from "@/lib/site";
@@ -10,9 +11,9 @@ const d = (s: string) => new Intl.DateTimeFormat("ro-RO", { day: "numeric", mont
 const at = (t: Date) => new Intl.DateTimeFormat("ro-RO", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Bucharest" }).format(t);
 
 export default async function BookingsPage() {
+  await requireAdmin();
   const bookings = await listBookings();
   const key = process.env.ICAL_EXPORT_KEY;
-  const live = bookings.filter((b) => b.status === "paid" || (b.status === "pending" && b.hold_until > new Date()));
 
   return (
     <>
@@ -21,7 +22,7 @@ export default async function BookingsPage() {
         <section style={{ display: "grid", gap: "1rem" }}>
           <h1 className="display h3">Direct bookings</h1>
           <p className="muted">Paid and pending direct bookings. Booking.com reservations stay in the extranet; both block the website calendar.</p>
-          {live.length + bookings.length === 0 ? <p className="notice">No direct bookings yet.</p> : (
+          {bookings.length === 0 ? <p className="notice">No direct bookings yet.</p> : (
             <div style={{ overflowX: "auto" }}>
               <table className="bk-table">
                 <thead>

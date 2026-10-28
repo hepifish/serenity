@@ -22,3 +22,8 @@ export function range(a: ISODate, b: ISODate, lang: string) {
 export function mediumDate(d: ISODate, lang: string) {
   return new Intl.DateTimeFormat(lang, { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" }).format(new Date(d + "T00:00:00Z"));
 }
+
+/** Free text that ends up in a CSV cell or an email subject: no control characters, no line breaks. */
+export function oneLine(s: string) {
+  return s.replace(/[\u0000-\u001f\u007f]+/g, " ");
+}

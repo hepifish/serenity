@@ -38,15 +38,17 @@ export const dmSans = DM_Sans({
   subsets: ["latin", "latin-ext"],
 });
 
-// One display face per apartment, chosen from what is in the room.
+// One display face per apartment, chosen from what is in the room. Not
+// preloaded: each loads when its name is drawn, instead of on every page
+// competing with the hero photo.
 
 /** Film Studio: the serif of classic film title cards. */
-export const filmFont = Bodoni_Moda({ variable: "--font-film-studio", subsets: ["latin", "latin-ext"], style: ["normal", "italic"] });
+export const filmFont = Bodoni_Moda({ variable: "--font-film-studio", subsets: ["latin", "latin-ext"], style: ["normal", "italic"], preload: false });
 /** Gothic Chambers: letters cut in stone, like the vaults. */
-export const gothicFont = Cinzel({ variable: "--font-gothic-chambers", subsets: ["latin", "latin-ext"] });
+export const gothicFont = Cinzel({ variable: "--font-gothic-chambers", subsets: ["latin", "latin-ext"], preload: false });
 /** Art Station: mid-century geometry, the Futura of museum posters. */
-export const artFont = Jost({ variable: "--font-art-station", subsets: ["latin", "latin-ext"] });
+export const artFont = Jost({ variable: "--font-art-station", subsets: ["latin", "latin-ext"], preload: false });
 /** Pink Panther: flared, hand-cut capitals on a bouncing baseline, in the spirit of the films (not their trademarked logo). */
-export const pinkFont = Ribeye({ variable: "--font-pink-panther", subsets: ["latin"], weight: "400" });
+export const pinkFont = Ribeye({ variable: "--font-pink-panther", subsets: ["latin"], weight: "400", preload: false });
 
 export const apartmentFontVars = [filmFont, gothicFont, artFont, pinkFont].map((f) => f.variable).join(" ");

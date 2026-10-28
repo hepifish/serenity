@@ -334,6 +334,12 @@
   color: var(--err);
   border-color: var(--err);
 }
+/* paid, but the nights went to someone else first: needs Pati */
+.pill.conflict {
+  color: #fff;
+  background: var(--err);
+  border-color: var(--err);
+}
 .copy-row {
   display: grid;
   grid-template-columns: 150px 1fr auto;

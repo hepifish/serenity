@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { isAdminRequest } from "@/lib/admin-auth";
+import { adminDenied } from "@/lib/admin-auth";
 import { APARTMENT_SLUGS } from "@/lib/apartments";
 import { sql } from "@/lib/db";
 
@@ -14,7 +14,8 @@ const Body = z.object({
 
 /** The defaults of one apartment: everyday price, Friday/Saturday price, shortest stay, cleaning. */
 export async function POST(req: Request) {
-  if (!(await isAdminRequest(req))) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  const denied = adminDenied(req);
+  if (denied) return denied;
   const parsed = Body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "invalid" }, { status: 400 });
   const r = parsed.data;

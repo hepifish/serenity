@@ -8,7 +8,7 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
           <label htmlFor="pw">Password</label>
           <input id="pw" name="password" type="password" autoComplete="current-password" required autoFocus />
         </div>
-        {error ? <p className="error-text" role="alert">That password didn&apos;t work.</p> : null}
+        {error ? <p className="error-text" role="alert">{error === "limit" ? "Too many attempts. Try again in 10 minutes." : "That password didn't work."}</p> : null}
         <button className="btn block">Enter</button>
       </form>
     </main>

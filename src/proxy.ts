@@ -2,21 +2,19 @@ import { NextResponse, type NextRequest } from "next/server";
 import { DEFAULT_LOCALE, isLocale } from "@/i18n/config";
 import { ADMIN_COOKIE, isValidAdminToken } from "@/lib/admin-auth";
 
-// Two jobs: send visitors without a language prefix to the right one, and keep
-// everyone but Pati out of /admin.
-export async function proxy(req: NextRequest) {
+// Two jobs: send visitors without a language prefix to the right one, and turn
+// everyone but Pati away from /admin early. It is the first door only: every
+// admin page and route checks the cookie again itself.
+export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   if (pathname.startsWith("/admin")) {
     if (pathname === "/admin/login") return NextResponse.next();
-    if (await isValidAdminToken(req.cookies.get(ADMIN_COOKIE)?.value)) return NextResponse.next();
+    if (isValidAdminToken(req.cookies.get(ADMIN_COOKIE)?.value)) return NextResponse.next();
     const url = req.nextUrl.clone();
     url.pathname = "/admin/login";
     return NextResponse.redirect(url);
   }
-
-  const first = pathname.split("/")[1];
-  if (isLocale(first)) return NextResponse.next();
 
   const url = req.nextUrl.clone();
   url.pathname = `/${preferredLocale(req)}${pathname === "/" ? "" : pathname}`;
@@ -33,7 +31,8 @@ function preferredLocale(req: NextRequest) {
 }
 
 export const config = {
-  // Skip API routes, Next internals, the calendar feeds and any file with an extension.
-  matcher: ["/((?!api|_next|ical|dev|.*\\..*).*)"],
+  // Only what needs a decision: unprefixed paths and /admin. Localized pages
+  // (cached), API routes, Next internals, the calendar feeds and files skip it.
+  matcher: ["/((?!en(?:/|$)|ro(?:/|$)|de(?:/|$)|api|_next|ical|dev|.*\\..*).*)"],
 };
 

@@ -160,6 +160,8 @@ const ro: Dict = {
       calendar_unavailable: "Nu am putut confirma disponibilitatea acum. Încearcă din nou peste un minut.",
       payment_unavailable: "Pagina de plată nu s-a deschis. Nu s-a încasat nimic. Încearcă din nou.",
       no_price: "Apartamentul nu este încă deschis pentru rezervare directă în această perioadă. Scrie-ne.",
+      hold_limit: "Ai deja rezervări care așteaptă plata. Finalizează una sau încearcă din nou peste 20 de minute, când expiră.",
+      too_many: "Prea multe încercări de la această conexiune. Așteaptă câteva minute și încearcă din nou.",
       generic: "Ceva nu a mers. Nu s-a încasat nimic. Încearcă din nou.",
     } as Record<string, string>,
   },
@@ -276,7 +278,7 @@ const ro: Dict = {
     sending: "Se trimite…",
     doneTitle: "Check-in finalizat.",
     doneText: "Mulțumim. Totul este pregătit; codul cutiei cu cheia îl primești în ziua sosirii.",
-    errors: { invalid: "Te rugăm să verifici câmpurile marcate.", cnp: "CNP-ul nu pare corect. Verifică cele 13 cifre sau lasă câmpul gol.", generic: "Ceva nu a mers. Te rugăm să încerci din nou." } as Record<string, string>,
+    errors: { invalid: "Te rugăm să verifici câmpurile marcate.", too_many: "Prea multe încercări de la această conexiune. Așteaptă câteva minute și încearcă din nou.", cnp: "CNP-ul nu pare corect. Verifică cele 13 cifre sau lasă câmpul gol.", generic: "Ceva nu a mers. Te rugăm să încerci din nou." } as Record<string, string>,
   },
   footer: {
     tagline: "Patru camere. Un oraș. Multe povești.",

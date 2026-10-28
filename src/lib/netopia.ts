@@ -9,11 +9,20 @@ import { importSPKI, jwtVerify } from "jose";
  *
  * NETOPIA_MOCK=1 swaps Netopia for a local stand-in (src/app/dev/netopia) that
  * speaks the same protocol, so the full flow can be tested without credentials.
+ * Production ignores it.
  */
 
-const MOCK = process.env.NETOPIA_MOCK === "1";
-const SANDBOX = process.env.NETOPIA_SANDBOX !== "false";
-const BASE = SANDBOX ? "https://secure.sandbox.netopia-payments.com" : "https://secure.mobilpay.ro/pay";
+const PRODUCTION = process.env.VERCEL_ENV === "production";
+export const MOCK = process.env.NETOPIA_MOCK === "1" && !PRODUCTION;
+// Live unless sandbox is asked for by name. Sandbox in production would let the
+// public test card "pay", so it stops every payment instead.
+const SANDBOX = process.env.NETOPIA_SANDBOX === "true";
+function base() {
+  if (SANDBOX && PRODUCTION) throw new Error("NETOPIA_SANDBOX=true in production: set it to false");
+  return SANDBOX ? "https://secure.sandbox.netopia-payments.com" : "https://secure.mobilpay.ro/pay";
+}
+/** An IPN older than this is a replay, not a retry. */
+const IPN_MAX_AGE_S = 3 * 24 * 3600;
 
 export const PAID_STATUSES = new Set([3, 5]); // paid, confirmed
 export const PENDING_STATUSES = new Set([1, 2, 6, 14, 15]); // new, opened, pending, auth pending, 3DS
@@ -69,7 +78,7 @@ export async function startPayment(p: StartPayment): Promise<{ ntpId: string; pa
 
   const apiKey = process.env.NETOPIA_API_KEY;
   if (!apiKey) throw new Error("NETOPIA_API_KEY is not set");
-  const res = await fetch(`${BASE}/payment/card/start`, {
+  const res = await fetch(`${base()}/payment/card/start`, {
     method: "POST",
     headers: { Authorization: apiKey, "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -83,14 +92,11 @@ export async function startPayment(p: StartPayment): Promise<{ ntpId: string; pa
   return { ntpId: String(data.payment.ntpID), paymentUrl: url };
 }
 
+// Netopia's IPN key is public and lives in the repo: one source, same in every
+// environment (next.config.ts traces it into the IPN function).
 let publicKey: Promise<CryptoKey> | null = null;
 function netopiaPublicKey() {
-  if (!publicKey) {
-    const pem = MOCK
-      ? readFileSync(".netopia/mock-public-key.pem", "utf8")
-      : process.env.NETOPIA_PUBLIC_KEY?.replace(/\\n/g, "\n") ?? readFileSync(".netopia/netopia-ipn-public-key.pem", "utf8");
-    publicKey = importSPKI(pem, "RS512");
-  }
+  publicKey ??= importSPKI(readFileSync(MOCK ? ".netopia/mock-public-key.pem" : ".netopia/netopia-ipn-public-key.pem", "utf8"), "RS512");
   return publicKey;
 }
 
@@ -105,10 +111,13 @@ export type Ipn = {
  */
 export async function verifyIpn(rawBody: string, token: string | null): Promise<Ipn> {
   if (!token) throw new Error("Missing Verification-token");
+  base(); // refuses sandbox in production here too
   const { payload } = await jwtVerify(token, await netopiaPublicKey(), {
     algorithms: ["RS512"],
     issuer: "NETOPIA Payments",
   });
+  // jose's maxTokenAge would reject a token without iat; Netopia's docs do not promise one.
+  if (typeof payload.iat === "number" && Date.now() / 1000 - payload.iat > IPN_MAX_AGE_S) throw new Error("IPN token too old");
   const aud = Array.isArray(payload.aud) ? payload.aud[0] : payload.aud;
   if (aud !== posSignature()) throw new Error("IPN is for another POS");
   const digest = createHash("sha512").update(rawBody, "utf8").digest("base64");

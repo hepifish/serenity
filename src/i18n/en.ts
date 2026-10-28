@@ -148,6 +148,8 @@ const en = {
       calendar_unavailable: "We couldn't confirm availability just now. Please try again in a minute.",
       payment_unavailable: "The payment page did not open. Nothing was charged. Please try again.",
       no_price: "This apartment is not open for direct booking on these dates yet. Write to us.",
+      hold_limit: "You already have bookings waiting for payment. Complete one, or try again in 20 minutes, when they lapse.",
+      too_many: "Too many attempts from this connection. Please wait a few minutes and try again.",
       generic: "Something went wrong. Nothing was charged. Please try again.",
     } as Record<string, string>,
   },
@@ -264,7 +266,7 @@ const en = {
     sending: "Sending…",
     doneTitle: "You're checked in.",
     doneText: "Thank you. Everything is ready for you; the key box code arrives on your arrival day.",
-    errors: { invalid: "Please check the highlighted fields.", cnp: "This CNP does not look right. Check the 13 digits, or leave it empty.", generic: "Something went wrong. Please try again." } as Record<string, string>,
+    errors: { invalid: "Please check the highlighted fields.", too_many: "Too many attempts from this connection. Please wait a few minutes and try again.", cnp: "This CNP does not look right. Check the 13 digits, or leave it empty.", generic: "Something went wrong. Please try again." } as Record<string, string>,
   },
   footer: {
     tagline: "Four rooms. One city. Many stories.",

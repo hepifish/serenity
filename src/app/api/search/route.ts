@@ -23,7 +23,7 @@ export async function GET(req: Request) {
       if (error) return { slug, capacity, available: false, reason: error, minNights: rate.min_nights };
       const free = await isStayFree(slug, checkIn!, checkOut!).catch(() => false);
       if (!free) return { slug, capacity, available: false, reason: "taken" };
-      const q = await quote(slug, checkIn!, checkOut!, 1);
+      const q = await quote(slug, checkIn!, checkOut!, 1, rate);
       return { slug, capacity, available: true, nights: q!.nights, lodging: q!.lodging, cleaning: q!.cleaning, cityTax: q!.cityTax, total: q!.total };
     }),
   );
