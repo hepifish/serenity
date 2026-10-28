@@ -1,0 +1,46 @@
+/* The home search: its wait under the bar, and what a group should know in the results. */
+
+.together-note {
+  margin: 1rem 0 1.6rem;
+  max-width: 46rem;
+  color: var(--bone-2);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+.together-note strong {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.12rem;
+  color: var(--bone);
+  margin-right: 0.25rem;
+}
+
+.same-house {
+  display: inline-block;
+  margin-left: 0.75rem;
+  padding: 0.12rem 0.55rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--bone-2);
+  vertical-align: 0.15em;
+}
+
+/* the wait, under the search bar (HeroSearch.tsx) */
+.search-status .morph {
+  padding: 1rem 0 0.4rem;
+}
+
+/* focus is moved to the results heading for screen readers; it is not a control, so no ring */
+#results-title:focus {
+  outline: none;
+}
+
+/* when it is nudged into view on a phone, keep it clear of the bottom edge */
+.search-wait {
+  scroll-margin-bottom: 1.5rem;
+}

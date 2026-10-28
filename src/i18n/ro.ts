@@ -75,6 +75,7 @@ const ro: Dict = {
     add: "Adaugă",
     added: "Adăugat",
     selection: "Selecția ta",
+    together: "Veniți în grup?",
     needSeveral: (n: number) => `Niciun apartament nu găzduiește singur ${n} persoane. Adaugă două împreună: o singură rezervare, o singură plată.`,
     sleeps: (n: number) => `${n} locuri`,
     notEnough: (guests: number, cap: number) => `Ai ${cap} locuri pentru ${guests} persoane: mai adaugă un apartament.`,
@@ -249,6 +250,7 @@ const ro: Dict = {
       { q: "Există parcare?", a: "Da, gratuită: pe stradă, în fața casei, și un garaj mic, încuiat, în curte (loc limitat, motocicletele sunt binevenite). Spune-ne în observații dacă ai nevoie de garaj." },
       { q: "Apartamentele sunt în centrul vechi al Sibiului?", a: "Nu în interiorul zidurilor. Film Studio, Gothic Chambers și Art Station sunt pe Fundătura Lupeni 2, la 1,3 km de Piața Mare: cam 20 de minute pe jos, 10 până la zidurile cetății. Pink Panther este în vestul Sibiului, la circa 10 minute cu mașina de centrul vechi." },
       { q: "Ce apartament se potrivește unei familii sau unui grup?", a: "Pink Panther: două dormitoare și o canapea extensibilă pentru până la 6 persoane, bucătărie completă, mașină de spălat și parcare privată gratuită. Grupurile de până la 12 persoane pot rezerva împreună Film Studio, Gothic Chambers și Art Station, într-o singură rezervare și o singură plată; sunt în aceeași casă." },
+      { q: "Putem rezerva mai multe apartamente împreună?", a: "Da, într-o singură rezervare și o singură plată: alege datele, apoi adaugă apartamentele dorite. Film Studio, Gothic Chambers și Art Station sunt în aceeași casă, pe Fundătura Lupeni 2, ușă lângă ușă, așa că un grup de până la 12 persoane stă împreună. Pink Panther, pentru până la 6 persoane, e la aproximativ 5 km, în vestul Sibiului, cam 10 minute cu mașina." },
     ],
   },
   hosts: {
@@ -339,6 +341,9 @@ const ro: Dict = {
     ron: "lei",
     loading: "Se încarcă…",
     opening: "Se deschide ușa",
+    pending: ["Verificăm calendarele", "Întrebăm Booking.com și Airbnb", "Căutăm ușa potrivită pentru tine"],
+    sameHouse: "Aceeași casă",
+    houses: (house: string, apart: string) => `${house} sunt în aceeași casă, ușă lângă ușă. ${apart} e apartamentul nostru mai retras, la vreo 10 minute cu mașina.`,
   },
 };
 

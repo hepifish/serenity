@@ -63,6 +63,7 @@ const en = {
     add: "Add",
     added: "Added",
     selection: "Your selection",
+    together: "Travelling together?",
     needSeveral: (n: number) => `No single apartment sleeps ${n}. Add two together: one booking, one payment.`,
     sleeps: (n: number) => `sleeps ${n}`,
     notEnough: (guests: number, cap: number) => `Room for ${cap}, you are ${guests}: add another apartment.`,
@@ -238,6 +239,7 @@ const en = {
       { q: "Is there parking?", a: "Yes, free: on the street outside, and a small locked garage on the property (limited space, motorcycles welcome). Tell us in the note if you need the garage." },
       { q: "Are the apartments in Sibiu's old town?", a: "Not inside the walls. Film Studio, Gothic Chambers and Art Station are at Fundătura Lupeni 2, 1.3 km from Piața Mare: about 20 minutes on foot, 10 to the old citadel walls. Pink Panther is in west Sibiu, about 10 minutes by car from the old town." },
       { q: "Which apartment suits a family or a group?", a: "Pink Panther: two bedrooms and a sofa bed for up to 6, a full kitchen, a washing machine and free private parking. Groups of up to 12 can book Film Studio, Gothic Chambers and Art Station together, in one booking and one payment; they share the same house." },
+      { q: "Can we book several apartments together?", a: "Yes, in one booking and one payment: choose your dates, then add the apartments you want. Film Studio, Gothic Chambers and Art Station share one house at Fundătura Lupeni 2, door to door, so a group of up to 12 stays together. Pink Panther, for up to 6, is about 5 km away in west Sibiu, around 10 minutes by car." },
     ],
   },
   hosts: {
@@ -328,6 +330,9 @@ const en = {
     ron: "RON",
     loading: "Loading…",
     opening: "Opening the door",
+    pending: ["Checking the calendars", "Asking Booking.com and Airbnb", "Finding the right door for you"],
+    sameHouse: "Same house",
+    houses: (house: string, apart: string) => `${house} share one house, door to door. ${apart} is our quiet one, about 10 minutes away by car.`,
   },
 };
 

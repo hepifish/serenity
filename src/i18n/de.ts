@@ -73,6 +73,7 @@ const de: Dict = {
     add: "Hinzufügen",
     added: "Hinzugefügt",
     selection: "Ihre Auswahl",
+    together: "Gemeinsam unterwegs?",
     needSeveral: (n: number) => `Keine Wohnung allein bietet Platz für ${n} Personen. Kombinieren Sie zwei: eine Buchung, eine Zahlung.`,
     sleeps: (n: number) => `${n} Schlafplätze`,
     notEnough: (guests: number, cap: number) => `Platz für ${cap}, Sie sind ${guests}: bitte eine weitere Wohnung hinzufügen.`,
@@ -247,6 +248,7 @@ const de: Dict = {
       { q: "Gibt es Parkplätze?", a: "Ja, kostenlos: auf der Straße vor dem Haus und in einer kleinen abschließbaren Garage auf dem Grundstück (begrenzter Platz, Motorräder willkommen). Geben Sie in der Notiz an, wenn Sie die Garage brauchen." },
       { q: "Liegen die Wohnungen in der Altstadt von Hermannstadt?", a: "Nicht innerhalb der Stadtmauern. Film Studio, Gothic Chambers und Art Station liegen in der Fundătura Lupeni 2, 1,3 km vom Großen Ring: etwa 20 Minuten zu Fuß, 10 bis zur alten Stadtmauer. Pink Panther liegt im Westen von Hermannstadt, etwa 10 Autominuten von der Altstadt." },
       { q: "Welche Wohnung passt für Familien oder Gruppen?", a: "Pink Panther: zwei Schlafzimmer und ein Schlafsofa für bis zu 6 Gäste, voll ausgestattete Küche, Waschmaschine und kostenloser Privatparkplatz. Gruppen bis 12 Personen buchen Film Studio, Gothic Chambers und Art Station zusammen, in einer Buchung mit einer Zahlung; sie liegen im selben Haus." },
+      { q: "Können wir mehrere Wohnungen zusammen buchen?", a: "Ja, mit einer Buchung und einer Zahlung: Wählen Sie Ihre Daten und fügen Sie dann die gewünschten Wohnungen hinzu. Film Studio, Gothic Chambers und Art Station liegen im selben Haus in der Fundătura Lupeni 2, Tür an Tür, so bleibt eine Gruppe von bis zu 12 Personen beisammen. Pink Panther für bis zu 6 Personen liegt etwa 5 km entfernt im Westen von Hermannstadt, rund 10 Autominuten." },
     ],
   },
   hosts: {
@@ -337,6 +339,9 @@ const de: Dict = {
     ron: "RON",
     loading: "Wird geladen…",
     opening: "Die Tür öffnet sich",
+    pending: ["Wir prüfen die Kalender", "Wir gleichen Booking.com und Airbnb ab", "Wir suchen die richtige Tür für Sie"],
+    sameHouse: "Selbes Haus",
+    houses: (house: string, apart: string) => `${house} liegen im selben Haus, Tür an Tür. ${apart} ist unsere ruhige Wohnung, etwa 10 Autominuten entfernt.`,
   },
 };
 

@@ -1,36 +1,56 @@
 "use client";
 
 import AptName from "./AptName";
-import MorphLoader from "./MorphLoader";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { searchStore, useSearch, type Result } from "@/lib/search-store";
 import { money, range } from "@/lib/format";
 import { getDict } from "@/i18n";
+import "./search.css";
 import type { Locale } from "@/i18n/config";
 
-export type AptCard = { slug: string; name: string; number: string; accent: string; tagline: string; image: { src: string; w: number; h: number } | null };
+export type AptCard = {
+  slug: string;
+  name: string;
+  number: string;
+  accent: string;
+  tagline: string;
+  image: { src: string; w: number; h: number } | null;
+  /** the front door it shares (lat,lng): apartments with the same one are in one house */
+  house: string;
+};
 
 /**
  * The answer to the hero search, right under it: every apartment for the
  * chosen dates, free ones first. One can be booked straight away, or several
  * picked and booked together in one payment.
  */
-export default function SearchResults({ lang, apartments }: { lang: Locale; apartments: AptCard[] }) {
+type Props = {
+  lang: Locale;
+  apartments: AptCard[];
+  /** which apartments share a house and which is apart, in one friendly sentence */
+  houses: string;
+};
+
+export default function SearchResults({ lang, apartments, houses }: Props) {
   const t = getDict(lang);
   const r = t.results;
   const s = useSearch();
   const ref = useRef<HTMLElement>(null);
+  const heading = useRef<HTMLHeadingElement>(null);
   const shown = !!(s.results && s.checkIn && s.checkOut);
 
-  // Bring the answer into view the moment it arrives.
+  // Bring the answer into view the moment it arrives, and take screen readers to it.
   useEffect(() => {
-    if (shown && !s.loading) ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (!shown || s.loading) return;
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    ref.current?.scrollIntoView({ behavior: still ? "auto" : "smooth", block: "start" });
+    heading.current?.focus({ preventScroll: true });
   }, [shown, s.loading, s.results]);
 
-  if (!shown && !s.loading) return null;
-  if (!shown) return <section className="results-panel" aria-busy="true"><div className="wrap"><MorphLoader size={56} srLabel={t.common.loading} /></div></section>;
+  // while the first answer is on its way, the hero shows the wait (HeroSearch)
+  if (!shown) return null;
 
   const list = apartments
     .map((a) => ({ a, res: s.results![a.slug] as Result | undefined }))
@@ -39,6 +59,10 @@ export default function SearchResults({ lang, apartments }: { lang: Locale; apar
   const free = list.filter((x) => x.res!.available);
   const biggest = Math.max(...list.map((x) => x.res!.capacity));
   const needsSeveral = s.guests > biggest;
+  // a group, or several apartments picked: say which ones are under one roof
+  const asGroup = needsSeveral || s.picked.length > 1;
+  const doorCount = new Map<string, number>();
+  apartments.forEach((a) => doorCount.set(a.house, (doorCount.get(a.house) ?? 0) + 1));
 
   const picked = free.filter((x) => s.picked.includes(x.a.slug));
   const pickedCap = picked.reduce((n, x) => n + x.res!.capacity, 0);
@@ -53,7 +77,7 @@ export default function SearchResults({ lang, apartments }: { lang: Locale; apar
         <div className="results-head">
           <div>
             <p className="eyebrow">{r.title}</p>
-            <h2 id="results-title" className="display h3">
+            <h2 id="results-title" className="display h3" ref={heading} tabIndex={-1}>
               {range(s.checkIn!, s.checkOut!, lang)}
               {nights ? <span className="muted"> · {r.nights(nights)}</span> : null}
               <span className="muted"> · {t.search.guest(s.guests)}</span>
@@ -66,6 +90,11 @@ export default function SearchResults({ lang, apartments }: { lang: Locale; apar
         </div>
 
         {free.length === 0 ? <p className="notice">{r.noneFree}</p> : needsSeveral ? <p className="notice">{r.needSeveral(s.guests)}</p> : null}
+        {asGroup ? (
+          <p className="together-note">
+            <strong>{r.together}</strong> {houses}
+          </p>
+        ) : null}
 
         <ul className="results-cards">
           {list.map(({ a, res }) => {
@@ -76,7 +105,10 @@ export default function SearchResults({ lang, apartments }: { lang: Locale; apar
                   {a.image ? <Image src={a.image.src} alt="" width={a.image.w} height={a.image.h} sizes="(max-width: 700px) 100vw, 25vw" /> : <span className="rcard-blank" />}
                 </Link>
                 <div className="rcard-body">
-                  <p className="apt-num" style={{ color: a.accent }}>{a.number}</p>
+                  <p className="apt-num" style={{ color: a.accent }}>
+                    {a.number}
+                    {asGroup && (doorCount.get(a.house) ?? 0) > 1 ? <span className="same-house">{t.common.sameHouse}</span> : null}
+                  </p>
                   <h3 className="rcard-name" style={{ fontFamily: `var(--font-${a.slug}), var(--serif)` }}>
                     <Link href={`/${lang}/apartments/${a.slug}?${q}`}><AptName slug={a.slug} name={a.name} /></Link>
                   </h3>
