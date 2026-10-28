@@ -67,7 +67,7 @@ export default function CheckinForm({ lang, apartments, prefill }: Props) {
         <legend><span>01</span>{t.stay}</legend>
         <div className="field">
           <span className="search-label">{t.source}</span>
-          <div className="choice" role="radiogroup" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
+          <div className="choice choice-3" role="radiogroup">
             {(["direct", "booking", "other"] as const).map((s) => (
               <label key={s}>
                 <input type="radio" name="source" value={s} defaultChecked={(prefill.source ?? "booking") === s} required />
@@ -90,7 +90,7 @@ export default function CheckinForm({ lang, apartments, prefill }: Props) {
             </select>
           </div>
         </div>
-        <div className="form-row" style={{ gridTemplateColumns: "2fr 1fr 1fr" }}>
+        <div className="form-row row-211">
           <div className="field">
             <label htmlFor="arrival">{t.arrival}</label>
             <input id="arrival" name="arrival" type="date" required defaultValue={prefill.arrival} />
@@ -127,7 +127,7 @@ export default function CheckinForm({ lang, apartments, prefill }: Props) {
           <label htmlFor="street">{t.street}</label>
           <input id="street" name="street" required minLength={3} maxLength={200} autoComplete="street-address" />
         </div>
-        <div className="form-row" style={{ gridTemplateColumns: "2fr 1fr" }}>
+        <div className="form-row row-21">
           <div className="field">
             <label htmlFor="city">{t.city}</label>
             <input id="city" name="city" required minLength={2} maxLength={100} autoComplete="address-level2" />

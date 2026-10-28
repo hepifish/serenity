@@ -1,4 +1,5 @@
 import Image from "next/image";
+import AptName from "./AptName";
 import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import { apartmentCopy } from "@/i18n/apartments";
@@ -19,7 +20,7 @@ export default function HeroTriptych({ lang }: { lang: Locale }) {
             <Image src={photo.src} alt={apartmentCopy(lang, a.slug).alts[a.heroIndex ?? 1] ?? a.name} fill priority={i === 0} sizes="(max-width: 900px) 60vw, 40vw" style={{ objectFit: "cover", objectPosition: a.heroFocus ?? "center" }} />
             <span className="door-label">
               <small>{a.number}</small>
-              <span className="door-name" style={{ fontFamily: `var(--font-${a.slug})` }}>{a.name}</span>
+              <span className="door-name" style={{ fontFamily: `var(--font-${a.slug})` }}><AptName slug={a.slug} name={a.name} /></span>
             </span>
           </Link>
         );

@@ -1,4 +1,4 @@
-import { Bodoni_Moda, Cinzel, Cormorant_Garamond, DM_Sans, Jost, Righteous } from "next/font/google";
+import { Bodoni_Moda, Cinzel, Cormorant_Garamond, DM_Sans, Jost, Ribeye } from "next/font/google";
 
 // Declared once and shared by the site and the admin layouts.
 export const cormorant = Cormorant_Garamond({
@@ -22,7 +22,7 @@ export const filmFont = Bodoni_Moda({ variable: "--font-film-studio", subsets: [
 export const gothicFont = Cinzel({ variable: "--font-gothic-chambers", subsets: ["latin", "latin-ext"] });
 /** Art Station: mid-century geometry, the Futura of museum posters. */
 export const artFont = Jost({ variable: "--font-art-station", subsets: ["latin", "latin-ext"] });
-/** Pink Panther: rounded sixties pop, witty but grown-up. */
-export const pinkFont = Righteous({ variable: "--font-pink-panther", subsets: ["latin", "latin-ext"], weight: "400" });
+/** Pink Panther: flared, hand-cut capitals on a bouncing baseline, in the spirit of the films (not their trademarked logo). */
+export const pinkFont = Ribeye({ variable: "--font-pink-panther", subsets: ["latin"], weight: "400" });
 
 export const apartmentFontVars = [filmFont, gothicFont, artFont, pinkFont].map((f) => f.variable).join(" ");

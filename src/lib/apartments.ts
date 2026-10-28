@@ -21,6 +21,8 @@ export type Apartment = {
   /** which photo stands for the apartment in the home hero, and where to aim the crop */
   heroIndex?: number;
   heroFocus?: string;
+  /** the photo behind the title on the apartment's own page, when not the first */
+  pageHeroIndex?: number;
   /** listed here but not bookable online yet (no calendar or photos) */
   comingSoon?: boolean;
   icalEnv: string;
@@ -52,8 +54,8 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
     beds: "queen + sofa bed",
     sizeM2: 45,
     icalEnv: "BOOKING_ICAL_FILM",
-    heroIndex: 1,
-    heroFocus: "50% 30%",
+    heroIndex: 0,
+    heroFocus: "55% 40%",
     bookingUrl: BOOKING_PAGE,
     gallery: img("film", ["Serenity2024-29", "Serenity2024-37", "Serenity2024-36", "Serenity2024-34", "Serenity2024-33", "Serenity2024-35", "Serenity2024-39", "Serenity2024-40", "Serenity2024-59", "Serenity2024-38", "Serenity2024-32", "Serenity2024-58", "Serenity2024-41", "Serenity2024-42", "Serenity2024-30", "Serenity2024-31", "Serenity2024-27", "Serenity2024-28"]),
   },
@@ -82,8 +84,8 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
     beds: "queen + sofa bed",
     sizeM2: 45,
     icalEnv: "BOOKING_ICAL_ART",
-    heroIndex: 1,
-    heroFocus: "50% 35%",
+    heroIndex: 0,
+    heroFocus: "64% 55%",
     bookingUrl: BOOKING_PAGE,
     gallery: img("art", ["Serenity2024-56", "Serenity2024-43", "Serenity2024-03", "Serenity2024-04", "Serenity2024-08", "Serenity2024-54", "Serenity2024-51", "Serenity2024-05", "Serenity2024-12", "Serenity2024-55", "Serenity2024-50", "Serenity2024-06", "Serenity2024-07", "Serenity2024-52", "Serenity2024-53", "Serenity2024-02", "Serenity2024-01", "Serenity2024-09", "Serenity2024-10", "Serenity2024-11"]),
   },
@@ -97,8 +99,9 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
     beds: "2 king + sofa bed",
     sizeM2: 56,
     icalEnv: "BOOKING_ICAL_PINK",
-    heroIndex: 0,
-    heroFocus: "18% 30%",
+    heroIndex: 1,
+    heroFocus: "50% 45%",
+    pageHeroIndex: 2,
     bookingUrl: "https://www.booking.com/hotel/ro/feel-like-home-pink-panther-apartment.html",
     gallery: img("pink", ["pink-01", "pink-03", "pink-10", "pink-19", "pink-02", "pink-09", "pink-06", "pink-04", "pink-05", "pink-07",
       "pink-08", "pink-11", "pink-12", "pink-18", "pink-16", "pink-17", "pink-13", "pink-14", "pink-15", "pink-20", "pink-21"]),

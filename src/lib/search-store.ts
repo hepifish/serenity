@@ -61,7 +61,8 @@ export const searchStore = {
       const res = await fetch(`/api/search?in=${checkIn}&out=${checkOut}&guests=${guests}`);
       const data: { results: Result[] } = await res.json();
       const results = Object.fromEntries(data.results.map((r) => [r.slug, r]));
-      set({ results, loading: false, picked: state.picked.filter((p) => results[p]?.available) });
+      // a new search is a new question: earlier picks do not carry over
+      set({ results, loading: false, picked: [] });
     } catch {
       set({ loading: false, results: null });
     }

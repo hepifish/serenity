@@ -57,7 +57,7 @@ const de: Dict = {
     taken: "An einigen dieser Nächte belegt",
     total: "gesamt",
     nights: (n: number) => naechte(n),
-    choose: "Diese Wohnung buchen",
+    choose: "Buchen",
     reasons: {
       taken: "An einigen dieser Nächte bereits gebucht",
       min_nights: "Erfordert einen längeren Aufenthalt",

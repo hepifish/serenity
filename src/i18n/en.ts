@@ -47,7 +47,7 @@ const en = {
     taken: "Taken on some of these nights",
     total: "total",
     nights: (n: number) => (n === 1 ? "1 night" : `${n} nights`),
-    choose: "Book this one",
+    choose: "Book",
     reasons: {
       taken: "Already booked on some of these nights",
       min_nights: "Needs a longer stay",

@@ -1,5 +1,17 @@
 [
   {
+    "src": "/images/sibiu/10-piata-mare-blue.webp",
+    "w": 2400,
+    "h": 1600,
+    "alt_en": "Piața Mare in Sibiu at blue hour, the Brukenthal Palace and the Old Town Hall glowing under a deep blue sky",
+    "alt_ro": "Piața Mare din Sibiu la ora albastră, Palatul Brukenthal și Primăria veche luminate sub un cer albastru adânc",
+    "alt_de": "Der Große Ring in Hermannstadt zur blauen Stunde, Brukenthal-Palais und altes Rathaus warm beleuchtet unter tiefblauem Himmel",
+    "author": "Photopro Pro (Panoramio)",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Piata_Sfatului_-_Sibiu_-_panoramio.jpg"
+  },
+  {
     "src": "/images/sibiu/01-eyes-night.webp",
     "w": 2400,
     "h": 1800,
@@ -12,30 +24,6 @@
     "source": "https://commons.wikimedia.org/wiki/File:ROM_Sibiu,_Strada_Ocnei_0004.jpg"
   },
   {
-    "src": "/images/sibiu/02-piata-mare.webp",
-    "w": 2400,
-    "h": 1600,
-    "alt_en": "Piața Mare at blue hour, the Brukenthal Palace and the lit facade of Sibiu City Hall framing the cobbled Large Square",
-    "alt_ro": "Piața Mare la ora albastră, cu Palatul Brukenthal și fațada luminată a Primăriei Sibiu încadrând piața pavată",
-    "alt_de": "Der Große Ring zur blauen Stunde, das Brukenthal-Palais und die beleuchtete Fassade des Rathauses von Hermannstadt rahmen den gepflasterten Platz",
-    "author": "Sergey Norin",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "source": "https://commons.wikimedia.org/wiki/File:Sibiu_(15257629580).jpg"
-  },
-  {
-    "src": "/images/sibiu/03-skyline.webp",
-    "w": 2400,
-    "h": 1600,
-    "alt_en": "View from the Council Tower over Piața Mică and the red tiled roofs of the Upper Town, the spire of the Lutheran Cathedral rising above them",
-    "alt_ro": "Vedere din Turnul Sfatului peste Piața Mică și acoperișurile roșii ale Orașului de Sus, cu turla Catedralei Evanghelice înălțându-se deasupra",
-    "alt_de": "Blick vom Ratturm über den Kleinen Ring und die roten Ziegeldächer der Oberstadt, darüber der Turm der Evangelischen Stadtpfarrkirche",
-    "author": "Antony Stanley",
-    "license": "CC BY-SA 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-    "source": "https://commons.wikimedia.org/wiki/File:Sibiu_Rooftops,_Romania_(8136341762).jpg"
-  },
-  {
     "src": "/images/sibiu/04-bridge-of-lies.webp",
     "w": 2400,
     "h": 1800,
@@ -46,6 +34,30 @@
     "license": "CC BY 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
     "source": "https://commons.wikimedia.org/wiki/File:ROM_Sibiu,_Pia%C8%9Ba_Mic%C4%83_0019.jpg"
+  },
+  {
+    "src": "/images/sibiu/11-roofs-mountains.webp",
+    "w": 2400,
+    "h": 1350,
+    "alt_en": "Piața Mare and the rooftops of Sibiu under a stormy sky, with the Făgăraș mountains on the horizon",
+    "alt_ro": "Piața Mare și acoperișurile Sibiului sub un cer de furtună, cu Munții Făgăraș la orizont",
+    "alt_de": "Der Große Ring und die Dächer von Hermannstadt unter Gewitterhimmel, am Horizont das Fogarascher Gebirge",
+    "author": "Jan Pešula",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Sibiu_panorama_from_Turnul_Scarii_Aurarilor.jpg"
+  },
+  {
+    "src": "/images/sibiu/12-roof-eyes-snow.webp",
+    "w": 2400,
+    "h": 801,
+    "alt_en": "Snow-dusted tiled rooftops of Sibiu's old town with eyelid dormers, seen from the Council Tower",
+    "alt_ro": "Acoperișuri de țiglă ale orașului vechi din Sibiu, cu lucarne în formă de ochi, sub un strat subțire de zăpadă, văzute din Turnul Sfatului",
+    "alt_de": "Leicht verschneite Ziegeldächer der Hermannstädter Altstadt mit Augengauben, vom Ratturm aus gesehen",
+    "author": "Paul Colin Hennig",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Rooftops_of_Sibiu_seen_from_the_Council_Tower_(2023).jpg"
   },
   {
     "src": "/images/sibiu/05-christmas.webp",

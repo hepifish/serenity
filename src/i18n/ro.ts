@@ -59,7 +59,7 @@ const ro: Dict = {
     taken: "Ocupat în unele dintre aceste nopți",
     total: "total",
     nights: (n: number) => nopti(n),
-    choose: "Rezervă acest apartament",
+    choose: "Rezervă",
     reasons: {
       taken: "Deja rezervat în unele dintre aceste nopți",
       min_nights: "Necesită un sejur mai lung",

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import AptName from "@/components/AptName";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -75,11 +76,14 @@ export default async function ApartmentPage({ params }: Params) {
       <Reveal />
       <main id="main" className={`theme-${slug}`}>
         <section className="apt-hero" style={a.gallery[0] ? undefined : { background: "radial-gradient(120% 90% at 30% 20%, #4a2738 0%, #2a1621 45%, var(--ink) 100%)" }}>
-          {a.gallery[0] ? <Image src={a.gallery[0].src} alt={photos[0].alt} fill priority sizes="100vw" style={{ objectFit: "cover", objectPosition: a.heroFocus ?? "center", zIndex: -1 }} /> : null}
+          {a.gallery.length ? (() => {
+            const h = a.pageHeroIndex ?? 0;
+            return <Image src={a.gallery[h].src} alt={photos[h].alt} fill priority sizes="100vw" style={{ objectFit: "cover", objectPosition: "center 45%", zIndex: -1 }} />;
+          })() : null}
           <div className="wrap">
             <nav className="crumbs" aria-label="Breadcrumb"><Link href={`/${lang}#apartments`}>← {t.apartment.back}</Link></nav>
             <p className="eyebrow">{a.number} · {c.tagline}</p>
-            <h1 className="display h1">{a.name}</h1>
+            <h1 className="display h1"><AptName slug={slug} name={a.name} /></h1>
             <p className="lead" style={{ color: "var(--bone)" }}>{c.intro}</p>
             {!a.comingSoon ? (
               <ul className="facts">

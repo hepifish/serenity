@@ -1,5 +1,6 @@
 "use client";
 
+import AptName from "./AptName";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
@@ -76,7 +77,7 @@ export default function SearchResults({ lang, apartments }: { lang: Locale; apar
                 <div className="rcard-body">
                   <p className="apt-num" style={{ color: a.accent }}>{a.number}</p>
                   <h3 className="rcard-name" style={{ fontFamily: `var(--font-${a.slug}), var(--serif)` }}>
-                    <Link href={`/${lang}/apartments/${a.slug}?${q}`}>{a.name}</Link>
+                    <Link href={`/${lang}/apartments/${a.slug}?${q}`}><AptName slug={a.slug} name={a.name} /></Link>
                   </h3>
                   <p className="muted rcard-tag">{a.tagline} · {t.apartments.upTo(res!.capacity)}</p>
                   {res!.available ? (
