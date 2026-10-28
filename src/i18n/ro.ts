@@ -236,7 +236,7 @@ const ro: Dict = {
     eyebrow: "Întrebări",
     title: "Înainte să vii",
     items: [
-      { q: "Unde sunt exact apartamentele?", a: "Pe Fundătura Lupeni 2, Sibiu, pe o stradă liniștită la 1,3 km de Piața Mare: cam 20 de minute pe jos, 10 până la zidurile cetății vechi. Gara e la 900 m, aeroportul la 5 km. Pink Panther este în Magnolia Residence, în partea de vest a Sibiului, la circa 10 minute cu mașina de centrul vechi, cu parcare privată gratuită." },
+      { q: "Unde sunt exact apartamentele?", a: "Pe Fundătura Lupeni 2, Sibiu, pe o stradă liniștită la 1,3 km de Piața Mare: cam 20 de minute pe jos, 10 până la zidurile cetății vechi. Gara e la 600 m, 8 minute pe jos, aeroportul la 5 km. Pink Panther este în Magnolia Residence, în partea de vest a Sibiului, la circa 10 minute cu mașina de centrul vechi, cu parcare privată gratuită." },
       { q: "Este mai ieftin să rezerv direct?", a: "Da. Booking.com ne ia un comision pentru fiecare sejur. Când rezervi aici, economia ajunge la tine, așa că aceleași nopți costă mai puțin." },
       { q: "Pot plăti cu cardul de vacanță?", a: "Da. Acceptăm carduri de vacanță Edenred, Up și Pluxee prin NETOPIA Payments, la același preț ca un card obișnuit." },
       { q: "De ce există o taxă turistică separată?", a: "Din 2026, Sibiul aplică taxa specială pentru promovarea turistică, de 2% din valoarea cazării (HCL 462/2025). O încasăm și o virăm orașului. O afișăm pe un rând separat ca să vezi exact ce este." },

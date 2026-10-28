@@ -234,7 +234,7 @@ const de: Dict = {
     eyebrow: "Fragen",
     title: "Bevor Sie anreisen",
     items: [
-      { q: "Wo genau liegen die Wohnungen?", a: "In der Fundătura Lupeni 2 in Sibiu (Hermannstadt), in einer ruhigen Straße 1,3 km vom Großen Ring (Piața Mare): etwa 20 Minuten zu Fuß, 10 bis zur alten Stadtmauer. Der Bahnhof ist 900 m entfernt, der Flughafen 5 km. Pink Panther liegt in der Magnolia Residence am Westrand von Sibiu, etwa 10 Autominuten von der Altstadt, mit kostenlosem Privatparkplatz." },
+      { q: "Wo genau liegen die Wohnungen?", a: "In der Fundătura Lupeni 2 in Sibiu (Hermannstadt), in einer ruhigen Straße 1,3 km vom Großen Ring (Piața Mare): etwa 20 Minuten zu Fuß, 10 bis zur alten Stadtmauer. Der Bahnhof ist 600 m entfernt, 8 Minuten zu Fuß, der Flughafen 5 km. Pink Panther liegt in der Magnolia Residence am Westrand von Sibiu, etwa 10 Autominuten von der Altstadt, mit kostenlosem Privatparkplatz." },
       { q: "Ist eine Direktbuchung günstiger?", a: "Ja. Booking.com berechnet uns für jeden Aufenthalt eine Provision. Wenn Sie hier buchen, geben wir diese Ersparnis weiter, und dieselben Nächte kosten weniger." },
       { q: "Kann ich mit einer rumänischen Urlaubskarte (card de vacanță) bezahlen?", a: "Ja. Wir akzeptieren Urlaubskarten von Edenred, Up und Pluxee über NETOPIA Payments, zum gleichen Preis wie mit einer normalen Karte." },
       { q: "Warum gibt es eine separate Tourismusabgabe?", a: "Seit 2026 erhebt Hermannstadt eine Tourismusabgabe von 2 % des Übernachtungspreises (HCL 462/2025). Wir ziehen sie ein und führen sie an die Stadt ab. Wir zeigen sie in einer eigenen Zeile, damit Sie genau sehen, was sie ist." },
