@@ -97,7 +97,7 @@ export default async function ApartmentPage({ params }: Params) {
         <section className="apt-hero" style={a.gallery[0] ? undefined : { background: "radial-gradient(120% 90% at 30% 20%, #4a2738 0%, #2a1621 45%, var(--ink) 100%)" }}>
           {a.gallery.length ? (() => {
             const h = a.pageHeroIndex ?? 0;
-            return <Image src={a.gallery[h].src} alt={photos[h].alt} fill priority sizes="100vw" style={{ objectFit: "cover", objectPosition: "center 45%", zIndex: -1 }} />;
+            return <Image src={a.gallery[h].src} alt={photos[h].alt} fill preload fetchPriority="high" sizes="100vw" style={{ objectFit: "cover", objectPosition: "center 45%", zIndex: -1 }} />;
           })() : null}
           <div className="wrap">
             <nav className="crumbs" aria-label="Breadcrumb"><Link href={`/${lang}#apartments`}>← {t.apartment.back}</Link></nav>

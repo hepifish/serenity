@@ -27,6 +27,6 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
       // arrivals whose season or special date asks for another minimum stay
       minStay: Object.fromEntries(rules.filter((r) => r.minNights !== rate?.min_nights).map((r) => [r.night, r.minNights])),
     },
-    { headers: { "Cache-Control": "no-store" } },
+    { headers: { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" } },
   );
 }

@@ -46,7 +46,7 @@ export default async function BookPage({ params, searchParams }: Props) {
             <CheckoutForm lang={lang} slugs={slugs} checkIn={q.in!} checkOut={q.out!} guests={guests} total={total} />
             <aside className="checkout-aside" aria-label={t.checkout.stay}>
               {slugs.length === 1 && single?.gallery[0] ? (
-                <Image src={single.gallery[0].src} alt="" width={single.gallery[0].w} height={single.gallery[0].h} sizes="380px" />
+                <Image src={single.gallery[0].src} alt="" width={single.gallery[0].w} height={single.gallery[0].h} sizes="380px" preload fetchPriority="high" />
               ) : (
                 <div className="aside-strip">
                   {slugs.map((s) => APARTMENTS[s].gallery[0] && <Image key={s} src={APARTMENTS[s].gallery[0].src} alt="" width={APARTMENTS[s].gallery[0].w} height={APARTMENTS[s].gallery[0].h} sizes="200px" />)}
