@@ -228,7 +228,7 @@ const toD = (cs) => `M${pt(cs[0].p0)}` + cs.map((c) => `C${pt(c.c1)} ${pt(c.c2)}
 
 export const MARKS = Object.fromEntries(ORDER.map((s) => [s, toD(centre(normalise(toCubics(SHAPES[s]))))]));
 
-const ACCENT = { "film-studio": "#D9A93B", "gothic-chambers": "#B5475F", "art-station": "#D0503C", "pink-panther": "#E39AB4" };
+const ACCENT = { "film-studio": "#D9A93B", "gothic-chambers": "#8F6BB0", "art-station": "#C8312C", "pink-panther": "#E39AB4" };
 
 if (process.argv.includes("--json")) {
   console.log(JSON.stringify(MARKS));

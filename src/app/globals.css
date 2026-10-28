@@ -2040,13 +2040,13 @@ textarea {
 }
 .theme-gothic-chambers {
   --display: var(--font-gothic-chambers);
-  --accent: #b5475f; /* wine */
+  --accent: #8f6bb0; /* stained-glass amethyst */
   --gold: #d9a35b; /* candlelight */
-  --tint: #4a1e2b;
+  --tint: #2e1d40; /* aubergine under the vaults */
 }
 .theme-art-station {
   --display: var(--font-art-station);
-  --accent: #d0503c; /* the red sofa */
+  --accent: #c8312c; /* the red sofa */
   --gold: #e0b45a;
   --tint: #2c4a3a; /* Rousseau's jungle */
 }
