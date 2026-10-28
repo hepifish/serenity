@@ -56,7 +56,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           <div className="hero-copy">
             <p className="eyebrow rv">{t.hero.eyebrow}</p>
             <h1 className="display h1 rv d1">
-              <span>{t.hero.title}</span> <em>{t.hero.titleEm}</em>
+              <span>{t.hero.title.split(/(\S+-\S+)/).map((w, i) => (i % 2 ? <span key={i} className="nobr">{w}</span> : w))}</span> <em>{t.hero.titleEm}</em>
             </h1>
             <p className="lead rv d2">{t.hero.lead}</p>
             <div className="rv d3" style={{ width: "100%" }}>

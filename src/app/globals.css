@@ -39,7 +39,7 @@
   --eye-lid: #e0bc80;
   --window: #1c1420;
 
-  --serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --serif: var(--font-circumflex), var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
   --sans: var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --gutter: clamp(1rem, 4vw, 3.5rem);
@@ -451,9 +451,13 @@ textarea {
   font-size: clamp(3.2rem, 6.6vw, 6.6rem);
   line-height: 0.98;
 }
-.hero .h1 span,
-.hero .h1 em {
+.hero .h1 > span,
+.hero .h1 > em {
   display: block;
+}
+/* "într-o" and friends: a hyphenated word never breaks at its hyphen */
+.nobr {
+  white-space: nowrap;
 }
 .hero .lead {
   max-width: 32rem;
