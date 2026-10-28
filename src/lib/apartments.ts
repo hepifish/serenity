@@ -215,6 +215,13 @@ export function places(): Place[] {
   return [...byDoor.values()];
 }
 
+/** Which apartments share a front door and which stand on their own: what a group needs to know. */
+export function housemates(): { together: string[]; apart: string[] } {
+  const all = places();
+  const names = (ps: Place[]) => ps.flatMap((p) => p.apartments.map((a) => a.name));
+  return { together: names(all.filter((p) => p.apartments.length > 1)), apart: names(all.filter((p) => p.apartments.length === 1)) };
+}
+
 export type ApartmentCopy = {
   /** the search result: what it is, where, and the one fact that sells it */
   seoTitle: string;

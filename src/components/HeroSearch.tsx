@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import DateSheet from "./DateSheet";
+import SearchPending from "./SearchPending";
+import "./search.css";
 import { searchStore, useSearch } from "@/lib/search-store";
 import { addDays, isISODate, type ISODate } from "@/lib/dates";
 import { range, shortDate } from "@/lib/format";
@@ -12,7 +14,8 @@ type Props = { lang: Locale; today: ISODate; maxGuests: number };
 type Combined = { today: ISODate; maxDate: ISODate; apartments: { slug: string; minNights: number; busy: ISODate[]; prices: Record<ISODate, number> }[] };
 
 export default function HeroSearch({ lang, today, maxGuests }: Props) {
-  const t = getDict(lang).search;
+  const dict = getDict(lang);
+  const t = dict.search;
   const s = useSearch();
   const [open, setOpen] = useState(false);
   const [cal, setCal] = useState<Combined | null>(null);
@@ -117,11 +120,16 @@ export default function HeroSearch({ lang, today, maxGuests }: Props) {
         }}
       />
     </div>
-    <p className="search-status" aria-live="polite">
-      {s.loading ? <span className="spinner" style={{ width: 14, height: 14 }} /> : results ? (
-        <a href="#results" className="link">{t.status(free, results.length)} ↓</a>
-      ) : null}
-    </p>
+    {/* the wait is shown where the eye already is, under the bar */}
+    {s.loading ? (
+      <div className="search-status">
+        <SearchPending lines={dict.common.pending} />
+      </div>
+    ) : (
+      <p className="search-status" aria-live="polite">
+        {results ? <a href="#results" className="link">{t.status(free, results.length)} ↓</a> : null}
+      </p>
+    )}
     </>
   );
 }

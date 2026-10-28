@@ -10,14 +10,14 @@ import HeroTriptych from "@/components/HeroTriptych";
 import SibiuPhotos from "@/components/SibiuPhotos";
 import HeroSearch from "@/components/HeroSearch";
 import SearchResults from "@/components/SearchResults";
-import { money } from "@/lib/format";
+import { listOf, money } from "@/lib/format";
 import ContactForm from "@/components/ContactForm";
 import Reveal from "@/components/Reveal";
 import { getDict } from "@/i18n";
 import { apartmentCopy } from "@/i18n/apartments";
 import { isLocale } from "@/i18n/config";
 import LocationMap from "@/components/LocationMap";
-import { LANDMARKS, apartmentList, places } from "@/lib/apartments";
+import { LANDMARKS, apartmentList, housemates, places } from "@/lib/apartments";
 import { addDays, todayInSibiu } from "@/lib/dates";
 import { fromPrice } from "@/lib/pricing";
 import { COMPANY } from "@/lib/site";
@@ -44,6 +44,9 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
   );
   // a party can spread over several apartments, so the search allows all of them together
   const maxGuests = apartments.filter((a) => !a.comingSoon).reduce((n, a) => n + a.maxGuests, 0);
+  // which apartments share a door, said once and reused by the results and the apartments intro
+  const mates = housemates();
+  const houses = t.common.houses(listOf(mates.together, lang), listOf(mates.apart, lang));
 
   return (
     <>
@@ -78,7 +81,9 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             accent: a.accent,
             tagline: apartmentCopy(lang, a.slug).tagline,
             image: a.gallery[0] ?? null,
+            house: `${a.lat},${a.lng}`,
           }))}
+          houses={houses}
         />
 
         <section className="section direct" aria-labelledby="direct-title">
@@ -103,6 +108,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             <div className="section-head">
               <p className="eyebrow rv">{t.apartments.eyebrow}</p>
               <h2 id="apartments-title" className="display h2 rv d1">{t.apartments.title}</h2>
+              <p className="lead rv d2" style={{ maxWidth: "40rem" }}>{houses}</p>
             </div>
             <div className="apt-list">
               {apartments.map((a, i) => {
