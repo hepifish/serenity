@@ -44,9 +44,16 @@ function route(req: NextRequest): NextResponse {
     return NextResponse.redirect(url);
   }
 
+  // /RO/... is /ro/...; an unknown two-letter prefix (/fr, /es) is a language
+  // we don't have, so it is replaced rather than kept as a path segment.
+  const rest = pathname.slice(first.length + 1);
   const url = req.nextUrl.clone();
-  url.pathname = `/${preferredLocale(req)}${pathname === "/" ? "" : pathname}`;
-  return NextResponse.redirect(url);
+  if (isLocale(first.toLowerCase())) url.pathname = `/${first.toLowerCase()}${rest}`;
+  else if (/^[a-z]{2}$/i.test(first)) url.pathname = `/${preferredLocale(req)}${rest}`;
+  else url.pathname = `/${preferredLocale(req)}${pathname === "/" ? "" : pathname}`;
+  const res = NextResponse.redirect(url);
+  res.headers.set("Vary", "Accept-Language");
+  return res;
 }
 
 function preferredLocale(req: NextRequest) {
