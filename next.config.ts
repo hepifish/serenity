@@ -11,6 +11,8 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
+    // 60 for the Sibiu carousel, which sits darkened under a gradient
+    qualities: [60, 75],
     minimumCacheTTL: 60 * 60 * 24 * 30,
   },
   // Netopia's public key is read from disk when the env var is not set.
