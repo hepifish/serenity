@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import MorphLoader from "./MorphLoader";
 import { useEffect, useState } from "react";
 import { longDate, money } from "@/lib/format";
 import { getDict } from "@/i18n";
@@ -29,7 +30,7 @@ export default function BookingStatus({ lang, ref_, token, initial, apartment, s
   const copy = t[status];
   const icon =
     status === "paid" ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
-    : status === "pending" ? <span className="spinner" />
+    : status === "pending" ? <MorphLoader size={40} delay={false} />
     : <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17" /></svg>;
 
   return (

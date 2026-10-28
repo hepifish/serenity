@@ -309,6 +309,7 @@ const de: Dict = {
   common: {
     ron: "RON",
     loading: "Wird geladen…",
+    opening: "Die Tür öffnet sich",
   },
 };
 
