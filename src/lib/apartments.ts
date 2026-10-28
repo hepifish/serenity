@@ -26,7 +26,8 @@ export type Apartment = {
   pageHeroIndex?: number;
   /** listed here but not bookable online yet (no calendar or photos) */
   comingSoon?: boolean;
-  icalEnv: string;
+  /** env vars holding each channel's iCal export (Booking.com, Airbnb); a night busy on any of them is busy here */
+  icalEnvs: string[];
   bookingUrl: string;
   /** where it is: the map pin, directions and the structured data */
   lat: number;
@@ -122,7 +123,7 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
     bedrooms: 1,
     beds: "queen + sofa bed",
     sizeM2: 45,
-    icalEnv: "BOOKING_ICAL_FILM",
+    icalEnvs: ["BOOKING_ICAL_FILM"],
     amenities: ["privateEntrance", "groundFloor", "terrace", "kitchen", "workspace", "wifi", "freeParking", "selfCheckIn"],
     heroIndex: 0,
     heroFocus: "55% 40%",
@@ -139,7 +140,7 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
     bedrooms: 1,
     beds: "queen + sofa bed",
     sizeM2: 45,
-    icalEnv: "BOOKING_ICAL_GOTHIC",
+    icalEnvs: ["BOOKING_ICAL_GOTHIC"],
     amenities: ["privateEntrance", "groundFloor", "kitchen", "walkInShower", "wifi", "freeParking", "selfCheckIn"],
     heroIndex: 1,
     heroFocus: "50% 40%",
@@ -156,7 +157,7 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
     bedrooms: 1,
     beds: "queen + sofa bed",
     sizeM2: 45,
-    icalEnv: "BOOKING_ICAL_ART",
+    icalEnvs: ["BOOKING_ICAL_ART"],
     amenities: ["privateEntrance", "groundFloor", "terrace", "kitchen", "workspace", "walkInShower", "wifi", "freeParking", "selfCheckIn"],
     heroIndex: 0,
     heroFocus: "64% 55%",
@@ -180,7 +181,7 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
     bedrooms: 2,
     beds: "2 king + sofa bed",
     sizeM2: 56,
-    icalEnv: "BOOKING_ICAL_PINK",
+    icalEnvs: ["BOOKING_ICAL_PINK", "AIRBNB_ICAL_PINK"],
     amenities: ["elevator", "balcony", "kitchen", "washingMachine", "bathtub", "wifi", "freeParking", "selfCheckIn"],
     bedDetails: [{ count: 2, type: "King" }, { count: 1, type: "Sofa bed" }],
     inHouse: false,
