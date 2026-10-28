@@ -112,8 +112,8 @@ export const mapStyle: StyleSpecification = {
       type: "symbol",
       source: "omt",
       "source-layer": "place",
-      // the old town is named by the Piața Mare marker instead
-      filter: ["all", cls(["suburb", "quarter", "neighbourhood"]), ["!=", ["get", "name"], "Centrul Istoric"]],
+      // the old town and its upper town are named by the Piața Mare landmark instead
+      filter: ["all", cls(["suburb", "quarter", "neighbourhood"]), ["!", ["in", ["get", "name"], ["literal", ["Centrul Istoric", "Orașul de Sus"]]]]],
       layout: {
         "text-field": ["upcase", name],
         "text-font": ["Noto Sans Regular"],

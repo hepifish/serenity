@@ -2520,6 +2520,10 @@ textarea {
   color: var(--bone-2);
   font-size: 0.95rem;
 }
+.locmap-cues {
+  display: grid;
+  gap: 0.25rem;
+}
 .locmap-cue {
   color: var(--stone);
   font-size: 0.88rem;
@@ -2648,31 +2652,66 @@ textarea {
   }
 }
 
-/* Piața Mare: a reference, not a destination */
-.pin-centre {
+/* landmarks: references, not destinations. A ring on the spot, the name
+   under it (or over it, where a neighbour sits below). Piața Mare leads;
+   the rest stay a step quieter and wait for room. */
+.landmark {
   position: absolute;
   left: 0;
-  top: -6px;
+  top: -5px;
   translate: -50% 0;
   display: grid;
   justify-items: center;
-  gap: 0.3rem;
+  gap: 0.25rem;
   pointer-events: none;
 }
-.pin-centre-mark {
-  width: 12px;
-  height: 12px;
-  border: 1px solid rgba(237, 230, 218, 0.5);
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(237, 230, 218, 0.7) 0 1.5px, transparent 2px);
+.landmark.is-above {
+  top: auto;
+  bottom: -5px;
 }
-.pin-centre-name {
+.landmark.is-above .landmark-mark {
+  order: 2;
+}
+.landmark-mark {
+  width: 10px;
+  height: 10px;
+  border: 1px solid rgba(237, 230, 218, 0.4);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(237, 230, 218, 0.55) 0 1.25px, transparent 1.75px);
+}
+.landmark-name {
+  display: grid;
+  justify-items: center;
   font-family: var(--serif);
   font-style: italic;
+  font-size: 0.9rem;
+  line-height: 1.15;
+  color: var(--stone);
+  white-space: nowrap;
+  text-align: center;
+  text-shadow: 0 0 6px #130f16, 0 0 2px #130f16, 0 0 1px #130f16;
+}
+.landmark-name small {
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 0.52rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--stone-2);
+  margin-top: 0.15rem;
+}
+.landmark-centre .landmark-mark {
+  width: 12px;
+  height: 12px;
+  border-color: rgba(237, 230, 218, 0.55);
+  background: radial-gradient(circle, rgba(237, 230, 218, 0.7) 0 1.5px, transparent 2px);
+}
+.landmark-centre .landmark-name {
   font-size: 1rem;
   color: var(--bone-2);
-  white-space: nowrap;
-  text-shadow: 0 0 6px #130f16, 0 0 2px #130f16;
+}
+.pin-anchor.is-hidden {
+  visibility: hidden;
 }
 
 /* MapLibre's controls, dressed for the evening */

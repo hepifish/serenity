@@ -2,7 +2,7 @@ import type { ApartmentCopy, ApartmentSlug } from "@/lib/apartments";
 
 const LUPENI_WAY = {
   title: "Cum ajungi",
-  text: "Fundătura Lupeni 2 este o stradă liniștită la 1,3 km de Piața Mare: cam 20 de minute pe jos până în piață, 10 până la zidurile cetății. Gara este la 900 m, iar aeroportul Sibiu la 5 km, cam zece minute cu taxiul.",
+  text: "Fundătura Lupeni 2 este o stradă liniștită la 1,3 km de Piața Mare: cam 20 de minute pe jos până în piață, 10 până la zidurile cetății. Gara este la 600 m, 8 minute pe jos, iar aeroportul Sibiu la 5 km, cam zece minute cu taxiul.",
 };
 const LUPENI_ARRIVAL = {
   title: "Sosire și parcare",

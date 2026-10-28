@@ -2,7 +2,7 @@ import type { ApartmentCopy, ApartmentSlug } from "@/lib/apartments";
 
 const LUPENI_WAY = {
   title: "Lage",
-  text: "Die Fundătura Lupeni 2 ist eine ruhige Gasse, 1,3 km vom Großen Ring: etwa 20 Minuten zu Fuß zum Hauptplatz, 10 bis zur alten Stadtmauer. Der Bahnhof liegt 900 m entfernt, der Flughafen Hermannstadt 5 km, etwa zehn Minuten mit dem Taxi.",
+  text: "Die Fundătura Lupeni 2 ist eine ruhige Gasse, 1,3 km vom Großen Ring: etwa 20 Minuten zu Fuß zum Hauptplatz, 10 bis zur alten Stadtmauer. Der Bahnhof liegt 600 m entfernt, 8 Minuten zu Fuß, der Flughafen Hermannstadt 5 km, etwa zehn Minuten mit dem Taxi.",
 };
 const LUPENI_ARRIVAL = {
   title: "Ankunft und Parken",

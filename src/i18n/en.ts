@@ -186,9 +186,16 @@ const en = {
     title: "Two addresses, one city",
     region: "Map of Sibiu with the apartments",
     westSibiu: "west Sibiu",
-    centre: "Piața Mare",
-    toCentre: (km: string, minutes: number, by: "foot" | "car") =>
-      `About ${km} km to Piața Mare, ${minutes} minutes ${by === "foot" ? "on foot" : "by car"}`,
+    /** landmark name, and a quieter second line */
+    landmarks: {
+      centre: ["Piața Mare", "Brukenthal Museum"],
+      airport: ["Sibiu Airport", "SBZ"],
+      station: ["Sibiu station"],
+      bridge: ["Bridge of Lies", "Piața Mică"],
+      astra: ["ASTRA Museum", "Dumbrava Sibiului"],
+    } as Record<string, string[]>,
+    way: (distance: string, minutes: number, by: "foot" | "car", to: "centre" | "station" | "airport") =>
+      `About ${distance} ${{ centre: "to Piața Mare", station: "to the train station", airport: "to the airport" }[to]}, ${minutes} minutes ${by === "foot" ? "on foot" : "by car"}`,
     directions: "Directions",
     directionsTo: (names: string) => `Directions to ${names} in Google Maps (opens in a new tab)`,
     loading: "Loading the map",
@@ -220,7 +227,7 @@ const en = {
     eyebrow: "Questions",
     title: "Before you come",
     items: [
-      { q: "Where exactly are the apartments?", a: "At Fundătura Lupeni 2, Sibiu, in a quiet street 1.3 km from Piața Mare: about 20 minutes on foot, 10 to the old citadel walls. The train station is 900 m away, the airport 5 km. Pink Panther is in Magnolia Residence on the western edge of Sibiu, about 10 minutes by car from the old town, with free private parking." },
+      { q: "Where exactly are the apartments?", a: "At Fundătura Lupeni 2, Sibiu, in a quiet street 1.3 km from Piața Mare: about 20 minutes on foot, 10 to the old citadel walls. The train station is 600 m away, 8 minutes on foot, the airport 5 km. Pink Panther is in Magnolia Residence on the western edge of Sibiu, about 10 minutes by car from the old town, with free private parking." },
       { q: "Is it cheaper to book directly?", a: "Yes. Booking.com charges us a commission on every stay. When you book here we pass that saving on, so the same nights cost less." },
       { q: "Can I pay with a holiday voucher card (card de vacanță)?", a: "Yes. We accept holiday voucher cards from Edenred, Up and Pluxee through NETOPIA Payments, at the same price as a normal card." },
       { q: "Why is there a separate tourism tax?", a: "Since 2026 Sibiu charges a tourism promotion tax of 2% of the accommodation value (HCL 462/2025). We collect it and pay it to the city. We show it on its own line so you see exactly what it is." },

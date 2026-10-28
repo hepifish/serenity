@@ -196,9 +196,15 @@ const de: Dict = {
     title: "Zwei Adressen, eine Stadt",
     region: "Karte von Hermannstadt mit den Wohnungen",
     westSibiu: "Westen von Hermannstadt",
-    centre: "Piața Mare",
-    toCentre: (km, minutes, by) =>
-      `Etwa ${km} km bis zur Piața Mare, ${minutes} Minuten ${by === "foot" ? "zu Fuß" : "mit dem Auto"}`,
+    landmarks: {
+      centre: ["Piața Mare", "Brukenthal-Museum"],
+      airport: ["Flughafen Hermannstadt", "SBZ"],
+      station: ["Bahnhof Hermannstadt"],
+      bridge: ["Lügenbrücke", "Piața Mică"],
+      astra: ["ASTRA-Museum", "Dumbrava Sibiului"],
+    },
+    way: (distance, minutes, by, to) =>
+      `Etwa ${distance} ${{ centre: "bis zur Piața Mare", station: "bis zum Bahnhof", airport: "bis zum Flughafen" }[to]}, ${minutes} Minuten ${by === "foot" ? "zu Fuß" : "mit dem Auto"}`,
     directions: "Route",
     directionsTo: (names) => `Route zu ${names} in Google Maps (öffnet in einem neuen Tab)`,
     loading: "Die Karte wird geladen",
@@ -230,7 +236,7 @@ const de: Dict = {
     eyebrow: "Fragen",
     title: "Bevor Sie anreisen",
     items: [
-      { q: "Wo genau liegen die Wohnungen?", a: "In der Fundătura Lupeni 2 in Hermannstadt (Sibiu), in einer ruhigen Straße 1,3 km vom Großen Ring (Piața Mare): etwa 20 Minuten zu Fuß, 10 bis zur alten Stadtmauer. Der Bahnhof ist 900 m entfernt, der Flughafen 5 km. Pink Panther liegt in der Magnolia Residence am Westrand von Hermannstadt, etwa 10 Autominuten von der Altstadt, mit kostenlosem Privatparkplatz." },
+      { q: "Wo genau liegen die Wohnungen?", a: "In der Fundătura Lupeni 2 in Hermannstadt (Sibiu), in einer ruhigen Straße 1,3 km vom Großen Ring (Piața Mare): etwa 20 Minuten zu Fuß, 10 bis zur alten Stadtmauer. Der Bahnhof ist 600 m entfernt, 8 Minuten zu Fuß, der Flughafen 5 km. Pink Panther liegt in der Magnolia Residence am Westrand von Hermannstadt, etwa 10 Autominuten von der Altstadt, mit kostenlosem Privatparkplatz." },
       { q: "Ist eine Direktbuchung günstiger?", a: "Ja. Booking.com berechnet uns für jeden Aufenthalt eine Provision. Wenn Sie hier buchen, geben wir diese Ersparnis weiter, und dieselben Nächte kosten weniger." },
       { q: "Kann ich mit einer rumänischen Urlaubskarte (card de vacanță) bezahlen?", a: "Ja. Wir akzeptieren Urlaubskarten von Edenred, Up und Pluxee über NETOPIA Payments, zum gleichen Preis wie mit einer normalen Karte." },
       { q: "Warum gibt es eine separate Tourismusabgabe?", a: "Seit 2026 erhebt Hermannstadt eine Tourismusabgabe von 2 % des Übernachtungspreises (HCL 462/2025). Wir ziehen sie ein und führen sie an die Stadt ab. Wir zeigen sie in einer eigenen Zeile, damit Sie genau sehen, was sie ist." },

@@ -9,6 +9,7 @@ import { getDict } from "@/i18n";
 // offer, the facts people ask about. Answers drawn from the same copy as the site.
 export const revalidate = 86400;
 
+const WAY_TO = { centre: "Piața Mare", station: "the train station", airport: "Sibiu airport" } as const;
 const BOOKING_NAME: Record<string, string> = { "pink-panther": "Feel Like Home Pink Panther Apartment" };
 
 export async function GET() {
@@ -25,7 +26,7 @@ export async function GET() {
     "",
     "## Facts",
     "- City: Sibiu, Transylvania, Romania. Sibiu is called Hermannstadt in German (Nagyszeben in Hungarian).",
-    `- Two addresses. Film Studio, Gothic Chambers and Art Station: ${lupeni}, a 19th-century house that served as a hospital in the Second World War; ground-floor apartments with private entrances, 1.3 km (about 20 min on foot) from Piața Mare, 900 m from the train station, 5 km from Sibiu airport. Pink Panther: Magnolia Residence, west Sibiu, an upper floor with a lift, about 5 km (10 min by car) from the old town.`,
+    `- Two addresses. Film Studio, Gothic Chambers and Art Station: ${lupeni}, a 19th-century house that served as a hospital in the Second World War; ground-floor apartments with private entrances, 1.3 km (about 20 min on foot) from Piața Mare, 600 m (8 min on foot) from the train station, 5 km from Sibiu airport. Pink Panther: Magnolia Residence, west Sibiu, an upper floor with a lift, about 5 km (10 min by car) from the old town.`,
     "- Guest rating: 8.9/10 from 253 verified reviews of Serenity House Apartments on Booking.com (staff 9.3, value 9.1, cleanliness 9.0, location 9.0).",
     "- Check-in from 15:00 (self check-in with a key box), check-out until 11:00. Free parking at both addresses. Free Wi-Fi. No pets, no smoking, no parties.",
     "- Direct booking on this website: our best price (no platform commission). Payment by card, Apple Pay, Google Pay or Romanian holiday voucher card (card de vacanță: Edenred, Up, Pluxee) through NETOPIA Payments.",
@@ -40,7 +41,7 @@ export async function GET() {
       const facts = a.comingSoon
         ? "coming soon"
         : `up to ${a.maxGuests} guests, ${a.bedrooms} bedroom${a.bedrooms > 1 ? "s" : ""}${a.sizeM2 ? `, ${a.sizeM2} m²` : ""}${prices[i] ? `, from ${prices[i]} RON / night` : ""}`;
-      const where = `${a.address.streetAddress}, ${a.toCentre.km} km to Piața Mare, ${a.toCentre.minutes} min ${a.toCentre.by === "foot" ? "on foot" : "by car"}`;
+      const where = [a.address.streetAddress, ...a.ways.map((w) => `${w.km} km to ${WAY_TO[w.to]}, ${w.minutes} min ${w.by === "foot" ? "on foot" : "by car"}`)].join(", ");
       const aka = BOOKING_NAME[a.slug] ? ` Listed on Booking.com as "${BOOKING_NAME[a.slug]}".` : "";
       return `- [${a.name}](${SITE_URL}/en/apartments/${a.slug}) ([RO](${SITE_URL}/ro/apartments/${a.slug}), [DE](${SITE_URL}/de/apartments/${a.slug})): ${c.tagline}. ${c.intro} (${facts}; ${where}).${aka}`;
     }),

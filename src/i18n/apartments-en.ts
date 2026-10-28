@@ -6,7 +6,7 @@ import type { ApartmentCopy, ApartmentSlug } from "@/lib/apartments";
 // The three units in the Lupeni house share the way there and the arrival.
 const LUPENI_WAY = {
   title: "Getting there",
-  text: "Fundătura Lupeni 2 is a quiet lane 1.3 km from Piața Mare: about 20 minutes on foot to the main square, 10 to the old citadel walls. The train station is 900 m away and Sibiu airport 5 km, about ten minutes by taxi.",
+  text: "Fundătura Lupeni 2 is a quiet lane 1.3 km from Piața Mare: about 20 minutes on foot to the main square, 10 to the old citadel walls. The train station is 600 m away, 8 minutes on foot, and Sibiu airport 5 km, about ten minutes by taxi.",
 };
 const LUPENI_ARRIVAL = {
   title: "Arrival and parking",
