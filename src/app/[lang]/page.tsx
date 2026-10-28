@@ -199,7 +199,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             </ul>
           </div>
           <div className="wrap">
-            <SibiuPhotos lang={lang} label={t.why.photoBy} />
+            <SibiuPhotos lang={lang} />
           </div>
         </section>
 

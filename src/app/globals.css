@@ -1923,73 +1923,119 @@ textarea {
   }
 }
 
-/* ───────── sibiu photographs ───────── */
-.sibiu-photos {
+/* ───────── sibiu carousel ───────── */
+.carousel {
+  margin-top: clamp(3rem, 6vw, 4.5rem);
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: clamp(0.6rem, 1.2vw, 1rem);
-  margin-top: clamp(3rem, 6vw, 5rem);
+  gap: 1rem;
 }
-.sp {
-  display: grid;
-  gap: 0.6rem;
-  align-content: start;
-}
-.sp-1 {
-  grid-column: span 7;
-}
-.sp-2 {
-  grid-column: span 5;
-  margin-top: clamp(2rem, 6vw, 5rem);
-}
-.sp-3 {
-  grid-column: span 5;
-}
-.sp-4 {
-  grid-column: span 7;
-}
-.sp-img {
+.carousel-frame {
+  position: relative;
+  aspect-ratio: 21 / 9;
   overflow: hidden;
-  aspect-ratio: 4 / 3;
+  background: var(--ink-2);
 }
-.sp-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: saturate(0.9) brightness(0.88);
-  transition: transform 1.6s var(--ease), filter 0.8s;
+.carousel-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.4s var(--ease);
 }
-.sp:hover .sp-img img {
-  transform: scale(1.03);
-  filter: none;
+.carousel-slide.on {
+  opacity: 1;
 }
-.sp figcaption {
+.carousel-slide img {
+  filter: saturate(0.92) brightness(0.86);
+  transform: scale(1.04);
+  transition: transform 7s linear;
+}
+.carousel-slide.on img {
+  transform: scale(1);
+}
+.carousel-slide::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(14, 11, 16, 0.85) 100%);
+}
+.carousel-slide figcaption {
+  position: absolute;
+  z-index: 2;
+  left: clamp(1rem, 3vw, 2rem);
+  right: clamp(1rem, 3vw, 2rem);
+  bottom: clamp(0.9rem, 2.5vw, 1.6rem);
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
-  font-size: 0.78rem;
-  color: var(--stone);
-  line-height: 1.5;
+  align-items: end;
+  gap: 1.5rem;
 }
-.sp figcaption a {
-  color: var(--stone-2);
-  white-space: nowrap;
-  flex: none;
-}
-.sp figcaption a:hover {
+.carousel-caption {
+  font-family: var(--serif);
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
   color: var(--bone);
+  max-width: 46rem;
+  line-height: 1.35;
+}
+.carousel-slide figcaption a {
+  color: var(--bone-2);
+  opacity: 0.75;
+  white-space: nowrap;
+  font-size: 0.72rem;
+}
+.carousel-slide figcaption a:hover {
+  opacity: 1;
+}
+.carousel .prev,
+.carousel .next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+}
+.carousel .prev {
+  left: 1rem;
+}
+.carousel .next {
+  right: 1rem;
+}
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+}
+.carousel-dots button {
+  width: 34px;
+  height: 18px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  position: relative;
+}
+.carousel-dots button::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  top: 8px;
+  height: 2px;
+  background: var(--line-strong);
+  transition: background 0.3s;
+}
+.carousel-dots button[aria-current="true"]::after {
+  background: var(--gold);
 }
 @media (max-width: 760px) {
-  .sp-1,
-  .sp-2,
-  .sp-3,
-  .sp-4 {
-    grid-column: 1 / -1;
-    margin-top: 0;
+  .carousel-frame {
+    aspect-ratio: 4 / 3;
   }
-  .sp figcaption {
+  .carousel-slide figcaption {
     flex-direction: column;
-    gap: 0.2rem;
+    align-items: start;
+    gap: 0.3rem;
+  }
+  .carousel .prev,
+  .carousel .next {
+    display: none;
   }
 }
 

@@ -179,6 +179,8 @@ const de: Dict = {
       "Über die Dächer von Hermannstadt wachen kleine Gauben in Form von Augenlidern, der älteste Scherz der Stadt und ihr bester Wächter. Darunter: sächsische Plätze, der Ratturm, das Brukenthal-Museum und der Weihnachtsmarkt, der die Stadt in ganz Europa bekannt gemacht hat.",
       "Drei unserer Wohnungen liegen wenige Gehminuten von der Altstadt entfernt: nah genug für einen Spaziergang zum Abendessen, weit genug für eine ruhige Nacht. Pink Panther blickt vom ruhigen Westrand der Stadt auf die Berge.",
     ],
+    prevPhoto: "Vorheriges Foto",
+    nextPhoto: "Nächstes Foto",
     photoBy: "Foto:",
     facts: ["Kulturhauptstadt Europas 2007", "Weihnachtsmarkt, Nov.–Jan.", "Theaterfestival FITS, Juni", "Transfăgărășan, 1,5 Std. mit dem Auto"],
   },

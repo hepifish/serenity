@@ -181,6 +181,8 @@ const ro: Dict = {
       "Acoperișurile Sibiului sunt păzite de mici ferestre în formă de pleoapă, cea mai veche glumă a orașului și cel mai bun paznic al lui. Sub ele: piețe săsești, Turnul Sfatului, Brukenthal și Târgul de Crăciun care a făcut orașul cunoscut în toată Europa.",
       "Trei dintre apartamente sunt la câțiva pași de centrul vechi: destul de aproape cât să mergi pe jos la cină, destul de departe cât să ai o noapte liniștită. Pink Panther privește munții din marginea liniștită de vest a orașului.",
     ],
+    prevPhoto: "Fotografia anterioară",
+    nextPhoto: "Fotografia următoare",
     photoBy: "Foto:",
     facts: ["Capitală Culturală Europeană 2007", "Târgul de Crăciun, nov.–ian.", "Festivalul de Teatru FITS, iunie", "Transfăgărășan, 1,5 h cu mașina"],
   },

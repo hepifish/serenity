@@ -169,6 +169,8 @@ const en = {
       "Sibiu's roofs are watched by small eyelid windows, the city's oldest joke and its best guard. Below them: Saxon squares, the Council Tower, the Brukenthal, and the Christmas market that made the city famous across Europe.",
       "Three of our apartments sit a short walk from the old town, close enough to stroll in for dinner and far enough for a quiet night. Pink Panther watches the mountains from the city's quiet western edge.",
     ],
+    prevPhoto: "Previous photo",
+    nextPhoto: "Next photo",
     photoBy: "Photo:",
     facts: ["European Capital of Culture 2007", "Christmas Market, Nov–Jan", "FITS Theatre Festival, June", "Transfăgărășan, 1.5 h by car"],
   },
