@@ -31,8 +31,7 @@ Direction 2, our site → channels (they read ours; only paid stays are sent):
 - [ ] Remember: Booking and Airbnb prices do NOT sync with the site. Change prices in each place.
 
 ### Database
-- [x] Migrations 001 to 005 on Neon.
-- [ ] **Owner** Run migration 006 (pricing table) on Neon; the command is in the chat. Search returns 500 until then.
+- [x] Migrations 001 to 006 on Neon (production builds now run new migrations automatically).
 - [ ] **Agent + Owner** Separate Neon branch for previews (previews currently share the live database).
 
 ### Email (booking confirmations, owner alerts)
@@ -66,3 +65,4 @@ Direction 2, our site → channels (they read ours; only paid stays are sent):
 ## Later
 - Landing pages: card de vacanță (RO), "where to stay in Sibiu / Wo übernachten in Hermannstadt", Christmas Market (Nov to Jan).
 - Prices in one place for all channels (a channel manager like Beds24), if keeping them in sync by hand gets tiring.
+- [ ] **Pati + Agent** Revisit: ship only the visitor's language to the browser (`src/i18n/{ro,en,de}.ts`). Tried twice on 2026-10-29 and measured 0 KB saved: the plurals ("20 de nopți") are functions, so the dictionaries can't be split across the server/client line and the bundler keeps all three languages together. The fix is to turn the plural functions into plain data (e.g. `Intl.PluralRules` + strings), for about 15 KB less JS per page. Decide if it's worth it.
