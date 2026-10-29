@@ -124,7 +124,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                           </Link>
                           {rest.slice(0, 2).map((g, j) => (
                             <Link key={g.src} href={`/${lang}/apartments/${a.slug}`} className="side" tabIndex={-1} aria-hidden="true">
-                              <Image src={g.src} alt={c.alts[j + 1] ?? a.name} width={g.w} height={g.h} sizes="(max-width: 860px) 33vw, 18vw" />
+                              <Image src={g.src} alt={c.alts[j + 1] ?? a.name} width={g.w} height={g.h} sizes="(max-width: 860px) 33vw, 14vw" />
                             </Link>
                           ))}
                         </>

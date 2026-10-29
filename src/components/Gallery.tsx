@@ -33,7 +33,7 @@ export default function Gallery({ photos, moreLabel }: { photos: Photo[]; moreLa
       <div className="gallery">
         {shown.map((p, i) => (
           <button key={p.src} type="button" onClick={() => setOpen(i)} className={i === 6 && n > 7 ? "more" : ""} aria-label={p.alt}>
-            <Image src={p.src} alt={p.alt} width={p.w} height={p.h} sizes={i === 0 ? "(max-width: 640px) 100vw, 50vw" : "(max-width: 640px) 50vw, 20vw"} />
+            <Image src={p.src} alt={p.alt} width={p.w} height={p.h} sizes={i === 0 ? "(max-width: 640px) 100vw, 40vw" : "(max-width: 640px) 50vw, 20vw"} />
             {i === 6 && n > 7 ? <span>{moreLabel}</span> : null}
           </button>
         ))}

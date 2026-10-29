@@ -55,6 +55,8 @@ export default function HeroSearch({ lang, today, maxGuests }: Props) {
   useEffect(() => {
     const pick = (e: Event) => (e.preventDefault(), setOpen(true));
     window.addEventListener("serenity:pick-dates", pick);
+    // the page is prerendered, so the query is only known here, after hydration
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (new URLSearchParams(location.search).get("pick") === "1") setOpen(true);
     return () => window.removeEventListener("serenity:pick-dates", pick);
   }, []);

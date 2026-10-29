@@ -1,5 +1,6 @@
 import type { Locale } from "@/i18n/config";
 import manifest from "./image-manifest.json";
+import { ACCENTS } from "./accents";
 import { ADDRESS } from "./site";
 
 /**
@@ -118,7 +119,7 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
     ...LUPENI_2,
     name: "Film Studio",
     number: "01",
-    accent: "#D9A93B",
+    accent: ACCENTS["film-studio"],
     maxGuests: 4,
     bedrooms: 1,
     beds: "queen + sofa bed",
@@ -135,7 +136,7 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
     ...LUPENI_2,
     name: "Gothic Chambers",
     number: "02",
-    accent: "#8F6BB0",
+    accent: ACCENTS["gothic-chambers"],
     maxGuests: 4,
     bedrooms: 1,
     beds: "queen + sofa bed",
@@ -152,7 +153,7 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
     ...LUPENI_2,
     name: "Art Station",
     number: "03",
-    accent: "#C8312C",
+    accent: ACCENTS["art-station"],
     maxGuests: 4,
     bedrooms: 1,
     beds: "queen + sofa bed",
@@ -176,7 +177,7 @@ export const APARTMENTS: Record<ApartmentSlug, Apartment> = {
     ],
     name: "Pink Panther",
     number: "04",
-    accent: "#E39AB4",
+    accent: ACCENTS["pink-panther"],
     maxGuests: 6,
     bedrooms: 2,
     beds: "2 king + sofa bed",

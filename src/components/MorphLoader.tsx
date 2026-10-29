@@ -1,4 +1,4 @@
-import { APARTMENTS } from "@/lib/apartments";
+import { ACCENTS } from "@/lib/accents";
 import { MARKS, MARK_GRID, MARK_ORDER } from "@/lib/marks";
 import AptMark, { markStroke } from "./AptMark";
 import "./marks.css";
@@ -41,16 +41,16 @@ MARK_ORDER.forEach((slug, i) => {
   if (i === 0) {
     timesD.push(0);
     dValues.push(MARKS[slug]);
-    colours.push(APARTMENTS[slug].accent);
+    colours.push(ACCENTS[slug]);
   }
   timesD.push(r(t0 + HOLD + SHIFT_FROM * MORPH), r(t0 + HOLD + SHIFT_TO * MORPH));
   dValues.push(MARKS[slug], MARKS[next]);
-  colours.push(APARTMENTS[slug].accent, APARTMENTS[next].accent);
+  colours.push(ACCENTS[slug], ACCENTS[next]);
   splinesD.push(FLAT, EASE);
 });
 timesD.push(1);
 dValues.push(MARKS[MARK_ORDER[0]]);
-colours.push(APARTMENTS[MARK_ORDER[0]].accent);
+colours.push(ACCENTS[MARK_ORDER[0]]);
 splinesD.push(FLAT);
 
 // the visible stretch, always centred on the middle of the line
@@ -97,7 +97,7 @@ export default function MorphLoader({ size = 72, label, srLabel, delay = true, c
           d={MARKS[MARK_ORDER[0]]}
           pathLength={1}
           fill="none"
-          stroke={APARTMENTS[MARK_ORDER[0]].accent}
+          stroke={ACCENTS[MARK_ORDER[0]]}
           strokeWidth={stroke}
           strokeLinecap="round"
           strokeLinejoin="round"

@@ -106,6 +106,8 @@ export default function PriceManager({ today }: { today: ISODate }) {
     setSlug((s) => s || b.rows[0]?.slug || "");
     setDraft((d) => (d.apartments.length && d.apartments[0] ? d : emptyDraft(b.rows[0]?.slug ?? "")));
   }, []);
+  // load() sets state only after its fetch resolves, not during the effect
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => void load(), [load]);
 
   useEffect(() => {

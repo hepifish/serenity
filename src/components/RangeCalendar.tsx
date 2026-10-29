@@ -56,21 +56,20 @@ export default function RangeCalendar({
   const minFor = (arrival: ISODate) => (typeof minNights === "function" ? minNights(arrival) : minNights);
 
   /** Latest departure for an arrival: the first booked night after it (departing that morning is fine). */
-  const latestOut = useMemo(() => {
-    const cache = new Map<ISODate, ISODate>();
-    return (arrival: ISODate): ISODate => {
-      const hit = cache.get(arrival);
-      if (hit) return hit;
-      let out: ISODate;
-      if (limitFor) out = limitFor(arrival) ?? arrival;
-      else {
-        out = addDays(maxDate, 1);
-        if (busy) for (let d = addDays(arrival, 1); d <= maxDate; d = addDays(d, 1)) if (busy.has(d)) { out = d; break; }
-      }
-      cache.set(arrival, out);
-      return out;
-    };
-  }, [busy, limitFor, maxDate]);
+  // cached for this render only: each day cell asks once or twice
+  const latestCache = new Map<ISODate, ISODate>();
+  const latestOut = (arrival: ISODate): ISODate => {
+    const hit = latestCache.get(arrival);
+    if (hit) return hit;
+    let out: ISODate;
+    if (limitFor) out = limitFor(arrival) ?? arrival;
+    else {
+      out = addDays(maxDate, 1);
+      if (busy) for (let d = addDays(arrival, 1); d <= maxDate; d = addDays(d, 1)) if (busy.has(d)) { out = d; break; }
+    }
+    latestCache.set(arrival, out);
+    return out;
+  };
   const limit = selectingOut ? latestOut(checkIn!) : null;
 
   function state(d: ISODate) {

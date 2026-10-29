@@ -21,6 +21,8 @@ export default function NotFoundView() {
   const t = getDict(lang);
   useEffect(() => {
     const first = window.location.pathname.split("/")[1];
+    // the server does not see the path of a 404 (see above), so this waits for the browser
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (isLocale(first)) setLang(first);
   }, []);
   useEffect(() => {

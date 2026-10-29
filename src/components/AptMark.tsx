@@ -1,4 +1,5 @@
-import { APARTMENTS, type ApartmentSlug } from "@/lib/apartments";
+import { ACCENTS } from "@/lib/accents";
+import type { ApartmentSlug } from "@/lib/apartments";
 import { MARKS, MARK_GRID } from "@/lib/marks";
 import "./marks.css";
 
@@ -32,7 +33,7 @@ export default function AptMark({ slug, size = 48, title, color, className }: Pr
       <path
         d={MARKS[slug]}
         fill="none"
-        stroke={color ?? APARTMENTS[slug].accent}
+        stroke={color ?? ACCENTS[slug]}
         strokeWidth={markStroke(size)}
         strokeLinecap="round"
         strokeLinejoin="round"

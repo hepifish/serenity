@@ -48,6 +48,8 @@ export default function ApartmentBooking({ lang, slug, name, maxGuests, bookingU
   useEffect(() => {
     const q = new URLSearchParams(location.search);
     const i = q.get("in"), o = q.get("out"), g = Number(q.get("guests"));
+    // the page is prerendered, so the query is only known here, after hydration
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (isISODate(i) && isISODate(o) && o > i) (setIn(i), setOut(o));
     if (g >= 1 && g <= maxGuests) setGuests(g);
     fetch(`/api/availability/${slug}`)
@@ -63,12 +65,12 @@ export default function ApartmentBooking({ lang, slug, name, maxGuests, bookingU
     return () => window.removeEventListener("serenity:pick-dates", pick);
   }, []);
 
-  // Dates that came in through a link may have been booked since: let them go.
-  useEffect(() => {
-    if (!data || !checkIn) return;
-    const ok = checkIn >= data.today && (!checkOut || eachNight(checkIn, checkOut).every((n) => !data.busy.includes(n) && n in data.prices));
-    if (!ok) (setIn(null), setOut(null));
-  }, [data, checkIn, checkOut]);
+  // Dates that came in through a link may have been booked since: let them go
+  // (set during render, so the stale range never paints).
+  if (data && checkIn && !(checkIn >= data.today && (!checkOut || eachNight(checkIn, checkOut).every((n) => !data.busy.includes(n) && n in data.prices)))) {
+    setIn(null);
+    setOut(null);
+  }
 
   const busy = useMemo(() => new Set(data?.busy ?? []), [data]);
   const prices = useMemo(() => new Map(Object.entries(data?.prices ?? {})), [data]);

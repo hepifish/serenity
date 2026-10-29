@@ -25,7 +25,12 @@ export default function Header({ lang, t, solid = false }: { lang: Locale; t: Di
     return () => window.removeEventListener("scroll", on);
   }, []);
 
-  useEffect(() => setOpen(false), [pathname]);
+  // a navigation closes the menu (set during render, so it never paints open)
+  const [menuPath, setMenuPath] = useState(pathname);
+  if (menuPath !== pathname) {
+    setMenuPath(pathname);
+    setOpen(false);
+  }
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
     const esc = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);

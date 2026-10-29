@@ -9,7 +9,12 @@ import { importPKCS8, SignJWT } from "jose";
  * The keypair is generated on first use and never leaves .netopia/.
  */
 
-type Order = { ntpId: string; body: any; createdAt: number };
+/** The parts of the start request (netopia.ts) the mock reads back. */
+type StartBody = {
+  config: { notifyUrl: string; redirectUrl: string; cancelUrl: string };
+  order: { orderID: string; amount: number; posSignature: string; description: string };
+};
+type Order = { ntpId: string; body: StartBody; createdAt: number };
 declare global {
   var __mockOrders: Map<string, Order> | undefined;
 }
@@ -23,7 +28,7 @@ function ensureKeys() {
   writeFileSync(".netopia/mock-private-key.pem", privateKey.export({ type: "pkcs8", format: "pem" }));
 }
 
-export async function mockStart(body: any) {
+export async function mockStart(body: StartBody) {
   ensureKeys();
   const ntpId = "MOCK" + randomUUID().slice(0, 8).toUpperCase();
   orders.set(ntpId, { ntpId, body, createdAt: Date.now() });
